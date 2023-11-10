@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- appointments23:19-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" type="image/x-icon" href="dashboard/img/favicon.ico">
+    <title>Gadget Zone Admin</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/select2.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/style.css' %}">
+    <!--[if lt IE 9]>
+		<script src="{% static 'dashboard/js/html5shiv.min.js' %}"></script>
+		<script src="{% static 'dashboard/js/respond.min.js' %}"></script>
+	<![endif]-->
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <div class="header">
+			<div class="header-left">
+				<a href="index-2.html" class="logo">
+					<img src="{% static 'dashboard/img/g_white.png' %}" width="25" height="25" alt=""> <span>adget Zone</span>
+				</a>
+			</div>
+			<a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+            <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar"><i class="fa fa-bars"></i></a>
+            <ul class="nav user-menu float-right">
+                <li class="nav-item dropdown d-none d-sm-block">
+                    <div class="dropdown-menu notifications">
+                        <div class="topnav-dropdown-footer">
+                            <a href="activities.html">View all Notifications</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown has-arrow">
+                    <a href="#" class="dropdown-toggle nav-link user-link" data-toggle="dropdown">
+                        <span class="user-img"><img class="rounded-circle" src="{% static 'dashboard/img/user.jpg' %}" width="40" alt="Admin">
+							<span class="status online"></span></span>
+                        <span>Admin</span>
+                    </a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="profile.html">My Profile</a>
+						<a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
+						<a class="dropdown-item" href="settings.html">Settings</a>
+						<a class="dropdown-item" href="login.html">Logout</a>
+					</div>
+                </li>
+            </ul>
+            <div class="dropdown mobile-user-menu float-right">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="profile.html">My Profile</a>
+                    <a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                    <a class="dropdown-item" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        <li class="menu-title">Main</li>
+                        <li  class="active">
+                            <a href="index-2.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+                        </li>
+						<li>
+                            <a href="doctors.html"><i class="fa fa-user-md"></i> <span>Users</span></a>
+                        </li>
+                        <li>
+                            <a href="patients.html"><i class="fa fa-mobile fa-l"></i> <span>Brands</span></a>
+                        </li>
+                        <li>
+                            <a href="appointments.html"><i class="fa fa-shopping-bag"></i> <span>All Products</span></a>
+                        </li>
+                        <li>
+                            <a href="schedule.html"><i class="fa fa-cart-plus"></i> <span>Orders</span></a>
+                        </li>
+                        <li>
+                            <a href="departments.html"><i class="fa fa-tag"></i> <span>Coupons</span></a>
+                        </li>
+                        <li>
+                            <a href="departments.html"><i class="fa fa-picture-o"></i> <span>Banners</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="page-wrapper"> 
+            
+            {% block content%}
+
+
+            {%endblock content%}
+
+
+        </div>
+    </div>
+    <div class="sidebar-overlay" data-reff=""></div>
+    <script src="{% static 'dashboard/js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'dashboard/js/popper.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'dashboard/js/select2.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/app.js' %}"></script>
+	<script>
+            $(function () {
+                $('#datetimepicker3').datetimepicker({
+                    format: 'LT'
+                });
+				$('#datetimepicker4').datetimepicker({
+                    format: 'LT'
+                });
+            });
+     </script>
+</body>
+</html>

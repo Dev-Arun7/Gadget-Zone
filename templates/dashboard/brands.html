@@ -1,0 +1,38 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-4 col-3">
+                        <h4 class="page-title">Brands</h4>
+                    </div>
+                    <div class="col-sm-8 col-9 text-left m-b-20 ml-3">
+                        <a href="add-appointment.html" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Brand</a>
+                    </div>
+                </div>
+				<div class="row">
+					<div class="col-md-8 pr-2">
+						<div class="table-responsive">
+							<table class="table table-striped custom-table">
+								<thead>
+									<tr>
+										<th>Brand Name</th>
+										<th>Description</th>
+										<th>Edit</th>
+                                        <th>Delete</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Samsung</td>
+										<td>The No one brnad in the world</td>
+										<td><button type="button" class="btn btn-success">Edit</button></td>
+										<td><button type="button" class="btn btn-danger">Remove</button></td>	
+									</tr>	
+								</tbody>
+							</table>
+						</div>
+					</div>
+                </div>
+            </div>
+{% endblock content %}
