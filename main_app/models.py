@@ -4,7 +4,7 @@ from django.db import models
 class Main_Category(models.Model):
     name = models.CharField(max_length=100)
     descriptions = models.TextField(default='Default Description')
-    img = models.ImageField(upload_to='categories', null=True, default='categories/default_image.jpg')
+    img = models.ImageField(upload_to='categories', default='null')
     objects = models.Manager()
     def __str__(self):
         return str(self.name)
