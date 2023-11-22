@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.views.decorators.cache import cache_control,never_cache
 from main_app.models import Main_Category
 
 # Create your views here.
@@ -7,10 +8,33 @@ def home(request):
     return render(request,'dashboard/all_products.html')
 
 def main_category(request):
-    main_category = Main_Category.objects.all()
-    
+    data = Main_Category.objects.all()
+    return render(request,"dashboard/main_category.html",{"data": data})
 
 
-    return render(request,"dashboard/main_category.html",{'main_category': main_category})
 
-        
+def add_main_category(request):
+    if request.method == 'POST':
+        main_category_name = request.POST['main_category_name']
+        description = request.POST['description']
+        image = request.FILES.get('image')
+
+        # Corrected the field names in the create method
+        query = Main_Category.objects.create(
+            name=main_category_name,
+            descriptions=description,
+            img=image,
+        )
+        query.save()
+
+        return redirect('add_main_category')
+    return render(request, 'dashboard/add_main_category.html')
+
+def update_main_category(request,id):
+    data = Main_Category.objects.all()
+    return render(request,"dashboard/main_category.html",{"data": data})
+
+def delete_main_category(request,id):
+    data = Main_Category.objects.all()
+    return render(request,"dashboard/main_category.html",{"data": data})
+ 

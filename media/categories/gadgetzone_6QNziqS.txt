@@ -1,0 +1,12 @@
+Superuser Credentials
+username: adminarun
+email: adminarun@gmail.com
+password: arun1234
+
+
+PostgreSQL
+'NAME': 'gadgetzone',
+        'USER':'postgres',
+        'PASSWORD':'admin123',
+        'HOST':'localhost',
+        'port':'5432'
