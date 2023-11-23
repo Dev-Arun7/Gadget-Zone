@@ -9,6 +9,8 @@ class Main_Category(models.Model):
     def __str__(self):
         return str(self.name)
     
+
+    
 class Category(models.Model):
     main_category = models.ForeignKey(Main_Category,on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
