@@ -6,37 +6,64 @@
                     <div class="col-sm-4 col-3">
                         <h4 class="page-title">Main_Category</h4>
                     </div>
-                    <div class="col-sm-8 col-9 text-left m-b-20 ml-3">
-                        <a href="add" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Brand</a>
+                    <div class="col-sm-12 col-9 text-left m-b-20 ml-3">
+                        <a href="{% url 'add_product' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Product</a>
                     </div>
                 </div>
 				<div class="row">
-					<div class="col-md-8 pr-2">
+					<div class="col-md-12 pr-2">
 						<div class="table-responsive">
 							<table class="table table-striped custom-table">
 								<thead>
 									<tr>
-										<th>Main_Category</th>
-										<th>Image</th>
-										<th>Description</th>
+										<th>Brand</th>
+										<th>Model</th>
+										<th>Price</th>
+										{% comment %} <th>Description</th> {% endcomment %}
+										<th>color</th>
+                                        <th>Display</th>
+										<th>Camera</th>
+										<th>storage</th>
+										<th>Ram</th>
+										<th>5G</th>
+										<th>Smart</th>
+										<th>battery</th>
+										<th>image</th>
+										<th>stock</th>
+										<th>offer</th>
 										<th>Edit</th>
-                                        <th>Delete</th>
+										<th>delete</th>
 									</tr>
 								</thead>
 								<tbody>
-									{% for i in main_category %}
+									{% for i in data %}
 									<tr>
-										<td>{{i.name}}</td>
-										<td><img width="90" height="50" src="{{i.img.url}}" alt="Li's Product Image"></td>
-										<td>{{i.descriptions}}</td>
-										<td><button type="button" href="{% url 'update_main_category' id %}" class="btn btn-success">Edit</button></td>
-										<td><button type="button" href="/delete/ {{id}}" class="btn btn-danger">Remove</button></td>	
-									</tr>	
-									{% endfor%}
+										<td>{{i.brand}}</td>
+										<td>{{i.model}}</td>
+										<td>{{i.price}}</td>
+										{% comment %} <td>{{i.description}}</td> {% endcomment %}
+										<td>{{i.color}}</td>
+										<td>{{i.display_size}} Inch</td>
+										<td>{{i.camera}} MP</td>
+										<td>{{i.storage}}</td>
+										<td>{{i.ram}} GB</td>
+										<td>{{i.network}}</td>
+										<td>{{i.smart}}</td>
+										<td>{{i.battery}} mAh</td>
+										<td style="width: 150px; height: 100px;">
+											<img style="width: 100%; height: 100%; object-fit: contain;" src="{{i.image.url}}" alt="Image">
+										</td>										
+										<td>{{i.stock}}</td>
+										<td>{{i.offer}}</td>
+										<td><a type="button" href="{% url 'update_product' id=i.id %}" class="btn btn-success">Edit</a></td>
+										{% comment %} <td><a type="button" href="{% url '#####' id=i.id %}" class="btn btn-danger">Remove</a></td>
+									</tr>	 {% endcomment %}
+									{% endfor%} 
 								</tbody>
 							</table>
 						</div>
 					</div>
                 </div>
             </div>
-{% endblock content %} 
+{% endblock content %}                  
+

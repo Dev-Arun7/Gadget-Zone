@@ -1,0 +1,184 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <h4 class="page-title">Add Products</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <form action="{% url 'update_product' product.id %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>Select the phone category</label>
+                                <select class="form-control" name="phone_category" required>
+                                    <option value="smartphone">Smartphone</option>
+                                    <option value="feature_phone">Feature Phone</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Brand</label>
+                                <input class="form-control" type="text"
+                                placeholder="Enter brand name"
+                                name= "brand"
+                                value="{{product.brand}}"
+                                required>
+                            </div>
+                            <div class="form-group">
+                                <label>Model</label>
+                                <input class="form-control" type="text" 
+                                placeholder="Enter phone model"
+                                name= "model"
+                                value="{{product.model}}"
+                                required>
+                            </div>
+                            <div class="form-group">
+                                <label>Price</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the price"
+                                       name="price"
+                                       value="{{product.price}}"
+                                       step="100" >
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea class="form-control" 
+                                          placeholder="Add description"
+                                          name="description"
+                                          value="{{product.description}}"
+                                          required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Color</label>
+                                <input class="form-control" type="text" 
+                                placeholder="Enter phone color"
+                                name= "color"
+                                value="{{product.color}}"
+                                required>
+                            </div>
+                            <div class="form-group">
+                                <label>Display Size</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the size of the display"
+                                       name="display_size"
+                                       value="{{product.display_size}}"
+                                       step="1" >
+                            </div>
+                            <div class="form-group">
+                                <label>Camera Resolution</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the resolution of the camera"
+                                       name="camera"
+                                       value="{{product.camera}}"
+                                       step="2" >
+                            </div>
+                            <div class="form-group">
+                                <label>Storage Capacity</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the storage size"
+                                       name="storage"
+                                       value="{{product.storage}}"
+                                       step="16" >
+                            </div>
+                            <div class="form-group">
+                                <label>RAM Size</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the amount of RAM"
+                                       name="ram"
+                                       value="{{product.ram}}"
+                                       step="2" >
+                            </div>
+                            <div class="form-group">
+                                <label for="network">Network</label>
+                                <div class="form-check">
+                                    <input type="checkbox" 
+                                           id="network" 
+                                           name="network" 
+                                           value="{{product.network}}"
+                                           class="form-check-input">
+                                    <label class="form-check-label" for="network">Include 5G</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Select is this a smartphone or not</label>
+                                <br>
+                                <div class="form-check">
+                                    <input type="checkbox" 
+                                           id="smartphoneCheckbox" 
+                                           name="smartphone" 
+                                           value="{{product.smartphone}}"
+                                           class="form-check-input">
+                                    <label class="form-check-label" for="smartphoneCheckbox">Smartphone</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Battery Capacity</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the battery capacity"
+                                       name="battery"
+                                       value="{{product.battery}}"
+                                       step="100" >
+                            </div>     
+                            <div class="form-group">
+                                <label>Current Image</label>
+                                <br>
+                                <br>
+                                {% if data.img %}
+                                    <img src="{{ product.image.url }}" alt="Current Image" style="max-width: 200px;">
+                                {% else %}
+                                    <p>No image available</p>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label>Add images</label>
+                                <div>
+                                    <input class="form-control" type="file"
+                                    placeholder="Select image"
+                                    name= "image"
+                                    required>
+                                    <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
+                                </div>   
+                            </div>
+                            <div class="form-group">
+                                <label>Stock</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the stock"
+                                       name="stock"
+                                       value="{{product.stock}}"
+                                       step="1" >
+                            </div>
+                            <div class="form-group">
+                                <label>Offer</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the offer percentage"
+                                       name="offer"
+                                       value="{{product.offer}}"
+                                       step="1" >
+                            </div>
+                            <div class="form-group">
+                                <label for="network">Delete the product from page</label>
+                                <div class="form-check">
+                                    <input type="checkbox" 
+                                           id="network" 
+                                           name="delete" 
+                                           value="{{product.delete}}" 
+                                           class="form-check-input">
+                                    <label class="form-check-label" for="network">Delete</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="m-t-20 text-center">
+                                <button class="btn btn-primary submit-btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+ 
