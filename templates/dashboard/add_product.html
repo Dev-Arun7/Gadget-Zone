@@ -13,10 +13,11 @@
                         <form action="{% url 'add_product' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
-                                <label>Select the phone category</label>
-                                <select class="form-control" name="phone_category" required>
-                                    <option value="smartphone">Smartphone</option>
-                                    <option value="feature_phone">Feature Phone</option>
+                                <label>Select the phone category</label>   
+                                <select class="form-control" name="main_category_id" required>
+                                    {% for cat in data %}
+                                    <option value ="{{cat.id}}">{{cat.name}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             

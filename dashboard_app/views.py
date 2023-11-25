@@ -1,7 +1,6 @@
-from django.shortcuts import render,redirect, get_object_or_404
-from django.http import HttpResponse
-from django.views.decorators.cache import cache_control,never_cache
-from main_app.models import Main_Category,Smartphone,Featurephone, Gadget
+from django.shortcuts import render,redirect
+from main_app.models import Main_Category, Product
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 def dashboard_home(request):
@@ -46,8 +45,7 @@ def update_main_category(request, id):
         edit.name = main_category_name
         edit.descriptions = description 
         edit.img = image
-        print(edit)
-
+        
         # Save updated data
         edit.save()
 
@@ -66,17 +64,15 @@ def delete_main_category(request,id):
 
 
 def all_products(request):
-    smartphones = Smartphone.objects.all()
-    featurephones = Featurephone.objects.all()
-    # Combine the QuerySets using union
-    data = smartphones.union(featurephones)
+    data = Product.objects.all()
     return render(request, "dashboard/all_products.html", {"data": data})
 
         
-def add_product(request):
-    if request.method == 'POST':
-        phone_category = request.POST.get('phone_category')
 
+def add_product(request):
+    data = Main_Category.objects.all() 
+    if request.method == 'POST':
+        # Extracting data from the POST request
         brand = request.POST['brand']
         model = request.POST['model']
         price = request.POST['price']
@@ -93,77 +89,38 @@ def add_product(request):
         stock = request.POST['stock']
         offer = request.POST['offer']
         delete = request.POST.get('delete', False) == 'True'
+        main_category_id = request.POST.get('main_category_id')  
 
-        # Get or create the Main_Category instance
-        main_category_name = request.POST.get('main_category_name', '')
-        main_category, created = Main_Category.objects.get_or_create(name=main_category_name, descriptions='', img='null')  
-
-        # Saving Data to the database based on the category
-        if phone_category == 'smartphone':
-            query1 = Smartphone.objects.create(
-                brand=brand,
-                model=model,
-                price=price,
-                description=description,
-                color=color,
-                display_size=display_size,
-                camera=camera,
-                storage=storage,
-                ram=ram,
-                network=network,
-                smart=smart,
-                battery=battery,
-                image=image,
-                stock=stock,
-                offer=offer,
-                deleted=delete,
-                main_category=main_category  # Associate the Smartphone with a main_category
-            )
-            query1.save()
-        else:
-            query2 = Featurephone.objects.create(
-                brand=brand,
-                model=model,
-                price=price,
-                description=description,
-                color=color,
-                display_size=display_size,
-                camera=camera,
-                storage=storage,
-                ram=ram,
-                network=network,
-                smart=smart,
-                battery=battery,
-                image=image,
-                stock=stock,
-                offer=offer,
-                deleted=delete,
-                main_category=main_category  # Associate the Featurephone with a main_category
-            )
-            query2.save()
-
+        main_cat = Main_Category.objects.get(id=main_category_id)
+        
+        query = Product.objects.create(
+            brand=brand,
+            model=model,
+            price=price,
+            description=description,
+            color=color,
+            display_size=display_size,
+            camera=camera,
+            storage=storage,
+            ram=ram,
+            network=network,
+            smart=smart,
+            battery=battery,
+            image=image,
+            stock=stock,
+            offer=offer,
+            deleted=delete,
+            main_category=main_cat  # Associate the Product with a main_category
+        )
+        query.save()
         return redirect('all_products')
-
-    return render(request, 'dashboard/add_product.html')
-
-
+    # Render the form if it's not a POST request
+    return render(request, 'dashboard/add_product.html', {"data": data})
 
 def update_product(request, id):
-    try:
-        # Try to get the product instance as a Smartphone
-        product = get_object_or_404(Smartphone, id=id)
-    except Smartphone.DoesNotExist:
-        try:
-            # If not found as a Smartphone, try to get it as a Featurephone
-            product = get_object_or_404(Featurephone, id=id)
-        except Featurephone.DoesNotExist:
-            # If not found as a Featurephone either, return a 404 response
-            raise Http404("Product does not exist")
-        
-    # product = Smartphone.objects.filter(id=id).first()
+    product = Product.objects.get(id=id)
 
     if request.method == 'POST':
-        # Retrieve common fields for both smartphone and feature phone
         brand = request.POST['brand']
         model = request.POST['model']
         price = request.POST['price']
@@ -181,42 +138,38 @@ def update_product(request, id):
         offer = request.POST['offer']
         delete = request.POST.get('delete', False) == 'True'
 
-        # Update common fields
-        product.brand = brand
-        product.model = model
-        product.price = price
-        product.description = description
-        product.color = color
-        product.display_size = display_size
-        product.camera = camera
-        product.storage = storage
-        product.ram = ram
-        product.network = network
-        product.smart = smart
-        product.battery = battery
-        product.image = image
-        product.stock = stock
-        product.offer = offer
-        product.deleted = delete
-
-        # Update main category (create if not exists)
-        main_category_name = request.POST.get('main_category_name', '')
-        main_category, created = Main_Category.objects.get_or_create(name=main_category_name, descriptions='', img='null')
-        product.main_category = main_category
-
-        # Update type-specific fields for Smartphone or Featurephone
-        if isinstance(product, Smartphone):
-            # Update Smartphone-specific fields
-            # Add your smartphone-specific fields update here
-            pass
-        elif isinstance(product, Featurephone):
-            # Update Featurephone-specific fields
-            # Add your featurephone-specific fields update here
-            pass
-
-        # Save the updated product
-        product.save()
+        # Retrieve existing data
+        edit = Product.objects.get(id=id)
+        # Update data in the table
+        edit.brand = brand
+        edit.model=model
+        edit.price=price
+        edit.description=description
+        edit.color=color
+        edit.display_size=display_size
+        edit.camera=camera
+        edit.storage=storage
+        edit.ram=ram
+        edit.network=network
+        edit.smart=smart
+        edit.battery=battery
+        edit.image=image
+        edit.stock=stock
+        edit.offer=offer
+        edit.deleted=delete
+        edit.save()
 
         return redirect('all_products')
-
     return render(request, "dashboard/update_product.html", {"product": product})
+
+def delete_product(request,id):
+    data = Product.objects.get(id=id) 
+    data.delete()  
+    return redirect('all_products')
+        
+
+
+
+
+
+

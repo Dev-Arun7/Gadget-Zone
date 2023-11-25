@@ -10,7 +10,7 @@ class Main_Category(models.Model):
         return str(self.name)
 
 
-class Gadget(models.Model):
+class Product(models.Model):
     main_category = models.ForeignKey(Main_Category, on_delete=models.CASCADE)
     brand = models.CharField(max_length=50)
     model = models.CharField(max_length=100)
@@ -25,21 +25,10 @@ class Gadget(models.Model):
     smart = models.BooleanField()
     battery = models.IntegerField()
     image = models.ImageField(upload_to='products', default='default_image.jpg')
-
     stock =  models.IntegerField(default=3)
     offer = models.PositiveBigIntegerField(default=0,null=True, blank=True)
     deleted = models.BooleanField(default=False)
-
-
     objects = models.Manager()
-
-    class Meta:
-        abstract = True
-
-class Smartphone(Gadget):
-    def __str__(self):
-        return f"Smartphone - {self.model}"
-
-class Featurephone(Gadget):
     def __str__(self):
         return f"Featurephone - {self.model}"
+
