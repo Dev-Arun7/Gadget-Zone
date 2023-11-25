@@ -1,4 +1,4 @@
-from django.urls import path,include
+from django.urls import path
 from dashboard_app import views
 
 urlpatterns = [
@@ -11,4 +11,5 @@ urlpatterns = [
     path('all_products/',views.all_products,name='all_products'),
     path('add_product/',views.add_product,name='add_product'), 
     path('update_product/<int:id>/',views.update_product,name='update_product'), 
+    path('delete_product/<int:id>/',views.delete_product,name='delete_product'), 
 ]  

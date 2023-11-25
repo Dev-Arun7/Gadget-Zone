@@ -56,8 +56,8 @@
 										<td>{{i.stock}}</td>
 										<td>{{i.offer}}</td>
 										<td><a type="button" href="{% url 'update_product' id=i.id %}" class="btn btn-success">Edit</a></td>
-										{% comment %} <td><a type="button" href="{% url '#####' id=i.id %}" class="btn btn-danger">Remove</a></td>
-									</tr>	 {% endcomment %}
+										<td><a type="button" href="{% url 'delete_product' id=i.id %}" class="btn btn-danger">Remove</a></td>
+									</tr>
 									{% endfor%} 
 								</tbody>
 							</table>
