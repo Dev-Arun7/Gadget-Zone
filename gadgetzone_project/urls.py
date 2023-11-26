@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard_app.urls')),
     path('gauth/',include('gauth_app.urls')),
-    path('', include('main_app.urls')),
+    path('', include(('main_app.urls', 'main_app'), namespace='main_app')),
 ]
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

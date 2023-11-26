@@ -67,8 +67,6 @@ def all_products(request):
     data = Product.objects.all()
     return render(request, "dashboard/all_products.html", {"data": data})
 
-        
-
 def add_product(request):
     data = Main_Category.objects.all() 
     if request.method == 'POST':

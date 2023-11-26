@@ -24,41 +24,36 @@
                             <div class="product-details-left">
                                 <div class="product-details-images slider-navigation-1">
                                     <div class="lg-image">
-                                        <img src="{% static 'main/images/product/large-size/1.jpg' %}" alt="product image">
+                                        <img src="{{ product.image.url }}" alt="product image">
                                     </div>
                                     <div class="lg-image">
-                                        <img src="{% static 'main/images/product/large-size/2.jpg' %}" alt="product image">
+                                        <img src="{{ product.image.url }}" alt="product image">
                                     </div>
                                     <div class="lg-image">
-                                        <img src="{% static 'main/images/product/large-size/3.jpg' %}" alt="product image">
+                                        <img src="{{ product.image.url }}" alt="product image">
                                     </div>
                                     <div class="lg-image">
-                                        <img src="{% static 'main/images/product/large-size/4.jpg' %}" alt="product image">
+                                        <img src="{{ product.image.url }}" alt="product image">
                                     </div>
                                     <div class="lg-image">
-                                        <img src="{% static 'main/images/product/large-size/5.jpg' %}" alt="product image">
-                                    </div>
-                                    <div class="lg-image">
-                                        <img src="{% static 'main/images/product/large-size/6.jpg' %}" alt="product image">
+                                        <img src="{{ product.image.url }}" alt="product image">
                                     </div>
                                 </div>
                                 <div class="product-details-thumbs slider-thumbs-1">
-                                    <div class="sm-image"><img src="{% static 'main/images/product/small-size/1.jpg' %}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{% static 'main/images/product/small-size/2.jpg' %}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{% static 'main/images/product/small-size/3.jpg' %}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{% static 'main/images/product/small-size/4.jpg' %}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{% static 'main/images/product/small-size/5.jpg' %}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{% static 'main/images/product/small-size/6.jpg' %}" alt="product image thumb"></div>
+                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
+                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
+                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
+                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
+                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
                                 </div>
                             </div>
                             <!--// Product Details Left -->
                         </div>
-
                         <div class="col-lg-7 col-md-6">
                             <div class="product-details-view-content sp-normal-content pt-60">
                                 <div class="product-info">
-                                    <h2>Today is a good day Framed poster</h2>
-                                    <span class="product-details-ref">Reference: demo_15</span>
+                                    <h2>{{ product.brand }} {{ product.model }}</h2>
+                                    <span class="product-details-ref">{{ product.color }} {{ product.storage }} GB</span>
                                     <div class="rating-box pt-20">
                                         <ul class="rating rating-with-review-item">
                                             <li><i class="fa fa-star-o"></i></li>
@@ -71,12 +66,11 @@
                                         </ul>
                                     </div>
                                     <div class="price-box pt-20">
-                                        <span class="new-price new-price-2">$57.98</span>
+                                        <span class="new-price new-price-2">₹ {{ product.price}}</span>
                                     </div>
                                     <div class="product-desc">
                                         <p>
-                                            <span>100% cotton double printed dress. Black and white striped top and orange high waisted skater skirt bottom. Lorem ipsum dolor sit amet, consectetur adipisicing elit. quibusdam corporis, earum facilis et nostrum dolorum accusamus similique eveniet quia pariatur.
-                                            </span>
+                                            <span> {{product.description}}  </span>
                                         </p>
                                     </div>
                                     <div class="single-add-to-cart">
@@ -127,18 +121,61 @@
                     <div class="tab-content">
                         <div id="description" class="tab-pane active show" role="tabpanel">
                             <div class="product-description">
-                                <span>The best is yet to come! Give your walls a voice with a framed poster. This aesthethic, optimistic poster will look great in your desk or in an open-space office. Painted wooden frame with passe-partout for more depth.</span>
+                                <span>{{ product.description }}</span>
                             </div>
                         </div>
+
+
                         <div id="product-details" class="tab-pane" role="tabpanel">
-                            <div class="product-details-manufacturer">
-                                <a href="#">
-                                    <img src="{% static 'main/images/product-details/1.jpg' %}" alt="Product Manufacturer Image">
-                                </a>
-                                <p><span>Reference</span> demo_7</p>
-                                <p><span>Reference</span> demo_7</p>
-                            </div>
+                            <table class="product-details-table">
+                                <tr>
+                                    <td><strong>Manufacturer</strong></td>
+                                    <td>{{ product.brand }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Model</strong></td>
+                                    <td>{{ product.model }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>MRP Price</strong></td>
+                                    <td>₹{{ product.price }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Offer</strong></td>
+                                    <td>{{ product.offer }} %</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Color</strong></td>
+                                    <td>{{ product.color }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Display Size</strong></td>
+                                    <td>{{ product.display_size }} Inch</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Camera</strong></td>
+                                    <td>{{ product.camera }} Megapixel</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Storage</strong></td>
+                                    <td>{{ product.storage }} GB internal</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ram</strong></td>
+                                    <td>{{ product.ram }} GB</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>5G</strong></td>
+                                    <td>{{ product.network }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Battery Capacity</strong></td>
+                                    <td>{{ product.battery }} mAh</td>
+                                </tr>
+                            </table>
                         </div>
+                        
+
                         <div id="reviews" class="tab-pane" role="tabpanel">
                             <div class="product-reviews">
                                 <div class="product-details-comment-block">
@@ -153,12 +190,34 @@
                                         </ul>
                                     </div>
                                     <div class="comment-author-infos pt-25">
-                                        <span>HTML 5</span>
-                                        <em>01-12-18</em>
+                                        <span>Arun Balakrishnan</span>
+                                        <em>Title: Awesome Smartphone Experience!
+
+                                            I recently got my hands on the latest smartphone from GadgetZone, and I must say, it's been a game-changer for me. 🚀
+                                            
+                                            Design and Build:
+                                            The sleek design and premium build quality immediately caught my eye. The phone feels great in my hand, and the attention to detail is impressive. 👌
+                                            
+                                            Performance:
+                                            Powered by the latest technology, this smartphone delivers smooth and speedy performance. Apps open quickly, and multitasking is a breeze. 🚀
+                                            
+                                            Camera Quality:
+                                            As a photography enthusiast, the camera on this device exceeded my expectations. The pictures are sharp, and the low-light performance is fantastic. 📸
+                                            
+                                            Battery Life:
+                                            No more worrying about running out of battery during the day. The long-lasting battery keeps up with my busy schedule without any hiccups. 🔋
+                                            
+                                            User Interface:
+                                            The user interface is intuitive and user-friendly, making it easy for someone like me, who's not a tech expert, to navigate through settings and apps effortlessly. 👍
+                                            
+                                            Overall Experience:
+                                            In conclusion, GadgetZone's smartphone offers a stellar overall experience. Whether you're a tech pro or just getting into smartphones, this device ticks all the boxes. Highly recommended! 🌟
+                                            
+                                            I hope you find this review format helpful! If you have any specific requirements or want more details, feel free to let me know. 😊</em>
                                     </div>
                                     <div class="comment-details">
-                                        <h4 class="title-block">Demo</h4>
-                                        <p>Plaza</p>
+                                        <h4 class="title-block">Feedback</h4>
+                                        <p>Value for money</p>
                                     </div>
                                     <div class="review-btn">
                                         <a class="review-links" href="#" data-toggle="modal" data-target="#mymodal">Write Your Review!</a>
@@ -174,7 +233,7 @@
                                                            <div class="li-review-product">
                                                                <img src="{% static 'main/images/product/large-size/3.jpg' %}" alt="Li's Product">
                                                                <div class="li-review-product-desc">
-                                                                   <p class="li-product-name">Today is a good day Framed poster</p>
+                                                                   <p class="li-product-name">{{ i.brand }} {{ i.model }}</p>
                                                                    <p>
                                                                        <span>Beach Camera Exclusive Bundle - Includes Two Samsung Radiant 360 R3 Wi-Fi Bluetooth Speakers. Fill The Entire Room With Exquisite Sound via Ring Radiator Technology. Stream And Control R3 Speakers Wirelessly With Your Smartphone. Sophisticated, Modern Design </span>
                                                                    </p>

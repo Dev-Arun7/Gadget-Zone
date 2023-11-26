@@ -1063,10 +1063,33 @@ textarea:focus {
   margin-right: 10px;
 }
 
-.product-details-images .lg-image img, 
-.product-details-thumbs .sm-image img {
-  width: 100%;
+/* Add these styles to your CSS file */
+.product-details-images {
+    text-align: center; /* Center the images within the container */
 }
+
+.product-details-images img {
+	width: auto; /* Set a fixed width for thumbnails */
+    height: 350px; /* Set a fixed height for thumbnails */
+    display: inline-block; /* Maintain centering and add padding */
+    padding: 40px; /* Add padding around the images */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+.product-details-images {
+    text-align: center; /* Center the images within the container */
+}
+
+.product-details-thumbs img {
+    width: auto; /* Set a fixed width for thumbnails */
+    height: 100px; /* Set a fixed height for thumbnails */
+	padding: 5px;
+    object-fit: contain; /* Ensure the entire image is visible while maintaining aspect ratio */
+    display: block; /* Remove any extra spacing below thumbnails */
+    margin-right: 5px; /* Add some space between thumbnails for neat alignment */
+}
+
+
 
 .product-details-thumbs .sm-image {
   cursor: pointer;
@@ -5437,3 +5460,17 @@ span.required {
 /*----------------------------------------------------------------------------------------------------*/
 /*------------------------------------------> The End <-----------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------*/
+
+
+/* --------------------------------------Gadgetzone Css ----------------------------------------------*/
+.product-details-table {
+    width: 50%;
+}
+
+.product-details-table td {
+    padding: 8px; /* Adjust the padding as per your preference */
+}
+
+.spec-name {
+    width: 50%; /* Adjust the width as per your preference */
+}
