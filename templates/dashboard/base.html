@@ -23,11 +23,11 @@
     <div class="main-wrapper">
         <div class="header">
 			<div class="header-left">
-				<a href="index-2.html" class="logo">
+				<a href="{% url 'dashboard_home' %}" class="logo">
 					<img src="{% static 'dashboard/img/g_white.png' %}" width="25" height="25" alt=""> <span>adget Zone</span>
 				</a>
 			</div>
-			<a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+			<a id="toggle_btn" href="{% url 'dashboard_home' %}"><i class="fa fa-bars"></i></a>
             <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar"><i class="fa fa-bars"></i></a>
             <ul class="nav user-menu float-right">
                 <li class="nav-item dropdown d-none d-sm-block">
