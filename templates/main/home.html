@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 
-
          <!-- Begin Slider With Category Menu Area -->
          <div class="slider-with-banner">
             <div class="container">
@@ -16,6 +15,7 @@
                             </div>
                             <div id="cate-toggle" class="category-menu-list">
                                 <ul>
+                                    <li><a href="{% url 'main_app:main_categories' %}">All Categories</a></li>
                                     <li><a href="{% url 'main_app:product_list' %}">All Products</a></li>
                                     <li><a href="{% url 'main_app:all_smartphones' %}">Smartphones</a></li>
                                     <li><a href="{% url 'main_app:all_featurephones' %}">Feature Phones</a></li>
@@ -2201,5 +2201,9 @@
                 </div>
             </section>
             <!-- Li's Trendding Products Area End Here -->
+
  {% endblock content %}
+
+
+
            

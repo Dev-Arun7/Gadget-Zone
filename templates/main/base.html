@@ -204,10 +204,9 @@
                                         <ul>
                                             <li class="{% url 'main_app:home' %}"><a href="{% url 'main_app:home' %}">Home</a>
                                                 <ul class="hb-dropdown">
-                                                    <li><a href="{% url 'main_app:product_list' %}">All Products</a></li>
-                                                    <li><a href="{% url 'main_app:all_smartphones' %}">Samrtphones</a></li>
-                                                    <li><a href="{% url 'main_app:all_featurephones' %}">Featurephones</a></li>
-                                                    <li><a href="index-4.html">Home Four</a></li>
+                                                    <li><a href="smartphones.html">Smartphones</a></li>
+                                                    <li><a href="featurephones.html">Featurephones</a></li>
+                                                    <li><a href="ruggedphones.html">Ruggeed Phones</a></li>
                                                 </ul>
                                             </li>
                                             <li class="megamenu-static-holder"><a href="index.html"> Shop all</a>
@@ -312,7 +311,7 @@
                                             <li><a href="about-us.html"> About Us</a></li>
                                             <li><a href="contact.html">Contact</a></li>
                                             <li><a href="shop-left-sidebar.html">Smartwatch</a></li>
-                                            <li><a href="shop-left-sidebar.html">Accessories</a></li>
+                                            <li><a href="{% url 'main_app:main_categories' %}">All Categories</a></li>
 
                                         </ul>
                                     </nav>
@@ -334,6 +333,10 @@
                 {% block content%} 
 
                     {% block form %}
+
+
+
+
 
                     {%endblock form%}               
                             

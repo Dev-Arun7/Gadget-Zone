@@ -5,7 +5,7 @@
             <div class="content">
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                        <h4 class="page-title">Add Products</h4>
+                        <h4 class="page-title">Edit Products</h4>
                     </div>
                 </div>
                 <div class="row">
@@ -15,8 +15,11 @@
                             <div class="form-group">
                                 <label>Select the phone category</label>
                                 <select class="form-control" name="phone_category" required>
-                                    <option value="smartphone">Smartphone</option>
-                                    <option value="feature_phone">Feature Phone</option>
+                                    {% for category in data %}
+                                    <option value="{{ category.id }}" {% if category.id == product.main_category.id %}selected{% endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             
