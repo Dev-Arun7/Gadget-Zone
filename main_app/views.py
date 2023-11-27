@@ -10,6 +10,7 @@ def home(request):
         product.offer_price = int(product.price * (1 - product.offer / 100))
     return render(request, "main/home.html", {"data": data})
 
+
 def product_list(request):
     data = Product.objects.all()
      # Calculate offer price for each product and add it to the data dictionary
@@ -24,6 +25,15 @@ def single_product(request, id):
     for product in data:
         product.offer_price = int(product.price * (1 - product.offer / 100))
     return render(request, "main/single_product.html", {"data": data,"product":product_id})
+
+
+
+
+
+
+
+def main_categories(request):
+    return render(request,'main/main_categories.html')
 
 
 ###############################################################################################################
@@ -71,5 +81,8 @@ def signup(request):
 
 def base(request):
     return render(request,'main/base.html')
+
+def temp(request):
+    return render(request,'main/temparary.html')
 
 

@@ -116,6 +116,7 @@ def add_product(request):
     return render(request, 'dashboard/add_product.html', {"data": data})
 
 def update_product(request, id):
+    data = Main_Category.objects.all()
     product = Product.objects.get(id=id)
 
     if request.method == 'POST':
@@ -158,7 +159,7 @@ def update_product(request, id):
         edit.save()
 
         return redirect('all_products')
-    return render(request, "dashboard/update_product.html", {"product": product})
+    return render(request, "dashboard/update_product.html", {"product": product, "data" : data})
 
 def delete_product(request,id):
     data = Product.objects.get(id=id) 

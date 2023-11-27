@@ -130,7 +130,9 @@
 
 
                                     <div id="grid-view" class="tab-pane fade" role="tabpanel">
+                                        
                                         <div class="product-area shop-product-area">
+                                           
                                             <div class="row">
                                                 {% for i in data %}
                                                     <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
@@ -158,7 +160,7 @@
                                                                             </ul>
                                                                         </div>
                                                                     </div>
-                                                                    <h4><a class="main_app/singleproduct" href="{% url 'main_app:single_product' i.id %}">{{ i.brand }} {{ i.model }}</a></h4>
+                                                                    <h4><a class="product_name" href="{% url 'main_app:single_product' i.id %}">{{ i.brand }} {{ i.model }}</a></h4>
                                                                     <div class="price-box">
                                                                         <span class="new-price">₹{{ i.offer_price }}</span>
                                                                     </div>
@@ -173,9 +175,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                {% endfor %}
+                                                    {% endfor %}
                                             </div>
+                                           
                                         </div>
+                                        
                                     </div>
                                     
                                     <div class="paginatoin-area">
