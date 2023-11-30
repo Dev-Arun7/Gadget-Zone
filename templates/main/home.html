@@ -147,21 +147,21 @@
                         <div id="li-new-product" class="tab-pane active show" role="tabpanel">
                             <div class="row">
                                 <div class="product-active owl-carousel">
-                                    {% for i in data %}
+                                    {% for i in default_product %}
                                         <div class="col-lg-12">
                                             <!-- single-product-wrap start -->
                                             <div class="single-product-wrap">
                                                 <div class="product-image">
-                                                    {% comment %} <a href="{% url 'main_app:single_product' i.id %}"> {% endcomment %}
-                                                        <img src="{{i.image.url}}" alt="Li's Product Image" style="height: 200px; object-fit: contain;">
+                                                    <a href="{% url 'main_app:single_product' i.id %}">
+                                                        <img src="{{ i.image.url }}" alt="Li's Product Image" style="height: 200px; object-fit: contain;">
                                                     </a>
                                                     <span class="sticker">New</span>
-                                                </div>
+                                                </div>                                                
                                                 <div class="product_desc">
                                                     <div class="product_desc_info">
                                                         <div class="product-review">
                                                             <h5 class="manufacturer">
-                                                                <a href="shop-left-sidebar.html"> {{ i.color }} {{ i.storage }} GB</a>
+                                                                <a href="{% url 'main_app:single_product' i.id %}""> {{ i.color }} {{ i.storage }} GB</a>
                                                             </h5>
                                                             <div class="rating-box">
                                                                 <ul class="rating">

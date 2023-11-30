@@ -2245,7 +2245,7 @@ textarea:focus {
 	padding-left: 20px;
 	position: relative;
 }
-.review-item::before {
+/* .review-item::before {
 	content: "\f040";
 	position: absolute;
 	left: 5px;
@@ -2254,7 +2254,7 @@ textarea:focus {
 	color: #7a7a7a;
 	font-size: 13px;
 	transition: all 0.3s ease-in-out;
-}
+} */
 .review-item:hover::before {
 	color: #fed700;
 }
