@@ -118,7 +118,9 @@ def add_product(request):
 def update_product(request, id):
     data = Main_Category.objects.all()
     product = Product.objects.get(id=id)
-
+    network = request.POST.get('network')
+    smart = request.POST.get('smart')
+    delete = request.POST.get('')
     if request.method == 'POST':
         brand = request.POST['brand']
         model = request.POST['model']
@@ -129,13 +131,13 @@ def update_product(request, id):
         camera = request.POST['camera']
         storage = request.POST['storage']
         ram = request.POST['ram']
-        network = request.POST.get('network', False) == 'true'
-        smart = request.POST.get('smart', False) == 'true'
+        network = request.POST.get('network', False)
+        smart = request.POST.get('smart', False)
         battery = request.POST['battery']
         image = request.FILES.get('image')
         stock = request.POST['stock']
         offer = request.POST['offer']
-        delete = request.POST.get('delete', False) == 'True'
+        delete = request.POST.get('delete', False)
 
         # Retrieve existing data
         edit = Product.objects.get(id=id)

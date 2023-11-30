@@ -100,7 +100,8 @@
                                     <input type="checkbox" 
                                            id="network" 
                                            name="network" 
-                                           value="{{product.network}}"
+                                           value="True"
+                                           {% if product.network %} checked {% endif %}
                                            class="form-check-input">
                                     <label class="form-check-label" for="network">Include 5G</label>
                                 </div>
@@ -111,8 +112,9 @@
                                 <div class="form-check">
                                     <input type="checkbox" 
                                            id="smartphoneCheckbox" 
-                                           name="smartphone" 
-                                           value="{{product.smartphone}}"
+                                           name="smart" 
+                                           value="True"
+                                           {% if product.smart %} checked {% endif %}
                                            class="form-check-input">
                                     <label class="form-check-label" for="smartphoneCheckbox">Smartphone</label>
                                 </div>
@@ -161,15 +163,17 @@
                                        value="{{product.offer}}"
                                        step="1" >
                             </div>
-                            <div class="form-group">
-                                <label for="network">Delete the product from page</label>
+                            <div>
+                                <label>Select is this a smartphone or not</label>
+                                <br>
                                 <div class="form-check">
                                     <input type="checkbox" 
-                                           id="network" 
+                                           id="delete_product" 
                                            name="delete" 
-                                           value="{{product.delete}}" 
+                                           value="True"
+                                           {% if product.deleted %} checked {% endif %}
                                            class="form-check-input">
-                                    <label class="form-check-label" for="network">Delete</label>
+                                    <label class="form-check-label" for="delete_product">Delete</label>
                                 </div>
                             </div>
                             <div class="row">

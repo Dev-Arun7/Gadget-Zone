@@ -93,7 +93,7 @@
                                                             <div class="product_desc_info">
                                                                 <div class="product-review">
                                                                     <h5 class="manufacturer">
-                                                                        <a href="product-details.html">{{ i.color }} {{ i.storage }} GB</a>
+                                                                        <a href="{% url 'main_app:single_product' i.id %}">{{ i.color }} {{ i.storage }} GB</a>
                                                                     </h5>
                                                                     <div class="rating-box">
                                                                         <ul class="rating">
