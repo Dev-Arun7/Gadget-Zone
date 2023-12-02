@@ -1,29 +1,37 @@
-
-
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from datetime import date,datetime
-from main_app.models import *
+from main_app.models import Product
 # Create your models here.
 
-class Customer(models.Model):
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(email, password, **extra_fields)
+
+class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, null=True)
-    last_name = models.CharField(max_length=30, null=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add = True)
-    phone=models.CharField(max_length=15,null=True)
-    wallet_bal = models.IntegerField(default=0)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    
+
+    objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    def __str__(self):
-        full_name = f"{self.first_name} {self.last_name}"
-        return full_name.strip()
     
 class Address(models.Model):
-    user = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, null=False, blank=True)
     last_name = models.CharField(max_length=50, null=False,blank=True)
     email = models.EmailField()
@@ -50,7 +58,7 @@ class Order(models.Model):
         ('refunded','refunded'),
         ('on_hold','on_hold')
     )
-    user           =   models.ForeignKey(Customer, on_delete=models.CASCADE) 
+    user           =   models.ForeignKey(CustomUser, on_delete=models.CASCADE) 
     address        =   models.ForeignKey(Address, on_delete=models.SET_NULL,null=True,blank=True)
     product        =   models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     amount         =   models.CharField(max_length=100)  
