@@ -78,8 +78,8 @@
                                                 <ul class="ht-setting-list">
                                                     <li><a href="login-register.html">Profile</a></li>
                                                     <li><a href="checkout.html">Checkout</a></li>
-                                                    <li><a href="login.html">Sign In</a></li>
-                                                    <li><a href="signup">Signup</a></li>
+                                                    <li><a href="{% url 'gauth_app:user_login' %}">Sign In</a></li>
+                                                    <li><a href="{% url 'gauth_app:user_signup' %}">Signup</a></li>
                                                 </ul>
                                             </div>
                                         </li>

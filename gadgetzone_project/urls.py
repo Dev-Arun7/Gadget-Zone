@@ -22,8 +22,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard_app.urls')),
-    path('gauth/',include('gauth_app.urls')),
+    path('gauth/',include(('gauth_app.urls', 'gauth_app'), namespace='gauth_app')),
     path('', include(('main_app.urls', 'main_app'), namespace='main_app')),
+    path('accounts/', include('allauth.urls')),
 ]
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
