@@ -132,16 +132,17 @@
           name="password"
         />
       </div>
-      {% if login_form.errors %}
+      {% if login_form.non_field_errors %}
       <div class="alert alert-danger">
         <strong>Oops...!</strong>
         <ul>
-          {% for error in login_form.errors %}
-          <li>{{ error }}</li>
+          {% for error in login_form.non_field_errors %}
+            <li>{{ error }}</li>
           {% endfor %}
         </ul>
       </div>
-      {% endif %}
+    {% endif %}
+    
       <br />
       <br />
       <button class="btn btn-primary btn-block" type="submit">Login</button>

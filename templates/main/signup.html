@@ -168,14 +168,17 @@
             </div>
             {% if register_form.errors %}
             <div class="alert alert-danger">
-              <strong>Error!</strong> Please correct the following errors:
-              <ul>
-                {% for error in register_form.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-              </ul>
+                <strong>Error!</strong> 
+                <ul>
+                    {% for field, errors in register_form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ field }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
             </div>
-            {% endif %}
+        {% endif %}
+        
             <button class="btn btn-primary btn-block" type="submit">
               Register
             </button>

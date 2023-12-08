@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 
+
 def user_signup(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
@@ -12,7 +13,10 @@ def user_signup(request):
             new_customer.username = form.cleaned_data['email']
             new_customer.save()
 
-            login(request, new_customer)
+            # Authenticate the user before login
+            user = authenticate(request, username=new_customer.username, password=form.cleaned_data['password1'])
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # Specify the authentication backend
+
             messages.success(request, "Registration successful.")
             return redirect("gauth_app:user_login")
         else:
@@ -20,6 +24,7 @@ def user_signup(request):
     else:
         form = NewUserForm()
     return render(request=request, template_name="main/signup.html", context={"register_form": form})
+
 
 def user_login(request):
     if request.method == "POST":
