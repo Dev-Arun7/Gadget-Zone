@@ -1,84 +1,160 @@
-{% comment %} 
-<!--Login--> 
+{% comment %}
+<!--Login-->
 <div class="container py-5">
-    <h1>Login</h1>
-    <form method="POST">
-      {% csrf_token %}
-      {{ login_form }}
-      <button class="btn btn-primary" type="submit">Login</button>
-    </form>
-    <p class="text-center">Don't have an account? <a href="{% url 'gauth_app:user_signup' %}">Create an account</a>.</p>
-  </div> {% endcomment %}
-
-
-
-
-{% load static %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <h1>Login</h1>
+  <form method="POST">
+    {% csrf_token %} {{ login_form }}
+    <button class="btn btn-primary" type="submit">Login</button>
+  </form>
+  <p class="text-center">
+    Don't have an account?
+    <a href="{% url 'gauth_app:user_signup' %}">Create an account</a>.
+  </p>
+</div>
+{% endcomment %} {% load socialaccount %} {% load static %}
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+/>
 
 <style>
-    .login-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 
-    .custom-card {
-        width: 300px;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
-        background-color: #ffffff;
-    }
+  .custom-card {
+    width: 300px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+  }
 
-    .logo-container {
-        text-align: center;
-        margin-bottom: 30px;
-    }
+  .logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+  }
 
-    .card-title {
-        font-size: 28px;
-    }
+  .card-title {
+    font-size: 28px;
+  }
 
-    .form-group {
-        margin-bottom: 20px;
-    }
+  .form-group {
+    margin-bottom: 20px;
+  }
 </style>
-
+{% comment %} this is the google signin button {% endcomment %}
 <div class="container login-container">
   <div class="card custom-card">
-      <div class="logo-container">
-          <img src="{% static 'main/images/menu/logo/1.png'%}" alt="Your Logo" class="img-fluid">
-      </div>
-      <h1 class="card-title text-center mb-4">Login</h1>
-      <form method="POST">
-          {% csrf_token %}
-          <div class="form-group">
-              {{ login_form.username.label_tag }}
-              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter username" name="username">
-          </div>
-          <div class="form-group">
-              {{ login_form.password.label_tag }}
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
-          </div>
-          {% if login_form.errors %}
-              <div class="alert alert-danger">
-                  <strong>Oops...!</strong>
-                  <ul>
-                      {% for error in login_form.errors %}
-                          <li>{{ error }}</li>
-                      {% endfor %}
-                  </ul>
-              </div>
-          {% endif %}
-          <br>
-          <br>
-          <button class="btn btn-primary btn-block" type="submit">Login</button> 
+    <div class="logo-container">
+      <img
+        src="{% static 'main/images/menu/logo/1.png'%}"
+        alt="Your Logo"
+        class="img-fluid"
+      />
+    </div>
+    <h1 class="card-title text-center mb-4">Login</h1>
+    <div class="signin text-center">
+      <img
+        src="{% static 'main/images/others/google.png' %}"
+        alt="Sign in with Google"
+        class="hover-effect"
+        style="
+          width: 14rem;
+          height: auto;
+          transition: transform 0.3s ease-in-out;
+          cursor: pointer;
+        "
+        onclick="submitForm()"
+        onmouseover="hoverEffect(this)"
+        onmouseout="removeHoverEffect(this)"
+      />
+      <br />
+
+      <form
+        id="googleForm"
+        action="{% provider_login_url 'google' %}"
+        method="post"
+        style="display: none"
+      >
+        {% csrf_token %}
       </form>
-      <br>
-      <p class="text-center mt-3">Don't have an account? <a href="{% url 'gauth_app:user_signup' %}">Create an account</a>.</p>
+
+      <script>
+        function submitForm() {
+          document.getElementById("googleForm").submit();
+        }
+
+        function hoverEffect(element) {
+          element.style.transform = "scale(1.1)";
+        }
+
+        function removeHoverEffect(element) {
+          element.style.transform = "scale(1)";
+        }
+      </script>
+      <br />
+
+      {% comment %}
+      <a href="{% provider_login_url 'google' %}" class="text-dark">
+        <img
+          src="{% static 'main/images/others/google.png' %}"
+          class="hover-effect"
+          style="width: 14rem; height: auto"
+        />
+      </a>
+      <br />
+      {% endcomment %}
+    </div>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ login_form.username.label_tag }}
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          placeholder="Enter username"
+          name="username"
+        />
+      </div>
+      <div class="form-group">
+        {{ login_form.password.label_tag }}
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+          placeholder="Password"
+          name="password"
+        />
+      </div>
+      {% if login_form.errors %}
+      <div class="alert alert-danger">
+        <strong>Oops...!</strong>
+        <ul>
+          {% for error in login_form.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <br />
+      <br />
+      <button class="btn btn-primary btn-block" type="submit">Login</button>
+    </form>
+    <br />
+    <p class="text-center mt-3">
+      Don't have an account?
+      <a href="{% url 'gauth_app:user_signup' %}">Create an account</a>.
+    </p>
   </div>
 </div>
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+/>

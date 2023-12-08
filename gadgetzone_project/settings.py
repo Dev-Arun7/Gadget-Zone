@@ -44,28 +44,36 @@ INSTALLED_APPS = [
     'crispy_forms',
 
     # allauth apps
-    'django.contrib.sites',
+    'django.contrib.sites', 
     'allauth',
     'allauth.account',
-    'allauth.socialaccount', 
-    'allauth.socialaccount.providers.google', # for Google auth
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
+# Provider specific settings
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         # For each OAuth based provider, either add a ``SocialApp``
+#         # (``socialaccount`` app) containing the required client
+#         # credentials, or list them here:
+#         'APP': {
+#             'client_id': '123',
+#             'secret': '456',
+#             'key': ''
+#         }
+#     }
+# }
+
+
+SOCIALACCOUNT_PROVIDERS = {'google': {
+    'SCOPE': ['profile', 'email', ], 'AUTH_PARAMS': {'access_type': 'online', }}}
+
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-AUTH_USER_MODEL = "gauth_app.Customer" 
+AUTH_USER_MODEL = "gauth_app.Customer"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,7 +82,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'gadgetzone_project.urls'
@@ -106,10 +114,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gadgetzone',
-        'USER':'postgres',
-        'PASSWORD':'admin123',
-        'HOST':'localhost',
-        'port':'5432'
+        'USER': 'postgres',
+        'PASSWORD': 'admin123',
+        'HOST': 'localhost',
+        'port': '5432'
     }
 }
 
@@ -150,8 +158,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static/'
-STATICFILES_DIRS=[
-    os.path.join(BASE_DIR,'static'),
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 MEDIA_URL = '/media/'
@@ -163,18 +171,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
 ############################################################################################
-#                       all auth configurations                                             
+#                       all auth configurations
 ############################################################################################
 AUTHENTICATION_BACKENDS = (
- #used for default signin such as loggin into admin panel
- 'django.contrib.auth.backends.ModelBackend', 
-  
- #used for social authentications
- 'allauth.account.auth_backends.AuthenticationBackend',
- )
+    # used for default signin such as loggin into admin panel
+    'django.contrib.auth.backends.ModelBackend',
 
-SITE_ID = 1
+    # used for social authentications
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+SITE_ID = 2
 
 LOGIN_REDIRECT_URL = 'main_app:home'

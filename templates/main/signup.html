@@ -1,99 +1,197 @@
-{% comment %} <div class="container py-5">
-    <h1>Register</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ register_form.as_p }}
-        {% if register_form.errors %}
-            <div class="alert alert-danger">
-                <strong>Error!</strong> Please correct the following errors:
-                <ul>
-                    {% for error in register_form.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-        <button class="btn btn-primary" type="submit">Register</button>
-    </form>
-    <p class="text-center">If you already have an account, <a href="{%  url 'gauth_app:user_login' %}">login</a> instead.</p>
-</div>  {% endcomment %}
-
-{% load static %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+{% comment %}
+<div class="container py-5">
+  <h1>Register</h1>
+  <form method="POST">
+    {% csrf_token %} {{ register_form.as_p }} {% if register_form.errors %}
+    <div class="alert alert-danger">
+      <strong>Error!</strong> Please correct the following errors:
+      <ul>
+        {% for error in register_form.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    <button class="btn btn-primary" type="submit">Register</button>
+  </form>
+  <p class="text-center">
+    If you already have an account,
+    <a href="{%  url 'gauth_app:user_login' %}">login</a> instead.
+  </p>
+</div>
+{% endcomment %} {% load static %} {% load socialaccount %}
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+/>
 
 <style>
-    .custom-card {
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
-        padding: 30px; /* Increased padding for more space */
-        background-color: #ffffff; /* White background */
-    }
+  .custom-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px; /* Increased padding for more space */
+    background-color: #ffffff; /* White background */
+  }
 
-    .material-icons {
-        font-size: 24px;
-    }
+  .material-icons {
+    font-size: 24px;
+  }
 
-    .form-group {
-        margin-bottom: 20px;
-    }
+  .form-group {
+    margin-bottom: 20px;
+  }
 
-    .logo-container {
-        text-align: center;
-        margin-bottom: 30px; /* Added margin for spacing */
-    }
+  .logo-container {
+    text-align: center;
+    margin-bottom: 30px; /* Added margin for spacing */
+  }
 
-    .logo-container img {
-        max-height: 150px; /* Adjust the max-height for the logo */
-    }
+  .logo-container img {
+    max-height: 150px; /* Adjust the max-height for the logo */
+  }
 
-    .card-title {
-        font-size: 28px; /* Adjust the font size for the card title */
-    }
+  .card-title {
+    font-size: 28px; /* Adjust the font size for the card title */
+  }
+
+  .hover-effect:hover {
+    transform: scale(1.1); /* Increase the size on hover */
+    transition: transform 0.3s ease; /* Add a smooth transition effect */
+  }
 </style>
 
 <div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-">
-            <div class="card custom-card">
-                <div class="logo-container">
-                    <!-- Add your website logo here -->
-                    <img src="{% static 'main/images/menu/logo/1.png'%}" alt="Your Logo" class="img-fluid">
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title text-center mb-4">Sign Up</h1>
-                    <form method="POST">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            {{ register_form.email.label_tag }}
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email">
-                        </div>
-                        <div class="form-group">
-                            {{ register_form.password1.label_tag }}
-                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password1">
-                        </div>
-                        <div class="form-group">
-                            {{ register_form.password2.label_tag }}
-                            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Confirm Password" name="password2">
-                        </div>
-                        {% if register_form.errors %}
-                            <div class="alert alert-danger">
-                                <strong>Error!</strong> Please correct the following errors:
-                                <ul>
-                                    {% for error in register_form.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %}
-                        <button class="btn btn-primary btn-block" type="submit">Register</button>
-                    </form>
-                    <p class="text-center mt-3">If you already have an account, <a href="{% url 'gauth_app:user_login' %}">login</a> instead.</p>
-                </div>
-            </div>
+  <div class="row justify-content-center">
+    <div class="col-md-">
+      <div class="card custom-card">
+        <div class="logo-container">
+          <!-- Add your website logo here -->
+          <img
+            src="{% static 'main/images/menu/logo/1.png'%}"
+            alt="Your Logo"
+            class="img-fluid"
+          />
         </div>
+        <div class="card-body">
+          <h1 class="card-title text-center mb-4">Sign Up</h1>
+
+          {% comment %} this is the google signin button {% endcomment %}
+          <div style="text-align: center;">
+            <img
+              src="{% static 'main/images/others/google.png' %}"
+              alt="Sign in with Google"
+              class="hover-effect"
+              style="
+                width: 18rem;
+                height: auto;
+                transition: transform 0.3s ease-in-out;
+                cursor: pointer;
+                margin: auto; /* Add this line to center the image */
+              "
+              onclick="submitForm()"
+              onmouseover="hoverEffect(this)"
+              onmouseout="removeHoverEffect(this)"
+            />
+          </div>
+
+          <form
+            id="googleForm"
+            action="{% provider_login_url 'google' %}"
+            method="post"
+            style="display: none"
+          >
+            {% csrf_token %}
+          </form>
+
+          <script>
+            function submitForm() {
+              document.getElementById("googleForm").submit();
+            }
+
+            function hoverEffect(element) {
+              element.style.transform = "scale(1.1)";
+            }
+
+            function removeHoverEffect(element) {
+              element.style.transform = "scale(1)";
+            }
+          </script>
+          <br />
+
+          {% comment %}
+          <div class="signin text-center">
+            <a href="{% provider_login_url 'google' %}" class="text-dark">
+              <img
+                src="{% static 'main/images/others/google.png' %}"
+                class="hover-effect"
+                style="width: 18rem; height: auto"
+              />
+            </a>
+            <br />
+          </div>
+          {% endcomment %}
+
+          <br />
+          <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              {{ register_form.email.label_tag }}
+              <input
+                type="email"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+                name="email"
+              />
+            </div>
+            <div class="form-group">
+              {{ register_form.password1.label_tag }}
+              <input
+                type="password"
+                class="form-control"
+                id="exampleInputPassword1"
+                placeholder="Password"
+                name="password1"
+              />
+            </div>
+            <div class="form-group">
+              {{ register_form.password2.label_tag }}
+              <input
+                type="password"
+                class="form-control"
+                id="exampleInputPassword2"
+                placeholder="Confirm Password"
+                name="password2"
+              />
+            </div>
+            {% if register_form.errors %}
+            <div class="alert alert-danger">
+              <strong>Error!</strong> Please correct the following errors:
+              <ul>
+                {% for error in register_form.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+            <button class="btn btn-primary btn-block" type="submit">
+              Register
+            </button>
+          </form>
+          <p class="text-center mt-3">
+            If you already have an account,
+            <a href="{% url 'gauth_app:user_login' %}">login</a> instead.
+          </p>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Add this line for Material Design Icons -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+/>
