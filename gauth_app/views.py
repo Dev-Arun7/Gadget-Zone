@@ -8,7 +8,10 @@ def user_signup(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
-            new_customer = form.save()
+            new_customer = form.save(commit=False)
+            new_customer.username = form.cleaned_data['email']
+            new_customer.save()
+
             login(request, new_customer)
             messages.success(request, "Registration successful.")
             return redirect("gauth_app:user_login")
@@ -17,7 +20,6 @@ def user_signup(request):
     else:
         form = NewUserForm()
     return render(request=request, template_name="main/signup.html", context={"register_form": form})
-
 
 def user_login(request):
     if request.method == "POST":

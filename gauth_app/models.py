@@ -8,7 +8,7 @@ from main_app.models import *
 
 class Customer(AbstractUser):
     email             = models.EmailField(unique=True)
-    username          = models.CharField(unique=True,null=True,blank=True,max_length=20)
+    username          = models.CharField(unique=True, null=True, blank=True, max_length=20)
     phone             = models.CharField(max_length=10)
     is_verified       = models.BooleanField(default=False)
     email_token       = models.CharField(max_length=100, null=True, blank=True)
@@ -21,7 +21,12 @@ class Customer(AbstractUser):
     USERNAME_FIELD    = 'email'
     REQUIRED_FIELDS   = []
 
-    def _str_(self):
+    def save(self, *args, **kwargs):
+        # Set the username as the email address before saving
+        self.username = self.email
+        super().save(*args, **kwargs)
+
+    def __str__(self):
         return self.email
        
 class Address(models.Model):
