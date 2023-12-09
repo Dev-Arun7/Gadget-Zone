@@ -7,7 +7,7 @@
                         <h4 class="page-title">All Products</h4>
                     </div>
                     <div class="col-sm-12 col-9 text-left m-b-20 ml-3">
-                        <a href="{% url 'add_product' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Product</a>
+                        <a href="{% url 'dashboard_app:add_product' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Product</a>
                     </div>
                 </div>
 				<div class="row">
@@ -65,10 +65,10 @@
 										<td>{{i.stock}}</td>
 										<td>{{i.offer}}</td>
 										<td>
-											<a type="button" href="{% url 'update_product' id=i.id %}" class="btn btn-success">Edit</a>
+											<a type="button" href="{% url 'dashboard_app:update_product' id=i.id %}" class="btn btn-success">Edit</a>
 										</td>
 										<td>
-											<a type="button" href="{% url 'delete_product' id=i.id %}" class="btn btn-danger">Remove</a>
+											<a type="button" href="{% url 'dashboard_app:delete_product' id=i.id %}" class="btn btn-danger">Remove</a>
 										</td>
 									</tr>
 									{% endfor%} 

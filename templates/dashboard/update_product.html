@@ -10,7 +10,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-8">
-                        <form action="{% url 'update_product' product.id %}" method="post" enctype="multipart/form-data">
+                        <form action="{% url 'dashboard_app:update_product' product.id %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
                                 <label>Select the phone category</label>
@@ -142,6 +142,7 @@
                                     <input class="form-control" type="file"
                                     placeholder="Select image"
                                     name= "image"
+                                    required
                                     >
                                     <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
                                 </div>   

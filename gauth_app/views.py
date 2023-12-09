@@ -1,8 +1,10 @@
+from django.contrib.auth import login, authenticate, logout 
 from django.shortcuts import render, redirect
 from .forms import NewUserForm
-from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from gauth_app.models import Customer
 
 
 def user_signup(request):
@@ -13,7 +15,7 @@ def user_signup(request):
             new_customer.username = form.cleaned_data['email']
             new_customer.save()
 
-            # Authenticate the user before login
+            # Authenticate the user before login just after signup
             user = authenticate(request, username=new_customer.username, password=form.cleaned_data['password1'])
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # Specify the authentication backend
 
@@ -26,7 +28,7 @@ def user_signup(request):
     return render(request=request, template_name="main/signup.html", context={"register_form": form})
 
 
-def user_login(request):
+def user_login(request): 
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -44,3 +46,15 @@ def user_login(request):
     else:
         form = AuthenticationForm()
     return render(request=request, template_name="main/login.html", context={"login_form": form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('gauth_app:user_login')
+
+
+
+def profile(request):
+    customer = request.user
+    return render(request, 'main/profile.html', {'customer': customer})
+

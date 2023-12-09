@@ -4,10 +4,10 @@
             <div class="content">
                 <div class="row">
                     <div class="col-sm-4 col-3">
-                        <h4 class="page-title">Main_Category</h4>
+                        <h4 class="page-title">Category</h4>
                     </div>
                     <div class="col-sm-8 col-9 text-left m-b-20 ml-3">
-                        <a href="{% url 'add_main_category' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Brand</a>
+                        <a href="{% url 'dashboard_app:add_main_category' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Category</a>
                     </div>
                 </div>
 				<div class="row">
@@ -29,8 +29,8 @@
 										<td>{{i.name}}</td>
 										<td><img width="90" height="50" src="{{i.img.url}}" alt="Li's Product Image"></td>
 										<td>{{i.descriptions}}</td>
-										<td><a type="button" href="{% url 'update_main_category' id=i.id %}" class="btn btn-success">Edit</a></td>
-										<td><a type="button" href="{% url 'delete_main_category' id=i.id %}" class="btn btn-danger">Remove</a></td>
+										<td><a type="button" href="{% url 'dashboard_app:update_main_category' id=i.id %}" class="btn btn-success">Edit</a></td>
+										<td><a type="button" href="{% url 'dashboard_app:delete_main_category' id=i.id %}" class="btn btn-danger">Remove</a></td>
 									</tr>	
 									{% endfor%} 
 								</tbody>

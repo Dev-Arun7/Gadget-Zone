@@ -76,11 +76,15 @@
                                             <div class="ht-setting-trigger"><span>My Account</div>
                                             <div class="setting ht-setting">
                                                 <ul class="ht-setting-list">
-                                                    <li><a href="login-register.html">Profile</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
-                                                    <li><a href="{% url 'gauth_app:user_login' %}">Sign In</a></li>
-                                                    <li><a href="{% url 'gauth_app:user_signup' %}">Signup</a></li>
-                                                </ul>
+                                                    {% if user.is_authenticated %}
+                                                        <li><a href="{% url 'gauth_app:profile' %}">Profile</a></li>
+                                                        <li><a href="checkout.html">Checkout</a></li>
+                                                        <li><a href="{% url 'gauth_app:user_logout' %}">Logout</a></li>
+                                                    {% else %}
+                                                        <li><a href="{% url 'gauth_app:user_login' %}">Sign In</a></li>
+                                                        <li><a href="{% url 'gauth_app:user_signup' %}">Signup</a></li>
+                                                    {% endif %}
+                                                </ul>                                 
                                             </div>
                                         </li>
                                         <!-- Setting Area End Here -->

@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse  
 from main_app.models import Main_Category, Product
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -13,12 +13,14 @@ def product_list(request):
         product.offer_price = int(product.price * (1 - product.offer / 100))
     return render(request, "main/product_list.html",{"data": products})
 
+
 def category_products(request,id):
     main_category = Main_Category.objects.get(pk=id)
     products = Product.objects.filter(main_category=main_category, deleted=False)
     for product in products:
         product.offer_price = int(product.price * (1 - product.offer / 100))
     return render(request, "main/product_list.html", {'data': products})
+
 
 def single_product(request, id):
     product = Product.objects.get(id=id)
@@ -31,6 +33,8 @@ def single_product(request, id):
     }
     return render(request, "main/single_product.html", context)
 
+
+@login_required(login_url='gauth_app:user_login')
 def main_categories(request):
     return render(request,'main/main_categories.html')
 
@@ -50,6 +54,7 @@ def all_featutephones(request):
         product.offer_price = int(product.price * (1 - product.offer / 100))
 
     return render(request, 'main/product_list.html', {'data': featurephone_products})
+
 
 def all_smartphones(request):
     # Get the Main_Category named 'Featurephone'
@@ -74,8 +79,6 @@ def budget_phones(request):
     return render(request, "main/product_list.html", {"budget": data})
 
 
-def signup(request):
-    return render(request,'main/signup.html')
 
 def base(request):
     return render(request,'main/base.html')

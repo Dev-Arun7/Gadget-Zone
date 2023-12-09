@@ -1,42 +1,82 @@
-{% extends 'dashboard/base.html' %}
 {% load static %}
-{% block content %}
-    <body>
-        <div class="main-wrapper account-wrapper">
-            <div class="account-page">
-                <div class="account-center">
-                    <div class="account-box">
-                        <form action="http://dreamguys.co.in/preclinic/template/index.html" class="form-signin">
-                            <div class="account-logo">
-                                <a href="index-2.html"><img src="{% static 'dashboard/img/logo-dark.png' %}" alt=""></a>
-                            </div>
-                            <div class="form-group">
-                                <label>Username or Email</label>
-                                <input type="text" autofocus="" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" class="form-control">
-                            </div>
-                            <div class="form-group text-right">
-                                <a href="forgot-password.html">Forgot your password?</a>
-                            </div>
-                            <div class="form-group text-center">
-                                <button type="submit" class="btn btn-primary account-btn">Login</button>
-                            </div>
-                            <div class="text-center register-link">
-                                Don’t have an account? <a href="register.html">Register Now</a>
-                            </div>
-                        </form>
+<!DOCTYPE html>
+<html lang="en">
+  <!-- appointments23:19-->
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="dashboard/img/favicon.ico"
+    />
+    <title>Gadget Zone Admin</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'dashboard/css/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'dashboard/css/font-awesome.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'dashboard/css/select2.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'dashboard/css/style.css' %}"
+    />
+    <!--[if lt IE 9]>
+      <script src="{% static 'dashboard/js/html5shiv.min.js' %}"></script>
+      <script src="{% static 'dashboard/js/respond.min.js' %}"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="main-wrapper account-wrapper">
+        <div class="account-page">
+            <div class="account-center">
+                <div class="account-box">
+                    <form method="post" action="{% url 'dashboard_app:dashboard_login' %}" class="form-signin">
+                        {% csrf_token %}
+                        <div class="account-logo">
+                            <a href="index-2.html">
+                                <img src="{% static 'main/images/menu/logo/1.png' %}" alt="" />
+                            </a>
+                        </div>
+                        <div class="form-group">
+                            <label>Username or Email</label>
+                            <input type="text" autofocus="" class="form-control" name="username">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" name="password">
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary account-btn">Login</button>
+                        </div>
+                    </form>
+                    
+                    <!-- Display error messages -->
+                    {% if messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
                     </div>
+                {% endif %}
+                    
                 </div>
             </div>
         </div>
-        <script src="{% static 'dashboard/js/jquery-3.2.1.min.js' %}"></script>
-        <script src="{% static 'dashboard/js/popper.min.js' %}"></script>
-        <script src="{% static 'dashboard/js/bootstrap.min.js' %}"></script>
-        <script src="{% static 'dashboard/js/app.js' %}"></script>
-    </body>
-{% endblock content %}
-
-
+    </div>
+    <!-- Your existing script tags... -->
+</body>
+</html>

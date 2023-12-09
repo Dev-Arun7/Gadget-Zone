@@ -52,19 +52,7 @@ INSTALLED_APPS = [
 ]
 
 
-# Provider specific settings
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': '123',
-#             'secret': '456',
-#             'key': ''
-#         }
-#     }
-# }
+
 
 
 SOCIALACCOUNT_PROVIDERS = {'google': {
@@ -170,9 +158,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 ############################################################################################
-#                       all auth configurations
+                      # all auth configurations #
 ############################################################################################
 AUTHENTICATION_BACKENDS = (
     # used for default signin such as loggin into admin panel

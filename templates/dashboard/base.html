@@ -23,11 +23,11 @@
     <div class="main-wrapper">
         <div class="header">
 			<div class="header-left">
-				<a href="{% url 'dashboard_home' %}" class="logo">
+				<a href="{% url 'dashboard_app:dashboard_home' %}" class="logo">
 					<img src="{% static 'dashboard/img/g_white.png' %}" width="25" height="25" alt=""> <span>adget Zone</span>
 				</a>
 			</div>
-			<a id="toggle_btn" href="{% url 'dashboard_home' %}"><i class="fa fa-bars"></i></a>
+			<a id="toggle_btn" href="{% url 'dashboard_app:dashboard_home' %}"><i class="fa fa-bars"></i></a>
             <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar"><i class="fa fa-bars"></i></a>
             <ul class="nav user-menu float-right">
                 <li class="nav-item dropdown d-none d-sm-block">
@@ -44,22 +44,10 @@
                         <span>Admin</span>
                     </a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="profile.html">My Profile</a>
-						<a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
-						<a class="dropdown-item" href="settings.html">Settings</a>
-						<a class="dropdown-item" href="login.html">Logout</a>
+						<a class="dropdown-item" href="{% url 'dashboard_app:dashboard_logout' %}">Logout</a>
 					</div>
                 </li>
             </ul>
-            <div class="dropdown mobile-user-menu float-right">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="profile.html">My Profile</a>
-                    <a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
-                    <a class="dropdown-item" href="settings.html">Settings</a>
-                    <a class="dropdown-item" href="login.html">Logout</a>
-                </div>
-            </div>
         </div>
         <div class="sidebar" id="sidebar">
             <div class="sidebar-inner slimscroll">
@@ -67,19 +55,19 @@
                     <ul>
                         <li class="menu-title">Main</li>
                         <li  class="active">
-                            <a href="{% url 'dashboard_home' %}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+                            <a href="{% url 'dashboard_app:dashboard_home' %}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                         </li>
 						<li>
                             <a href="doctors.html"><i class="fa fa-user-md"></i> <span>Users</span></a>
                         </li>
                         <li>
-                            <a href="{% url 'main_category' %}"><i class="fa  fa-cubes fa-l"></i> <span>Main Category</span></a>
+                            <a href="{% url 'dashboard_app:main_category' %}"><i class="fa  fa-cubes fa-l"></i> <span>Category</span></a>
                         </li>
                         <li>
                             <a href="patients.html"><i class="fa fa-mobile fa-l"></i> <span>Brands</span></a>
                         </li>
                         <li>
-                            <a href="{% url 'all_products' %}"><i class="fa fa-shopping-bag"></i> <span>All Products</span></a>
+                            <a href="{% url 'dashboard_app:all_products' %}"><i class="fa fa-shopping-bag"></i> <span>All Products</span></a>
                         </li>
                         <li>
                             <a href="schedule.html"><i class="fa fa-cart-plus"></i> <span>Orders</span></a>

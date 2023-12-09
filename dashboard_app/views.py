@@ -1,19 +1,54 @@
 from django.shortcuts import render,redirect
 from main_app.models import Main_Category, Product
-from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-# Create your views here.
+
+#############################################################################################
+                            # Login and home #
+#############################################################################################
+
+from django.contrib import messages  # Import the messages module
+
+def dashboard_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None and user.is_superuser:
+            # Log in the superuser
+            login(request, user)
+            return redirect("dashboard_app:dashboard_home")  # Redirect to your dashboard
+        else:
+            # Handle incorrect credentials
+            messages.error(request, 'Invalid username or password. Please try again.')
+
+    return render(request, 'dashboard/login.html')
+
+def dashboard_logout(request):
+    logout(request)
+    return render(request,'dashboard/login.html')
+
+
+@login_required(login_url='dashboard_app:dashboard_login')
 def dashboard_home(request):
     return render(request,'dashboard/home.html')
 
 #############################################################################################
-            # Main Category Section, All product, Add, update and delete
+            # Main Category Section, All product, Add, update and delete #
 #############################################################################################
 
+@login_required(login_url='dashboard_app:dashboard_login')
 def main_category(request):
     data = Main_Category.objects.all()
     return render(request,"dashboard/main_category.html",{"data": data})
 
+
+@login_required(login_url='dashboard_app:dashboard_login')
 def add_main_category(request):
     if request.method == 'POST':
         main_category_name = request.POST['main_category_name']
@@ -30,6 +65,8 @@ def add_main_category(request):
         return redirect('main_category')
     return render(request, 'dashboard/add_main_category.html')
 
+
+@login_required(login_url='dashboard_app:dashboard_login')
 def update_main_category(request, id):
     data = Main_Category.objects.get(id=id)
 
@@ -49,24 +86,29 @@ def update_main_category(request, id):
         # Save updated data
         edit.save()
 
-        return redirect('main_category')
+        return redirect('dashboard_app:main_category')
 
     return render(request, "dashboard/update_main_category.html", {"data": data})
 
+
+@login_required(login_url='dashboard_app:dashboard_login')
 def delete_main_category(request,id):
     data = Main_Category.objects.get(id=id) 
     data.delete()  
     return redirect('main_category')
  
 #############################################################################################
-       # Product Section, contains "all_products, add, update and delete product"
+       # Product Section, contains "all_products, add, update and delete product" #
 #############################################################################################
 
 
+@login_required(login_url='dashboard_app:dashboard_login')
 def all_products(request):
     data = Product.objects.all()
     return render(request, "dashboard/all_products.html", {"data": data})
 
+
+@login_required(login_url='dashboard_app:dashboard_login')
 def add_product(request):
     data = Main_Category.objects.all() 
     if request.method == 'POST':
@@ -111,10 +153,12 @@ def add_product(request):
             main_category=main_cat  # Associate the Product with a main_category
         )
         query.save()
-        return redirect('all_products')
+        return redirect('dashboard_app:all_products')
     # Render the form if it's not a POST request
     return render(request, 'dashboard/add_product.html', {"data": data})
 
+
+@login_required(login_url='dashboard_app:dashboard_login')
 def update_product(request, id):
     data = Main_Category.objects.all()
     product = Product.objects.get(id=id)
@@ -160,13 +204,15 @@ def update_product(request, id):
         edit.deleted=delete
         edit.save()
 
-        return redirect('all_products')
+        return redirect('dashboard_app:all_products')
     return render(request, "dashboard/update_product.html", {"product": product, "data" : data})
 
+
+@login_required(login_url='dashboard_app:dashboard_login')
 def delete_product(request,id):
     data = Product.objects.get(id=id) 
     data.delete()  
-    return redirect('all_products')
+    return redirect('dashboard_app:all_products')
         
 
 

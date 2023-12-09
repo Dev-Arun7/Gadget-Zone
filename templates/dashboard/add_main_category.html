@@ -5,12 +5,12 @@
             <div class="content">
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                        <h4 class="page-title">Add Main Categories</h4>
+                        <h4 class="page-title">Main Categories</h4>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                        <form action="{% url 'add_main_category' %}" method="post" enctype="multipart/form-data">
+                        <form action="{% url 'dashboard_app:add_main_category' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
                                 <label>Main category name</label>

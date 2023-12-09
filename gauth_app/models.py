@@ -15,7 +15,7 @@ class Customer(AbstractUser):
     forgot_password   = models.CharField(max_length=100,null=True, blank=True)
     last_login_time   = models.DateTimeField(default=timezone.now,null = True, blank = True)
     last_logout_time  = models.DateTimeField(default=timezone.now, null=True,blank=True)
-    profile_photo     = models.ImageField(upload_to='products', null=True, blank=True, default='default_image.jpg')
+    profile_photo     = models.ImageField(upload_to='profile_photo', null=True, blank=True, default='profile.png')
     wallet_bal        = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
     # objects           = UserManager()
     USERNAME_FIELD    = 'email'
@@ -31,6 +31,7 @@ class Customer(AbstractUser):
        
 class Address(models.Model):
     user              = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    address_name      = models.CharField(max_length=50, null=False, blank=True)
     first_name        = models.CharField(max_length=50, null=False, blank=True)
     last_name         = models.CharField(max_length=50, null=False,blank=True)
     email             = models.EmailField()

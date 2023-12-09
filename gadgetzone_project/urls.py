@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashboard/', include('dashboard_app.urls')),
+    path('dashboard/', include(('dashboard_app.urls', 'dashboard_app'), namespace='dashboard_app')),
     path('gauth/',include(('gauth_app.urls', 'gauth_app'), namespace='gauth_app')),
     path('', include(('main_app.urls', 'main_app'), namespace='main_app')),
     path('accounts/', include('allauth.urls')),
