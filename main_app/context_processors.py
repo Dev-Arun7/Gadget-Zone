@@ -6,5 +6,7 @@ def extras(request):
     for product in products:
         product.offer_price = int(product.price * (1 - product.offer / 100))
     
-    context = {'default_main_category' : main_category, 'default_product': products}
+    context = {'default_main_category' : main_category,
+                'default_product': products
+                }
     return context

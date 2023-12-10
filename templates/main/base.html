@@ -59,16 +59,32 @@
                     <div class="container">
                         <div class="row">
                             <!-- Begin Header Top Left Area -->
-                            <div class="col-lg-3 col-md-4">
-                                <div class="header-top-left">
+                            <div class="col-lg-3 col-md-3">
+                                <div class="header-top-left" style="font-style: italic; font-weight: bold; text-align: center;">
                                     <ul class="phone-wrap">
-                                        <li><span>Telephone Enquiry:</span><a href="#">(+123) 123 321 345</a></li>
+                                        <li><span style="color: #007bff;"></span><a href="#" style="text-decoration: none; color: #333;">Welcome to the world of gadgets</a></li>
                                     </ul>
                                 </div>
                             </div>
+                            
                             <!-- Header Top Left Area End Here -->
+                            <!-- Begin Header Top centere Area -->
+                            <div class="col-lg-6 col-md-6">
+                                <div class="header-top-left" style="font-style: italic; font-weight: bold; text-align: center;">
+                                    {% if user.is_authenticated %}
+                                    <ul class="phone-wrap">
+                                        <li><span style="color: #007bff;">Hi </span><a href="#" style="text-decoration: none; color: #333;"> {{customer.first_name}}</a></li>
+                                    </ul>
+                                    {% else %}
+                                    <ul class="phone-wrap">
+                                        <li><span style="color: #007bff;">Guest User</span><a href="#" style="text-decoration: none; color: #333;"> </a></li>
+                                    </ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
                             <!-- Begin Header Top Right Area -->
-                            <div class="col-lg-9 col-md-8">
+                            <div class="col-lg-3 col-md-3">
                                 <div class="header-top-right">
                                     <ul class="ht-menu">
                                         <!-- Begin Setting Area -->
@@ -110,7 +126,7 @@
                             </div>
                             <!-- Header Logo Area End Here -->
                             <!-- Begin Header Middle Right Area -->
-                            <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
+                            <div class="col-lg-9'  pl-0 ml-sm-15 ml-xs-15">
                                 <!-- Begin Header Middle Searchbox Area -->
                                 <form action="#" class="hm-searchbox">
                                     <select class="nice-select select-search-category">
@@ -140,6 +156,7 @@
                                                 <i class="fa fa-heart-o"></i>
                                             </a>
                                         </li>
+                                        
                                         <!-- Header Middle Wishlist Area End Here -->
                                         <!-- Begin Header Mini Cart Area -->
                                         <li class="hm-minicart">
