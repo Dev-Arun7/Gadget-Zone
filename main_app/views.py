@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 
 
 def home(request):
-    customer = request.user
-    return render(request, "main/home.html", {'customer':customer})
+    
+    return render(request, "main/home.html")
 
 
 def product_list(request):

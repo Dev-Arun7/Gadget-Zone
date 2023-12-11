@@ -35,16 +35,18 @@ class Address(models.Model):
     first_name        = models.CharField(max_length=50, null=False, blank=True)
     last_name         = models.CharField(max_length=50, null=False,blank=True)
     email             = models.EmailField()
-    number            = models.BigIntegerField(blank=True)
-    address           = models.CharField(max_length=250)
+    phone             = models.BigIntegerField(blank=True)
+    address_1         = models.CharField(max_length=250, blank=True)
+    address_2         = models.CharField(max_length=250, blank=True)
     country           = models.CharField(max_length=15)
     state             = models.CharField(max_length=15)
     city              = models.CharField(max_length=15)
-    pin_code          = models.IntegerField()
+    pin               = models.IntegerField()
     is_deleted        = models.BooleanField(default=False)
-    
+    default           = models.BooleanField(default=False)
+    objects = models.Manager()
     def __str__(self):
-        return f"{self.first_name} {self.last_name}, {self.address}, {self.city}, {self.state} - {self.user}"
+        return f"{self.address_name} "
   
 class Order(models.Model):
 

@@ -1,0 +1,60 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4" style="color: grey;">Your Address</h2>
+            <table class="table table-bordered rounded-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Default</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">POST</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data %}
+                    <tr>
+                        <td>
+                            {% if i.default %}
+                                <span class="badge badge-pill badge-success">Default</span>     
+                            {% else %}
+                            <span class="badge badge-pill badge-danger">No</span>
+                            {% endif %}
+                        </td>
+                        <td>{{i.address_name}}</td>
+                        <td>{{i.first_name}}</td>
+                        <td>{{i.address_1}}</td>
+                        <td>{{i.pin}}</td>
+                        <td>{{i.phone}}</td>
+                        <td>
+                            <a type="button" href="{% url 'gauth_app:update_address' id=i.id %}" class="btn btn-success">Edit</a>
+                        </td>
+                        <td>
+                            <a type="button" href="{% url 'gauth_app:delete_address' id=i.id %}" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-end">
+        <div class="col-md-8">
+            <a href="{% url 'gauth_app:add_address' %}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Add Address</a>
+            <br>
+            <br>
+        </div>   
+    </div>
+</div>
+
+{% endblock content %}
+

@@ -2,8 +2,9 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-<!------ Include the above in your HEAD tag ---------->
+
 {% block content %}
+<!------ Include the above in your HEAD tag ---------->
 <div class="container emp-profile">
     <form method="post">
         <div class="row">
@@ -14,10 +15,16 @@
                 <br>
                 <br>
                 <div class="card border-dark mb-3" style="max-width: 18rem;">
-                    <div class="card-header">Header</div>
+                    <div class="card-header">{{ default_address.address_name }}</div>
                     <div class="card-body text-dark">
-                      <h5 class="card-title">Dark card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      <h5 class="card-title">{{ default_address.first_name }} {{ default_address.last_name }}</h5>
+                      <p class="card-text">{{ default_address.address_1 }}</p>
+                      <p class="card-text">{{ default_address.address_2 }}</p>
+                      <p class="card-text">{{ default_address.city }}</p>
+                      <p class="card-text">{{ default_address.state }}</p>
+                      <p class="card-text">{{ default_address.address_name }}</p>
+                      <p class="card-text">{{ default_address.pin }}</p>
+                      <p class="card-text">{{ default_address.phone }}</p>
                     </div>
                   </div>
                   
@@ -82,8 +89,10 @@
                                 </div>
                             </div>
                         </div>
+                        
                        
                     </div>
+                    <a href="{% url 'gauth_app:address' %}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Manage Address</a>
                     
                 </div>
                 
