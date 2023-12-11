@@ -1,9 +1,36 @@
 from django.shortcuts import render,redirect
 from main_app.models import Main_Category, Product
+from gauth_app.models import Customer
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+
+#############################################################################################
+                         # User management #
+#############################################################################################
+
+
+def users(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        action = request.POST.get('action')
+
+        user = Customer.objects.get(pk=user_id)
+        if action == 'block':
+            user.is_blocked = True
+            messages.success(request, f"{user.email} is blocked.")
+        elif action == 'unblock':
+            user.is_blocked = False
+            messages.success(request, f"{user.email} is unblocked.")
+
+        user.save()
+
+        return redirect('dashboard_app:users')
+
+    # Order the records by email
+    customers = Customer.objects.all().order_by('email')
+    return render(request, 'dashboard/users.html', {'customers': customers})
 
 #############################################################################################
                             # Login and home #

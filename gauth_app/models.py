@@ -6,24 +6,30 @@ from django.utils import timezone
 from main_app.models import *
 # Create your models here.
 
+
 class Customer(AbstractUser):
-    email             = models.EmailField(unique=True)
-    username          = models.CharField(unique=True, null=True, blank=True, max_length=20)
-    phone             = models.CharField(max_length=10)
-    is_verified       = models.BooleanField(default=False)
-    email_token       = models.CharField(max_length=100, null=True, blank=True)
-    forgot_password   = models.CharField(max_length=100,null=True, blank=True)
-    last_login_time   = models.DateTimeField(default=timezone.now,null = True, blank = True)
-    last_logout_time  = models.DateTimeField(default=timezone.now, null=True,blank=True)
-    profile_photo     = models.ImageField(upload_to='profile_photo', null=True, blank=True, default='profile.png')
-    wallet_bal        = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
-    # objects           = UserManager()
-    USERNAME_FIELD    = 'email'
-    REQUIRED_FIELDS   = []
+    email = models.EmailField(unique=True)
+    username = models.CharField(unique=True, null=True, blank=True, max_length=20)
+    phone = models.CharField(max_length=10)
+    is_verified = models.BooleanField(default=False)
+    email_token = models.CharField(max_length=100, null=True, blank=True)
+    forgot_password = models.CharField(max_length=100, null=True, blank=True)
+    last_login_time = models.DateTimeField(default=timezone.now, null=True, blank=True)
+    last_logout_time = models.DateTimeField(default=timezone.now, null=True, blank=True)
+    profile_photo = models.ImageField(upload_to='profile_photo', null=True, blank=True, default='profile.png')
+    wallet_bal = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    is_blocked = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     def save(self, *args, **kwargs):
-        # Set the username as the email address before saving
-        self.username = self.email
+        # Truncate the username (email) if it's longer than 20 characters
+        if self.email and len(self.email) > 20:
+            self.username = self.email[:20]
+        else:
+            self.username = self.email
+
         super().save(*args, **kwargs)
 
     def __str__(self):

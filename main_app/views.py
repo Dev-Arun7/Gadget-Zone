@@ -35,7 +35,6 @@ def single_product(request, id):
     return render(request, "main/single_product.html", context)
 
 
-@login_required(login_url='gauth_app:user_login')
 def main_categories(request):
     return render(request,'main/main_categories.html')
 

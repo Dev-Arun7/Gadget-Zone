@@ -32,23 +32,32 @@ def user_signup(request):
     return render(request=request, template_name="main/signup.html", context={"register_form": form})
 
 
-def user_login(request): 
+
+def user_login(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')  
-            password = form.cleaned_data.get('password') 
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, f"Welcome back, {username}!")
-                return redirect("main_app:home")
+
+            if user:
+                print(f"User: {user}, is_blocked: {user.is_blocked}, xxxxxxxxxx")
+                if user.is_blocked:
+                    # Display a message for blocked users
+                    messages.error(request, "Your account is blocked. Please contact support for assistance.")
+                    return render(request, 'main/blocked.html')
+                else:
+                    login(request, user)
+                    messages.success(request, f"Welcome back, {username}!")
+                    return redirect("main_app:home")
             else:
                 messages.error(request, "Invalid username or password. Please check your credentials.")
         else:
             messages.error(request, "Invalid form submission. Please check your input.")
     else:
         form = AuthenticationForm()
+
     return render(request=request, template_name="main/login.html", context={"login_form": form})
 
 

@@ -1,45 +1,63 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
+
 {% block content %}
-            <div class="content">
-                <div class="row">
-                    <div class="col-sm-4 col-3">
-                        <h4 class="page-title">Appointments</h4>
-                    </div>
-                    <div class="col-sm-8 col-9 text-right m-b-20">
-                        <a href="add-appointment.html" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Appointment</a>
-                    </div>
-                </div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="table-responsive">
-							<table class="table table-striped custom-table">
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>E Mail</th>
-										<th>Mobile</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td><img width="28" height="28" src="{% static 'dashboard/img/user.jpg' %}" class="rounded-circle m-r-5" alt=""> Denise Stevens</td>
-										<td>dennins@gmail.com</td>
-										<td>9867543223</td>
-										<td><button type="button" class="btn btn-success">Block</button></td>
-										</td>
-                                    </tr>	
-                                    <tr>
-                                        <td><img width="28" height="28" src="{% static 'dashboard/img/user.jpg' %}" class="rounded-circle m-r-5" alt=""> Denise Stevens</td>
-                                        <td>dennins@gmail.com</td>
-                                        <td>9867543223</td>
-                                        <td><button type="button" class="btn btn-danger">Unblock</button></td>	
-									</tr>	
-								</tbody>
-							</table>
-						</div>
-					</div>
-                </div>
-            </div>
+  <div class="content">
+    <div class="row">
+      <div class="col-sm-4 col-3">
+        <h4 class="page-title">User Details</h4>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="table-responsive">
+          <table class="table table-striped custom-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Address</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in customers %}
+              <tr>
+                <td>
+                  <img width="28" height="28" src="{% static 'dashboard/img/user.jpg' %}" class="rounded-circle m-r-5" alt="">
+                  {% if user.address_set.exists %}
+                    {{ user.address_set.first.first_name }} {{ user.address_set.first.last_name }}
+                  {% else %}
+                    No name available
+                  {% endif %}
+                </td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone }}</td>
+                <td>
+                  {% if user.address_set.exists %}
+                    {{ user.address_set.first.address_1 }}, {{ user.address_set.first.city }},
+                    {{ user.address_set.first.state }}, {{ user.address_set.first.pin }}
+                  {% else %}
+                    No address available
+                  {% endif %}
+                </td>
+                <td>
+                  <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <button type="submit" name="action" value="{% if user.is_blocked %}unblock{% else %}block{% endif %}"
+                            class="btn btn-{% if user.is_blocked %}success{% else %}warning{% endif %}">
+                      {% if user.is_blocked %}Unblock{% else %}Block{% endif %}
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
