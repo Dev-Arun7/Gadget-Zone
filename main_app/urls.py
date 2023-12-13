@@ -10,6 +10,10 @@ urlpatterns = [
     path('category_products/<int:id>/', views.category_products, name='category_products'),
     path('main_categories/',views.main_categories,name='main_categories'),
     path('base/',views.base,name='base'),
+    path('update_item',views.updateItem,name='update_item'),
+
 
 
 ]
+
+

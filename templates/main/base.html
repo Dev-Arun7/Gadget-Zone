@@ -45,6 +45,23 @@
         <link rel="stylesheet" href="{% static 'main/css/responsive.css' %}">
         <!-- Modernizr js -->
         <script src="{% static 'main/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+        <script type="text/javascript">
+            var user = '{{request.user}}'
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i =0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0,name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        }
+
+                    }
+                }
+                return cookieValue;
+        </script>
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -195,7 +212,7 @@
                                                 </ul>
                                                 <p class="minicart-total">SUBTOTAL: <span>£80.00</span></p>
                                                 <div class="minicart-button">
-                                                    <a href="shopping-cart.html" class="li-button li-button-fullwidth li-button-dark">
+                                                    <a href="{% url 'gauth_app:cart' %}" class="li-button li-button-fullwidth li-button-dark">
                                                         <span>View Full Cart</span>
                                                     </a>
                                                     <a href="checkout.html" class="li-button li-button-fullwidth">
@@ -645,6 +662,8 @@
         <script src="{% static 'main/js/scrollUp.min.js' %}"></script>
         <!-- Main/Activator js -->
         <script src="{% static 'main/js/main.js' %}"></script>
+        <!-- Cart js file -->
+        <script type="text/javascript" src="{% static 'main/js/cart.js' %}"></script>
     </body>
 
 <!-- index30:23-->

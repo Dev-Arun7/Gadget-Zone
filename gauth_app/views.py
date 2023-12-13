@@ -165,3 +165,12 @@ def delete_address(request,id):
     data = Address.objects.get(id=id) 
     data.delete()  
     return redirect('gauth_app:address')
+
+
+#############################################################################################
+                                    # Cart #
+#############################################################################################
+
+
+def cart(request): 
+    return render(request, 'main/cart.html')

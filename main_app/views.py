@@ -1,7 +1,12 @@
 from django.shortcuts import render
 from main_app.models import Main_Category, Product
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
+
+###############################################################################################################
+                                  # Home, Categories, single product etc #
+###############################################################################################################
 
 def home(request):
     
@@ -38,6 +43,13 @@ def single_product(request, id):
 def main_categories(request):
     return render(request,'main/main_categories.html')
 
+
+###############################################################################################################
+                                  # Cart Fuctionality #
+###############################################################################################################
+
+def updateItem(request):
+    return JsonResponse('Item was added', safe=False)
 
 
 ###############################################################################################################
