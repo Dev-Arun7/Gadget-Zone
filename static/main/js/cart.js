@@ -1,12 +1,14 @@
-var updateBtns = document.getElementsByClassName('update-cart');
+var updateBtns = document.getElementsByClassName('add-to-cart');
 
 for (var i = 0; i < updateBtns.length; i++) {
     updateBtns[i].addEventListener('click', function() {
-        var productId = this.dataset.product;
+        var productId = this.dataset.product; 
         var action = this.dataset.action;
+        console.log('productId:', productId,'action:',action)
+        console.log('USER', user)
 
         // Check if user is available
-        if (user == 'AnonymousUser') {
+        if (user === 'AnonymousUser') {
             console.log('User is not authenticated');
         } else {
             updateUserOrder(productId, action)
@@ -17,14 +19,15 @@ for (var i = 0; i < updateBtns.length; i++) {
 function updateUserOrder(productId, action){
     console.log('User is logged in, sending data..')
 
-    var url = '/update_item/'
+    var url = '/update_item/';
 
     fetch(url,{
         method:'POST',
         headers:{
-            'Content-type': 'application/json'
+            'Content-type': 'application/json',
+            'X-CSRFToken': csrftoken,
         },
-        body:JSON.stringify({'productID': productId, 'action':action})
+        body:JSON.stringify({'productId': productId, 'action':action})
     })
     .then((response) =>{
         return response.json()
@@ -34,4 +37,4 @@ function updateUserOrder(productId, action){
     })
 }
 
- 
+       

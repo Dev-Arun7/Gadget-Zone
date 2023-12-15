@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from main_app.models import Main_Category, Product
 from django.http import JsonResponse
+import json
 from django.contrib.auth.decorators import login_required
 
 
@@ -49,6 +50,29 @@ def main_categories(request):
 ###############################################################################################################
 
 def updateItem(request):
+    data = json.loads(request.body)
+    productId = data['productId']
+    action = data['action']
+
+    print('Action:',action)
+    print('productId:',productId)
+
+    customer = request.user.customer
+    product = Product.objects.get(id=productId)
+
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+
+    if action == 'add':
+        orderItem.quantity = (orderItem.quantity + 1)
+    elif action == 'remove':
+        orderItem.quantity = (orderItem.quantity - 1)
+
+    orderItem.save()
+    if orderItem.quantity <= 0:
+        orderItem.delete()
+
+    return JsonResponse('Item was added', safe=False)
+
     return JsonResponse('Item was added', safe=False)
 
 
