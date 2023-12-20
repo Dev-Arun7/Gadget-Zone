@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from main_app.models import Main_Category, Product
+from gauth_app.models import OrderItem, Order
+from django.utils import timezone
 from django.http import JsonResponse
 import json
 from django.contrib.auth.decorators import login_required
@@ -49,29 +51,35 @@ def main_categories(request):
                                   # Cart Fuctionality #
 ###############################################################################################################
 
+
+@login_required
 def updateItem(request):
     data = json.loads(request.body)
     productId = data['productId']
     action = data['action']
 
-    print('Action:',action)
-    print('productId:',productId)
+    print('Action:', action)
+    print('productId:', productId)
 
     customer = request.user.customer
     product = Product.objects.get(id=productId)
 
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    order, created = Order.objects.get_or_create(user=customer, status='pending')
+
+    # Get or create a OrderItem for the specified product
+    cart_item, created = OrderItem.objects.get_or_create(user=customer, product=product)
 
     if action == 'add':
-        orderItem.quantity = (orderItem.quantity + 1)
+        cart_item.quantity += 1
     elif action == 'remove':
-        orderItem.quantity = (orderItem.quantity - 1)
+        cart_item.quantity -= 1
 
-    orderItem.save()
-    if orderItem.quantity <= 0:
-        orderItem.delete()
+    # Save the OrderItem
+    cart_item.save()
 
-    return JsonResponse('Item was added', safe=False)
+    # If quantity is now zero, delete the OrderItem
+    if cart_item.quantity <= 0:
+        cart_item.delete()
 
     return JsonResponse('Item was added', safe=False)
 

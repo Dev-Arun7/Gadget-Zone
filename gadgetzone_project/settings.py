@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'main_app',
     'dashboard_app',
     'gauth_app',
-    'crispy_forms',
 
     # allauth apps
     'django.contrib.sites', 

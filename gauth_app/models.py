@@ -1,9 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# from .manager import UserManager
-from datetime import date
 from django.utils import timezone
-from main_app.models import *
+from main_app.models import Product 
+from datetime import date
 # Create your models here.
 
 
@@ -34,7 +33,44 @@ class Customer(AbstractUser):
 
     def __str__(self):
         return self.email
-       
+    
+  
+class Order(models.Model):
+
+    ORDER_STATUS = (
+        ('pending', 'Pending'),
+        ('processing','processing'),
+        ('shipped','shipped'),
+        ('delivered','delivered'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+        ('refunded','refunded'),
+        ('on_hold','on_hold')
+    )
+    customer          = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
+    date_ordered = models.DateTimeField(default=timezone.now)
+    product           = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    amount            = models.CharField(max_length=100)  
+    payment_type      = models.CharField(max_length=100)  
+    status            = models.CharField(max_length=100, choices=ORDER_STATUS, default='pending' )
+    image             = models.ImageField(upload_to='products', null=True, blank=True)
+    objects = models.Manager()
+    
+          
+    def __str__(self):
+        return f"Order #{self.pk} - {self.product}"
+
+
+
+class OrderItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
+    quantity = models.PositiveIntegerField()
+    image = models.ImageField(upload_to='cart', null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+    
+
 class Address(models.Model):
     user              = models.ForeignKey(Customer,on_delete=models.CASCADE)
     address_name      = models.CharField(max_length=50, null=False, blank=True)
@@ -50,34 +86,6 @@ class Address(models.Model):
     pin               = models.IntegerField()
     is_deleted        = models.BooleanField(default=False)
     default           = models.BooleanField(default=False)
-    objects = models.Manager()
+    address_objects = models.Manager()
     def __str__(self):
         return f"{self.address_name} "
-  
-class Order(models.Model):
-
-    ORDER_STATUS = (
-        ('pending', 'Pending'),
-        ('processing','processing'),
-        ('shipped','shipped'),
-        ('delivered','delivered'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
-        ('refunded','refunded'),
-        ('on_hold','on_hold')
-    )
-    user              = models.ForeignKey(Customer, on_delete=models.CASCADE) 
-    address           = models.ForeignKey(Address, on_delete=models.SET_NULL,null=True,blank=True)
-    product           = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
-    amount            = models.CharField(max_length=100)  
-    payment_type      = models.CharField(max_length=100)  
-    status            = models.CharField(max_length=100, choices=ORDER_STATUS, default='pending' )  
-    quantity          = models.IntegerField(default=0, null=True, blank=True)
-    image             = models.ImageField(upload_to='products', null=True, blank=True)
-    date              = models.DateField(default=date.today) 
-          
-    def __str__(self):
-        return f"Order #{self.pk} - {self.product}"
-
-
- 
