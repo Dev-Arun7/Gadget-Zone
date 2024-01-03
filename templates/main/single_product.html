@@ -50,7 +50,7 @@
                             <!--// Product Details Left -->
                         </div>
                         <div class="col-lg-7 col-md-6">
-                            <div class="product-details-view-content sp-normal-content pt-60">
+                            <div class="product-details-view-content sp-normal-content pt-60 product_data">
                                 <div class="product-info">
                                     <h2>{{ product.brand }} {{ product.model }}</h2> 
                                     <div class="offer-percent">
@@ -78,20 +78,20 @@
                                         <p>
                                             <span> {{product.description}}  </span>
                                         </p>
-                                    </div>
+                                    </div>     
+
                                     <div class="single-add-to-cart">
-                                        <form action="#" class="cart-quantity">
-                                            <div class="quantity">
-                                                <label>Quantity</label>
-                                                <div class="cart-plus-minus">
-                                                    <input class="cart-plus-minus-box" value="1" type="text">
-                                                    <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
-                                                    <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
+                                        <form action="###" method="post" class="cart-quantity add-to-cart-form">
+                                                <div class="col-md-3">
+                                                    <label for="Quantity">Quantity</label>
+                                                        <div class="input-group text-center mb-3" style="width:130px;"> <button class="input-group-text decrement-btn">-</button>
+                                                        <input type="text" name="quantity" class="form-control qty-input text-center" value="1" >
+                                                        <button class="input-group-text indrement-btn">+</button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <button class="add-to-cart" type="submit">Add to cart</button>
+                                            <button type="submit" class="add-to-cart">Add to cart</button>
                                         </form>
-                                    </div>
+                                    </div>                            
                                     <div class="product-additional-info">
                                         <div class="product-social-sharing">
                                             <ul>
@@ -309,6 +309,7 @@
             <section class="product-area li-laptop-product pt-30 pb-50">
                 <div class="container">
                     <div class="row">
+                        
                         <!-- Begin Li's Section Area -->
                         <div class="col-lg-12">
                             <div class="li-section-title">
@@ -362,16 +363,7 @@
                                         </div>
                                         <!-- single-product-wrap end -->
                                     </div>
-                                    {% endfor %}
-
-
-
-
-
-
-
-                                   
-                                   
+                                    {% endfor %}                                   
                                 </div>
                             </div>
                         </div>
@@ -381,4 +373,4 @@
             </section>
             <!-- Li's Laptop Product Area End Here -->
         {% endblock content %}
-         
+      

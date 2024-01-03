@@ -195,7 +195,7 @@
                                                 </ul>
                                                 <p class="minicart-total">SUBTOTAL: <span>£80.00</span></p>
                                                 <div class="minicart-button">
-                                                    <a href="shopping-cart.html" class="li-button li-button-fullwidth li-button-dark">
+                                                    <a href="{% url 'main_app:cart' %}" class="li-button li-button-fullwidth li-button-dark">
                                                         <span>View Full Cart</span>
                                                     </a>
                                                     <a href="checkout.html" class="li-button li-button-fullwidth">
@@ -645,6 +645,9 @@
         <script src="{% static 'main/js/scrollUp.min.js' %}"></script>
         <!-- Main/Activator js -->
         <script src="{% static 'main/js/main.js' %}"></script>
+
+        <script src="{% static 'main/js/jquery-3.7.1.min.js' %}"></script>
+        <script src="{% static 'main/js/custom.js' %}"></script>
     </body>
 
 <!-- index30:23-->

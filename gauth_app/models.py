@@ -54,6 +54,7 @@ class Address(models.Model):
     def __str__(self):
         return f"{self.address_name} "
   
+
 class Order(models.Model):
 
     ORDER_STATUS = (
@@ -80,4 +81,23 @@ class Order(models.Model):
         return f"Order #{self.pk} - {self.product}"
 
 
- 
+class Cart(models.Model):
+    user = models.ForeignKey(Customer, on_delete = models.CASCADE, null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    quantity = models.IntegerField(default=0)
+    image = models.ImageField(upload_to="products", null=True, blank=True)
+    total = models.IntegerField(default=0)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
+    objects = models.Manager()
+
+    def __str__(self) -> str:
+        return f"Cart - {self.user} - {self.product} - Quantity: {self.quantity}"
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(Customer, on_delete = models.CASCADE, null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(upload_to="products", null=True, blank=True)
+    objects = models.Manager()
+    
+    def __str__(self) -> str:
+        return f"Wishlist - {self.user} - {self.product}"

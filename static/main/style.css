@@ -5432,6 +5432,17 @@ span.required {
 .small-version {
   display: none;
 }
+
+
+.li-product-thumbnail img {
+    width: 100px; /* Set your desired width */
+    height: auto; /* Maintain aspect ratio */
+    border: 2px solid #3498db; /* Add a border, change color as needed */
+    /* Add more styles as per your requirements */
+}
+
+
+
 /*----------------------------------------------------------------------------------------------------*/
 /*------------------------------------------> The End <-----------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------*/

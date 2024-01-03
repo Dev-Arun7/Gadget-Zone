@@ -1,6 +1,16 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block content %}
+
+<style>
+    .product-image {
+        max-width: 200px; /* Set your desired max width */
+        max-height: 150px; /* Set your desired max height */
+        width: auto;
+        height: auto;
+    }
+</style>
+
             <!-- Begin Li's Breadcrumb Area -->
             <div class="breadcrumb-area">
                 <div class="container">
@@ -32,36 +42,32 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for i in cart_data %}
                                             <tr>
                                                 <td class="li-product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
-                                                <td class="li-product-thumbnail"><a href="#"><img src="{% static 'main/images/product/small-size/5.jpg' %}" alt="Li's Product Image"></a></td>
-                                                <td class="li-product-name"><a href="#">Accusantium dolorem1</a></td>
-                                                <td class="li-product-price"><span class="amount">$46.80</span></td>
+                                                            
+                                                <td class="li-product-thumbnail">
+                                                    {% if i.image %}
+                                                        <a href="#">
+                                                            <img class="product-image" src="{{ i.image.url }}" alt="Li's Product Image">
+                                                        </a>
+                                                    {% else %}
+                                                        <span>No Image Available</span>
+                                                    {% endif %}
+                                                </td>                                    
+                                                <td class="li-product-name"><a href="#">{{ i.product_brand }} {{ i.product_name }}</a></td>
+                                                <td class="li-product-price"><span class="amount">₹{{ i.product_price }}</span></td>
                                                 <td class="quantity">
                                                     <label>Quantity</label>
                                                     <div class="cart-plus-minus">
-                                                        <input class="cart-plus-minus-box" value="1" type="text">
+                                                        <input class="cart-plus-minus-box" value="{{ i.quantity }}" type="text" data-product-id="{{ item.product.id }}">
                                                         <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
                                                         <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
                                                     </div>
                                                 </td>
-                                                <td class="product-subtotal"><span class="amount">$70.00</span></td>
+                                                <td class="product-subtotal"><span class="amount">₹ {{ i.total }}</span></td>
                                             </tr>
-                                            <tr>
-                                                <td class="li-product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
-                                                <td class="li-product-thumbnail"><a href="#"><img src="{% static 'main/images/product/small-size/6.jpg' %}" alt="Li's Product Image"></a></td>
-                                                <td class="li-product-name"><a href="#">Mug Today is a good day</a></td>
-                                                <td class="li-product-price"><span class="amount">$71.80</span></td>
-                                                <td class="quantity">
-                                                    <label>Quantity</label>
-                                                    <div class="cart-plus-minus">
-                                                        <input class="cart-plus-minus-box" value="1" type="text">
-                                                        <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
-                                                        <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
-                                                    </div>
-                                                </td>
-                                                <td class="product-subtotal"><span class="amount">$60.50</span></td>
-                                            </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -97,4 +103,30 @@
             </div>
             <!--Shopping Cart Area End-->
         {% endblock content %}
-            
+  
+   <!-- Add this script to your cart.html file -->
+
+   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+   <script>
+    $(document).ready(function () {
+        $('.update-cart').on('click', function () {
+            var product_id = $(this).data('product-id');
+            var quantity = $(this).siblings('.quantity-input').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "main_app/update_cart_quantity" %}',
+                data: {
+                    'product_id': product_id,
+                    'quantity': quantity,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    // Update the total on the page
+                    $('#total_' + product_id).html(data.total);
+                }
+            });
+        });
+    });
+</script>

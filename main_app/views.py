@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from main_app.models import Main_Category, Product
+from gauth_app.models import Cart, Wishlist
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 
 def home(request):
@@ -37,7 +40,6 @@ def single_product(request, id):
 
 def main_categories(request):
     return render(request,'main/main_categories.html')
-
 
 
 ###############################################################################################################
@@ -77,6 +79,90 @@ def budget_phones(request):
         product.offer_price = int(product.price * (1 - product.offer / 100))
     print("Debug - Budget Phones Data:", data) 
     return render(request, "main/product_list.html", {"budget": data})
+
+
+
+###############################################################################################################
+                            # Cart and Wishlist #
+###############################################################################################################
+
+
+
+
+def add_to_cart(request, product_id):
+    # Retrieve the product
+    product = get_object_or_404(Product, id=product_id)
+
+    # Check if the user is authenticated
+    if request.user.is_authenticated:
+        # Check if the product is already in the user's cart
+        cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
+
+        # If the product is already in the cart, increase the quantity
+        if not created:
+            cart_item.quantity += 1
+        else:
+            # If it's a new product in the cart, set the quantity to 1
+            cart_item.quantity = 1
+
+        cart_item.save()
+
+        # Return a JSON response indicating success
+        return JsonResponse({'status': 'success', 'message': 'Item added to cart successfully!'})
+    else:
+        # Return a JSON response indicating the need for authentication
+        return JsonResponse({'status': 'error', 'message': 'User not authenticated'})
+    
+
+
+    
+def cart(request):
+    cart_items = Cart.objects.all()
+
+    # Create a list to store product details for each item in the cart
+    cart_data = []
+
+    # Loop through each item in the cart
+    for item in cart_items:
+        # Get the associated product for the current cart item
+        print(f"Product ID: {item.product_id}, Image: {item.image}")
+        product = item.product
+        discounted_price = product.price - (product.price * (product.offer / 100))
+        total = discounted_price * item.quantity
+
+        # Append a dictionary with product details to the cart_data list
+        cart_data.append({
+            'product_name': product.model,  
+            'product_brand': product.brand, 
+            'product_price': discounted_price,
+            'product_offer': product.offer,  
+            'quantity': item.quantity,
+            'total': total,
+            'image': product.image,
+        })
+
+    return render(request, "main/cart.html", {"cart_data": cart_data})
+
+
+
+def update_cart_quantity(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        quantity = request.POST.get('quantity')
+
+        # Update the cart item with the new quantity
+        cart_item = Cart.objects.get(product_id=product_id)
+        cart_item.quantity = quantity
+        cart_item.save()
+
+        # Calculate the new total for the cart item
+        discounted_price = cart_item.product.price - (cart_item.product.price * (cart_item.product.offer / 100))
+        cart_item.total = discounted_price * cart_item.quantity
+        cart_item.save()
+
+        # Return the updated total for the cart item
+        return JsonResponse({'total': cart_item.total})
+
 
 
 
