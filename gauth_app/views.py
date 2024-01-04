@@ -42,7 +42,6 @@ def user_login(request):
             user = authenticate(username=username, password=password)
 
             if user:
-                print(f"User: {user}, is_blocked: {user.is_blocked}, xxxxxxxxxx")
                 if user.is_blocked:
                     # Display a message for blocked users
                     messages.error(request, "Your account is blocked. Please contact support for assistance.")
@@ -50,7 +49,7 @@ def user_login(request):
                 else:
                     login(request, user)
                     messages.success(request, f"Welcome back, {username}!")
-                    return redirect("main_app:home")
+                    return redirect("main_app:home", {'messages': messages.get_messages(request)})
             else:
                 messages.error(request, "Invalid username or password. Please check your credentials.")
         else:

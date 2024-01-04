@@ -90,29 +90,29 @@ def budget_phones(request):
 
 
 def add_to_cart(request, product_id):
-    # Retrieve the product
-    product = get_object_or_404(Product, id=product_id)
-
-    # Check if the user is authenticated
-    if request.user.is_authenticated:
-        # Check if the product is already in the user's cart
-        cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
-
-        # If the product is already in the cart, increase the quantity
-        if not created:
-            cart_item.quantity += 1
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            prod_id = int(request.POST.get('product_id'))
+            product_check = Product.objects.get(id=prod_id)
+            if(product_check):
+                if(Cart.objects.filter(user=request.user.id, product_id=prod_id)):
+                    return JsonResponse({'status':"Product Already in cart..!"})
+                else:
+                    prod_qty = int(request.POST.get('product_qty'))
+                    
+                    if product_check.stock >= prod_qty:
+                        Cart.objects.create(user=request.user, product_id=prod_id, quantity=prod_qty)
+                        return JsonResponse({'status':"Prduct added successfully"})
+                    else:
+                        return JsonResponse({'status':"Only " + str(product_check.quantity) + "quantity available"})
+            else:
+                return JsonResponse({'status': "No such product found"})
         else:
-            # If it's a new product in the cart, set the quantity to 1
-            cart_item.quantity = 1
+            return JsonResponse({'status': "Login to continue"})
+    return redirect('/')
 
-        cart_item.save()
 
-        # Return a JSON response indicating success
-        return JsonResponse({'status': 'success', 'message': 'Item added to cart successfully!'})
-    else:
-        # Return a JSON response indicating the need for authentication
-        return JsonResponse({'status': 'error', 'message': 'User not authenticated'})
-    
+
 
 
     

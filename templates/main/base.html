@@ -45,6 +45,11 @@
         <link rel="stylesheet" href="{% static 'main/css/responsive.css' %}">
         <!-- Modernizr js -->
         <script src="{% static 'main/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+                
+        <!-- CSS -->
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        <!-- Default theme -->
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -648,6 +653,15 @@
 
         <script src="{% static 'main/js/jquery-3.7.1.min.js' %}"></script>
         <script src="{% static 'main/js/custom.js' %}"></script>
+        <!-- JavaScript -->
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <script> 
+            alertify.set('notifier','position', 'top-right');
+            {% for msg in messages %}
+                alertify.success('{{ msg }}');
+            {% endfor %}
+            
+        </script>
     </body>
 
 <!-- index30:23-->

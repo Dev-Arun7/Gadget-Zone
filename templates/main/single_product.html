@@ -3,6 +3,13 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block content %}
+<style>
+.out-of-stock-message {
+    color: #e74c3c;
+    font-size: 16px;
+    font-weight: bold;
+}
+</style>
          <!-- Begin Li's Breadcrumb Area -->
             <div class="breadcrumb-area">
                 <div class="container">
@@ -16,7 +23,7 @@
             </div>
             <!-- Li's Breadcrumb Area End Here -->
             <!-- content-wraper start -->
-            <div class="content-wraper">
+            <div class="content-wraper product_data">
                 <div class="container">
                     <div class="row single-product-area">
                         <div class="col-lg-5 col-md-6">
@@ -83,6 +90,8 @@
                                     <div class="single-add-to-cart">
                                         <form action="#" class="cart-quantity">
                                             <div class="quantity">
+                                                {% csrf_token %}
+                                                <input type="hidden" value="{{ product.id }}" class="prod_id">
                                                 <label for="quantity">Quantity</label>
                                                 <div class="input-group text-center mb-3" style="width: 130px;">
                                                     <button class="input-group-text decrement-btn">-</button>
@@ -90,7 +99,12 @@
                                                     <button class="input-group-text increment-btn">+</button>
                                                 </div>
                                             </div>
-                                            <button class="add-to-cart" type="submit">Add to cart</button>
+                                            {% if product.stock > 0 %}
+                                                <button class="add-to-cart addToCartBtn" type="submit">Add to Cart</button>
+                                            {% else %}
+                                                <p class="out-of-stock-message">Sorry, this item is currently out of stock.</p>
+                                            {% endif %}
+
                                         </form>
                                     </div>
                                     

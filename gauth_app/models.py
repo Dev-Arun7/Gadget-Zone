@@ -76,7 +76,7 @@ class Order(models.Model):
     quantity          = models.IntegerField(default=0, null=True, blank=True)
     image             = models.ImageField(upload_to='products', null=True, blank=True)
     date              = models.DateField(default=date.today) 
-          
+            
     def __str__(self):
         return f"Order #{self.pk} - {self.product}"
 
