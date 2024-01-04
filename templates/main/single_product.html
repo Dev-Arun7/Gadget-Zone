@@ -78,20 +78,24 @@
                                         <p>
                                             <span> {{product.description}}  </span>
                                         </p>
-                                    </div>     
-
+                                    </div>    
+                                    
                                     <div class="single-add-to-cart">
-                                        <form action="###" method="post" class="cart-quantity add-to-cart-form">
-                                                <div class="col-md-3">
-                                                    <label for="Quantity">Quantity</label>
-                                                        <div class="input-group text-center mb-3" style="width:130px;"> <button class="input-group-text decrement-btn">-</button>
-                                                        <input type="text" name="quantity" class="form-control qty-input text-center" value="1" >
-                                                        <button class="input-group-text indrement-btn">+</button>
-                                                    </div>
+                                        <form action="#" class="cart-quantity">
+                                            <div class="quantity">
+                                                <label for="quantity">Quantity</label>
+                                                <div class="input-group text-center mb-3" style="width: 130px;">
+                                                    <button class="input-group-text decrement-btn">-</button>
+                                                    <input type="text" name="quantity" class="form-control qty-input text-center" value="1">
+                                                    <button class="input-group-text increment-btn">+</button>
                                                 </div>
-                                            <button type="submit" class="add-to-cart">Add to cart</button>
+                                            </div>
+                                            <button class="add-to-cart" type="submit">Add to cart</button>
                                         </form>
-                                    </div>                            
+                                    </div>
+                                    
+
+                                                              
                                     <div class="product-additional-info">
                                         <div class="product-social-sharing">
                                             <ul>
