@@ -43,4 +43,61 @@ $(document).ready(function(){
         });
     });
 
+    $('.changeQuantity').click(function (e) {
+        e.preventDefault();
+    
+        var product_id = $(this).closest('.tr').find('.prod_id').val();
+        var product_qty = $(this).closest('.tr').find('.qty-input').val();
+        var token = $('input[name=csrfmiddlewaretoken]').val();           
+        $.ajax({
+            method: "POST",
+            url: "/update_cart/",
+
+            data: {
+                'product_id': product_id,
+                'product_qty': product_qty,
+                'csrfmiddlewaretoken': token  
+            },
+            success: function (response) {
+                alertify.success(response.status);
+                $('.cart_data').load(location.href + " .cart_data");
+            }
+        });
+    });
+
+
+    $('.delete_cart_item').click(function (e) {
+        e.preventDefault();
+    
+        // Use closest() to find the closest tr element
+        var productRow = $(this).closest('tr');
+    
+        // Find the hidden input with class 'prod_id' within the tr element
+        var product_id = productRow.find('.prod_id').val();
+    
+        // Ensure product_id is not undefined or null before sending the request
+        if (product_id !== undefined && product_id !== null) {
+            var token = $('input[name=csrfmiddlewaretoken]').val();
+    
+            $.ajax({
+                method: "POST",
+                url: "/delete_cart/",
+                data: {
+                    'product_id': product_id,
+                    'csrfmiddlewaretoken': token
+                },
+                success: function (response) {
+                alertify.success(response.status);
+                $('.cart_data').load(location.href + " .cart_data");
+
+                }
+            });
+        } else {
+            console.error("Product ID is undefined or null.");
+        }
+    });
+    
+    
+
 });
+

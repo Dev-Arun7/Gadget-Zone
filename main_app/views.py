@@ -86,7 +86,33 @@ def budget_phones(request):
                             # Cart and Wishlist #
 ###############################################################################################################
 
+def cart(request):
+    cart_items = Cart.objects.filter(user=request.user)
+     # Create a list to store product details for each item in the cart
+    cart_data = []
 
+    # Loop through each item in the cart
+    for item in cart_items:
+        # Get the associated product for the current cart item
+        print(f"Product ID: {item.product_id}, Image: {item.image}")
+        product = item.product
+        discounted_price = product.price - (product.price * (product.offer / 100))
+        total = discounted_price * item.quantity
+
+        # Append a dictionary with product details to the cart_data list
+        cart_data.append({
+            'product_name': product.model,  
+            'product_brand': product.brand, 
+            'product_price': discounted_price,
+            'product_offer': product.offer,  
+            'quantity': item.quantity,
+            'total': total,
+            'image': product.image,
+            'product_id': product.id,
+        })
+    context = {'cart' : cart_data}
+    return render(request,"main/cart.html", context)
+  
 
 
 def add_to_cart(request, product_id):
@@ -112,57 +138,26 @@ def add_to_cart(request, product_id):
     return redirect('/')
 
 
-
-
-
-    
-def cart(request):
-    cart_items = Cart.objects.all()
-
-    # Create a list to store product details for each item in the cart
-    cart_data = []
-
-    # Loop through each item in the cart
-    for item in cart_items:
-        # Get the associated product for the current cart item
-        print(f"Product ID: {item.product_id}, Image: {item.image}")
-        product = item.product
-        discounted_price = product.price - (product.price * (product.offer / 100))
-        total = discounted_price * item.quantity
-
-        # Append a dictionary with product details to the cart_data list
-        cart_data.append({
-            'product_name': product.model,  
-            'product_brand': product.brand, 
-            'product_price': discounted_price,
-            'product_offer': product.offer,  
-            'quantity': item.quantity,
-            'total': total,
-            'image': product.image,
-        })
-
-    return render(request, "main/cart.html", {"cart_data": cart_data})
-
-
-
-def update_cart_quantity(request):
+def update_cart(request):
     if request.method == 'POST':
-        product_id = request.POST.get('product_id')
-        quantity = request.POST.get('quantity')
+        prod_id = int(request.POST.get('product_id'))
+        if(Cart.objects.filter(user=request.user, product_id = prod_id)):
+            prod_qty = int(request.POST.get('product_qty'))
+            cart_data = Cart.objects.get(product_id=prod_id, user=request.user)
+            cart_data.quantity = prod_qty
+            cart_data.save()
+            return JsonResponse({'status':"Updated Successfully"})
+    return redirect('/')  
 
-        # Update the cart item with the new quantity
-        cart_item = Cart.objects.get(product_id=product_id)
-        cart_item.quantity = quantity
-        cart_item.save()
 
-        # Calculate the new total for the cart item
-        discounted_price = cart_item.product.price - (cart_item.product.price * (cart_item.product.offer / 100))
-        cart_item.total = discounted_price * cart_item.quantity
-        cart_item.save()
-
-        # Return the updated total for the cart item
-        return JsonResponse({'total': cart_item.total})
-
+def delete_cart(request):
+    if request.method == 'POST':
+        prod_id = int(request.POST.get('product_id'))
+        if(Cart.objects.filter(user = request.user, product_id=prod_id)):
+            cartitem = Cart.objects.get(product_id=prod_id, user=request.user)
+            cartitem.delete()
+        return JsonResponse({'status':"Deleted Successfully"})
+    return redirect('/')
 
 
 

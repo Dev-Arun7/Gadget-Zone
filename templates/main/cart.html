@@ -4,8 +4,8 @@
 
 <style>
     .product-image {
-        max-width: 200px; /* Set your desired max width */
-        max-height: 150px; /* Set your desired max height */
+        max-width: 100px; /* Set your desired max width */
+        max-height: 75px; /* Set your desired max height */
         width: auto;
         height: auto;
     }
@@ -28,9 +28,10 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
+                            {% if cart %}
                             <form action="#">
                                 <div class="table-content table-responsive">
-                                    <table class="table">
+                                    <table class="table  cart_data">
                                         <thead>
                                             <tr>
                                                 <th class="li-product-remove">remove</th>
@@ -41,11 +42,12 @@
                                                 <th class="li-product-subtotal">Total</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            {% for i in cart_data %}
-                                            <tr>
-                                                <td class="li-product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
-                                                            
+                                        <tbody >
+                                            
+                                            {% for i in cart %}
+                                            
+                                                <tr>
+                                                <td class="li-product-remove delete_cart_item "><a href="#"><i class="fa fa-times"></i></a></td>           
                                                 <td class="li-product-thumbnail">
                                                     {% if i.image %}
                                                         <a href="#">
@@ -57,17 +59,23 @@
                                                 </td>                                    
                                                 <td class="li-product-name"><a href="#">{{ i.product_brand }} {{ i.product_name }}</a></td>
                                                 <td class="li-product-price"><span class="amount">₹{{ i.product_price }}</span></td>
-                                                <td class="quantity">
-                                                    <label>Quantity</label>
-                                                    <div class="cart-plus-minus">
-                                                        <input class="cart-plus-minus-box" value="{{ i.quantity }}" type="text" data-product-id="{{ item.product.id }}">
-                                                        <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
-                                                        <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
+                                                <td class="quantity tr " style="text-align: center;">
+                                                    <div class="quantity product_data">
+                                                        <input type="hidden" value="{{ i.product_id }}" class="prod_id">
+                                                        {% csrf_token %}
+                                                        <label for="quantity">Quantity</label>
+                                                        <div class="input-group text-center mb-3" style="width: 130px; margin: auto;">
+                                                            <button class="input-group-text changeQuantity decrement-btn">-</button>
+                                                            <input type="text" name="quantity" class="form-control qty-input text-center" value="{{ i.quantity }}">
+                                                            <button class="input-group-text changeQuantity increment-btn">+</button>
+                                                        </div>
                                                     </div>
-                                                </td>
+                                                </td>                                                
                                                 <td class="product-subtotal"><span class="amount">₹ {{ i.total }}</span></td>
                                             </tr>
+                                        
                                             {% endfor %}
+                                        
                                         </tbody>
                                     </table>
                                 </div>
@@ -78,8 +86,10 @@
                                                 <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text">
                                                 <input class="button" name="apply_coupon" value="Apply coupon" type="submit">
                                             </div>
-                                            <div class="coupon2">
-                                                <input class="button" name="update_cart" value="Update cart" type="submit">
+                                            <div class="coupon2"> 
+                                                <a a href="{% url 'main_app:cart' %}">
+                                                    <input class="button" name="update_cart" value="Update cart" type="submit">
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -90,6 +100,7 @@
                                             <h2>Cart totals</h2>
                                             <ul>
                                                 <li>Subtotal <span>$130.00</span></li>
+                                                <li>Delivery <span>₹ 50</span></li>
                                                 <li>Total <span>$130.00</span></li>
                                             </ul>
                                             <a href="#">Proceed to checkout</a>
@@ -98,6 +109,13 @@
                                 </div>
                             </form>
                         </div>
+                        {% else %}
+                        <br>
+                        <br>
+                        <h4> Your cart is empty</h4>
+                        <br>
+                        <br>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -106,27 +124,4 @@
   
    <!-- Add this script to your cart.html file -->
 
-   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-   <script>
-    $(document).ready(function () {
-        $('.update-cart').on('click', function () {
-            var product_id = $(this).data('product-id');
-            var quantity = $(this).siblings('.quantity-input').val();
-
-            $.ajax({
-                type: 'POST',
-                url: '{% url "main_app/update_cart_quantity" %}',
-                data: {
-                    'product_id': product_id,
-                    'quantity': quantity,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (data) {
-                    // Update the total on the page
-                    $('#total_' + product_id).html(data.total);
-                }
-            });
-        });
-    });
-</script>
+  

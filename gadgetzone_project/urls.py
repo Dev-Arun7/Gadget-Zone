@@ -18,13 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from main_app.views import update_cart
 
 urlpatterns = [
+    path('update_cart/', update_cart, name='update_cart'),
     path('admin/', admin.site.urls),
     path('dashboard/', include(('dashboard_app.urls', 'dashboard_app'), namespace='dashboard_app')),
     path('gauth/',include(('gauth_app.urls', 'gauth_app'), namespace='gauth_app')),
     path('', include(('main_app.urls', 'main_app'), namespace='main_app')),
     path('accounts/', include('allauth.urls')),
 ]
+   
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
