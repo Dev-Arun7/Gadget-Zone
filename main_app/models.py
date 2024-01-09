@@ -36,10 +36,12 @@ class Product(models.Model):
     deleted = models.BooleanField(default=False)
     objects = models.Manager()
 
-    def get_images(self):
-        return ProductImage.objects.filter(product=self)
+    def __str__(self):
+            return f"{self.brand} {self.model}"
 
-    
+    @staticmethod
+    def search_by_model(query):
+        return Product.objects.filter(model__icontains=query)
 
 
 class ProductImage(models.Model):

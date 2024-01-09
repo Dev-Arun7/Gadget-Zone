@@ -4,6 +4,7 @@ from gauth_app.models import Cart, Wishlist
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 
 def home(request):
@@ -13,8 +14,6 @@ def home(request):
 
 def product_list(request):
     products = Product.objects.filter(deleted=False)
-    for product in products:
-        product.offer_price = int(product.price * (1 - product.offer / 100))
     return render(request, "main/product_list.html",{"data": products})
 
 
@@ -47,6 +46,30 @@ def main_categories(request):
                         # Sorting and showing products on page #
 ###############################################################################################################
 
+
+
+
+
+
+def product_search(request):
+    query = request.GET.get('q', '')
+
+    if query:
+        query_parts = query.split(' ')
+        # if user provide more than two words it splits and check both model name or brand name
+        if len(query_parts) > 1:
+            results = Product.objects.filter(
+                Q(brand__icontains=query_parts[0]) & Q(model__icontains=query_parts[1])
+            )
+            # if the user provide only one word as a keyword search both field separately using OR
+        else:
+            results = Product.objects.filter(
+                Q(model__icontains=query) | Q(brand__icontains=query)
+            )
+    else:
+        results = Product.objects.all()
+
+    return render(request, 'main/product_list.html', {'data': results, 'query': query})
 
 
 
