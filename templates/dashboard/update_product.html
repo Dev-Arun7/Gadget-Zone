@@ -44,7 +44,7 @@
                                        placeholder="Enter the price"
                                        name="price"
                                        value="{{product.price}}"
-                                       step="100" >
+                                        >
                             </div>
                             <div class="form-group">
                                 <label>Description</label>
@@ -137,41 +137,46 @@
                                 {% endif %}
                             </div>
                             <div class="form-group">
-                                <label>Add images</label>
+                                <label>Add image</label>
                                 <div>
                                     <input class="form-control" type="file"
-                                    placeholder="Select image"
-                                    name= "image"
-                                    required
-                                    >
+                                           placeholder="Select image"
+                                           name="image"
+                                           accept=".jpg, .jpeg, .gif, .png, .webp"
+                                           required>
                                     <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
-                                </div>   
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Add multiple images</label>
                                 <div>
                                     <input class="form-control" type="file"
-                                           placeholder="Select image"
+                                           placeholder="Select images"
                                            name="images"
+                                           accept=".jpg, .jpeg, .gif, .png, .webp"
                                            multiple required>
                                     <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
                                 </div>
-                            </div>                            
+                            </div>                           
                             <div class="form-group">
                                 <label>Stock</label>
                                 <input class="form-control" type="number" 
                                        placeholder="Enter the stock"
                                        name="stock"
                                        value="{{product.stock}}"
-                                       step="1" >
+                                       step="1"
+                                       min = "1" >
                             </div>
+
                             <div class="form-group">
                                 <label>Offer</label>
                                 <input class="form-control" type="number" 
                                        placeholder="Enter the offer percentage"
                                        name="offer"
                                        value="{{product.offer}}"
-                                       step="1" >
+                                       step="1" 
+                                       min = "1"
+                                       max = "99">
                             </div>
                             <div>
                                 <label>Delete product from the page</label>

@@ -47,6 +47,9 @@ def main_categories(request):
                         # Sorting and showing products on page #
 ###############################################################################################################
 
+
+
+
 def all_featutephones(request):
     # Get the Main_Category named 'Featurephone'
     featurephone_category = Main_Category.objects.get(name='Feature Phones')

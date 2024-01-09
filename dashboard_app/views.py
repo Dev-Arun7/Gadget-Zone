@@ -9,13 +9,13 @@ from django.views.decorators.cache import never_cache
 
      # ............. User Priventing Authentication...................
           
-def admin_required(dashboard_home):
+def admin_required(view_func):
     
     actual_decorator = user_passes_test(
         lambda u: u.is_authenticated and u.is_staff,
         login_url='dashboard_app:dashboard_login'
     )
-    return actual_decorator(dashboard_home)
+    return actual_decorator(view_func)
 
 
 #############################################################################################
@@ -44,10 +44,10 @@ def users(request):
     customers = Customer.objects.all().order_by('email')
     return render(request, 'dashboard/users.html', {'customers': customers})
 
+
 #############################################################################################
                             # Login and home #
 #############################################################################################
-
 
 @never_cache
 @admin_required
@@ -74,6 +74,7 @@ def dashboard_login(request):
 
     return render(request, 'dashboard/login.html')
 
+
 def dashboard_logout(request):
     logout(request)
     return render(request,'dashboard/login.html')
@@ -84,12 +85,18 @@ def dashboard_logout(request):
             # Main Category Section, All product, Add, update and delete #
 #############################################################################################
 
+
+
+@never_cache
+@admin_required
 @login_required(login_url='dashboard_app:dashboard_login')
 def main_category(request):
     data = Main_Category.objects.all()
     return render(request,"dashboard/main_category.html",{"data": data})
 
 
+@never_cache
+@admin_required
 @login_required(login_url='dashboard_app:dashboard_login')
 def add_main_category(request):
     if request.method == 'POST':
@@ -97,6 +104,11 @@ def add_main_category(request):
         description = request.POST['description']
         image = request.FILES.get('image')
         delete = request.POST.get('delete', False) == 'True'
+        
+        # Check the category name is already there
+        if Main_Category.objects.filter(name = main_category_name).exists():
+            messages.error(request, "Category is already exists.")
+            return render(request, 'dashboard/add_main_category.html')
 
         # Savin Data to the database
         query = Main_Category.objects.create(
@@ -110,6 +122,8 @@ def add_main_category(request):
     return render(request, 'dashboard/add_main_category.html')
 
 
+@never_cache
+@admin_required
 @login_required(login_url='dashboard_app:dashboard_login')
 def update_main_category(request, id):
     data = Main_Category.objects.get(id=id)
@@ -155,9 +169,12 @@ def all_products(request):
     return render(request, "dashboard/all_products.html", {"data": data})
 
 
+@never_cache
+@admin_required
 @login_required(login_url='dashboard_app:dashboard_login')
 def add_product(request):
     data = Main_Category.objects.all() 
+
     if request.method == 'POST':
         # Extracting data from the POST request
         brand = request.POST['brand']
@@ -179,7 +196,11 @@ def add_product(request):
         main_category_id = request.POST.get('main_category_id')  
 
         main_cat = Main_Category.objects.get(id=main_category_id)
-        
+
+        # Calculate offer price
+        offer_price = int(price) - (int(price) * int(offer) / 100)
+
+        # Create the Product instance with the calculated offer price
         query = Product.objects.create(
             brand=brand,
             model=model,
@@ -197,15 +218,17 @@ def add_product(request):
             stock=stock,
             offer=offer,
             deleted=delete,
-            main_category=main_cat  # Associate the Product with a main_category
+            main_category=main_cat,
+            offer_price=offer_price  # New field
         )
-        query.save()
+
         # Save multiple images associated with the product
         images = request.FILES.getlist('images')
         for img in images:
             ProductImage.objects.create(product=query, image=img)
             
         return redirect('dashboard_app:all_products')
+
     # Render the form if it's not a POST request
     return render(request, 'dashboard/add_product.html', {"data": data})
 
@@ -214,9 +237,7 @@ def add_product(request):
 def update_product(request, id):
     data = Main_Category.objects.all()
     product = Product.objects.get(id=id)
-    network = request.POST.get('network')
-    smart = request.POST.get('smart')
-    delete = request.POST.get('')
+
     if request.method == 'POST':
         brand = request.POST['brand']
         model = request.POST['model']
@@ -235,27 +256,31 @@ def update_product(request, id):
         offer = request.POST['offer']
         delete = request.POST.get('delete', False)
         images = request.FILES.getlist('images')
-        
+
+        # Calculate offer price
+        offer_price = int(price) - (int(price) * int(offer) / 100)
 
         # Retrieve existing data
         edit = Product.objects.get(id=id)
+
         # Update data in the table
         edit.brand = brand
-        edit.model=model
-        edit.price=price
-        edit.description=description
-        edit.color=color
-        edit.display_size=display_size
-        edit.camera=camera
-        edit.storage=storage
-        edit.ram=ram
-        edit.network=network
-        edit.smart=smart
-        edit.battery=battery
-        edit.image=image
-        edit.stock=stock
-        edit.offer=offer
-        edit.deleted=delete
+        edit.model = model
+        edit.price = price
+        edit.description = description
+        edit.color = color
+        edit.display_size = display_size
+        edit.camera = camera
+        edit.storage = storage
+        edit.ram = ram
+        edit.network = network
+        edit.smart = smart
+        edit.battery = battery
+        edit.image = image
+        edit.stock = stock
+        edit.offer = offer
+        edit.deleted = delete
+        edit.offer_price = offer_price
         edit.save()
 
         # Remove existing images associated with the product
@@ -268,7 +293,8 @@ def update_product(request, id):
             ProductImage.objects.create(product=edit, image=img)
 
         return redirect('dashboard_app:all_products')
-    return render(request, "dashboard/update_product.html", {"product": product, "data" : data})
+
+    return render(request, "dashboard/update_product.html", {"product": product, "data": data})
 
 
 

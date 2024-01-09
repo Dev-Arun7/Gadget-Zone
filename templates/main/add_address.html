@@ -58,15 +58,16 @@
             </div>
             <div class="form-group col-md-4">
               <label for="inputZip">Phone</label>
-              <input type="text" class="form-control" name="phone" placeholder="Phone number" required>
-            </div>
+              <input type="text" class="form-control" name="phone" placeholder="Phone number" required
+                     pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+          </div>          
             <div class="form-group col-md-6">
               <label for="inputZip">Email</label>
               <input type="email" class="form-control" name="email" placeholder="Email" required>
             </div>
             <div class="form-group col-md-2"> 
               <label for="inputZip">PIN</label>
-              <input type="text" class="form-control" name="pin" placeholder=" 6 Digits" required>
+              <input type="number" class="form-control" name="pin" placeholder=" Post Code" required>
             </div>
           </div>
           <div class="text-center">

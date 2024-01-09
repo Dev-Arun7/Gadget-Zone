@@ -10,7 +10,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                        <form action="{% url 'dashboard_app:add_main_category' %}" method="post" enctype="multipart/form-data">
+                        <form action="{% url 'dashboard_app:add_main_category' id=data.id %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
                                 <label>Main category name</label>
@@ -18,7 +18,7 @@
                                 placeholder="Enter the main category here"
                                 name= "main_category_name"
                                 required>
-                            </div>
+                            </div>                      
                             <div class="form-group">
                                 <label>Description</label>
                                 <input class="form-control" type="text" 
@@ -27,14 +27,15 @@
                                 required>
                             </div>
                             <div class="form-group">
-                                <label>Add images</label>
+                                <label>Add image</label>
                                 <div>
                                     <input class="form-control" type="file"
-                                    placeholder="Select image"
-                                    name= "image"
-                                    required>
+                                           placeholder="Select image"
+                                           name="image"
+                                           accept=".jpg, .jpeg, .gif, .png, .webp"
+                                           required>
                                     <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
-                                </div>   
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="network">Delete the category from page</label>
