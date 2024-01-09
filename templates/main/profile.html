@@ -61,7 +61,11 @@
                                     <label>First Name</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <p> {{ customer.first_name }}</p>
+                                    {% if default_address.first_name %}
+                                        <p> {{ default_address.first_name }}</p>
+                                    {% else %}
+                                        <p> {{ customer.first_name }}</p>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="row">
@@ -69,7 +73,11 @@
                                     <label>Last Name</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>{{ customer.last_name }}</p>
+                                    {% if default_address.last_name %}
+                                        <p> {{ default_address.last_name }}</p>
+                                    {% else %}
+                                        <p> {{ customer.last_name }}</p>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="row">
@@ -77,7 +85,7 @@
                                     <label>Phone</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>{{ customer.phone }}</p>
+                                    <p>{{ default_address.phone }}</p>
                                 </div>
                             </div>
                             <div class="row">

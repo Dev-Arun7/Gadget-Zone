@@ -113,7 +113,8 @@
                                        placeholder="Enter the battery capacity"
                                        name="battery"
                                        step="100" >
-                            </div>     
+                            </div>   
+
                             <div class="form-group">
                                 <label>Add images</label>
                                 <div>
@@ -121,6 +122,16 @@
                                     placeholder="Select image"
                                     name= "image"
                                     required>
+                                    <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
+                                </div>   
+                            </div>
+                            <div class="form-group">
+                                <label>Add mutiple images</label>
+                                <div>
+                                    <input class="form-control" type="file"
+                                    placeholder="Select image"
+                                    name= "images"
+                                    multiple required>
                                     <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
                                 </div>   
                             </div>

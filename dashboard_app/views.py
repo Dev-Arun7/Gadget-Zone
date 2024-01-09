@@ -1,9 +1,21 @@
 from django.shortcuts import render,redirect
-from main_app.models import Main_Category, Product
+from main_app.models import Main_Category, Product, ProductImage
 from gauth_app.models import Customer
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
+from django.views.decorators.cache import never_cache
+
+     # ............. User Priventing Authentication...................
+          
+def admin_required(dashboard_home):
+    
+    actual_decorator = user_passes_test(
+        lambda u: u.is_authenticated and u.is_staff,
+        login_url='dashboard_app:dashboard_login'
+    )
+    return actual_decorator(dashboard_home)
 
 
 #############################################################################################
@@ -36,7 +48,13 @@ def users(request):
                             # Login and home #
 #############################################################################################
 
-from django.contrib import messages  # Import the messages module
+
+@never_cache
+@admin_required
+@login_required(login_url='dashboard_app:dashboard_login')
+def dashboard_home(request):
+    return render(request,'dashboard/home.html')
+
 
 def dashboard_login(request):
     if request.method == 'POST':
@@ -61,9 +79,6 @@ def dashboard_logout(request):
     return render(request,'dashboard/login.html')
 
 
-@login_required(login_url='dashboard_app:dashboard_login')
-def dashboard_home(request):
-    return render(request,'dashboard/home.html')
 
 #############################################################################################
             # Main Category Section, All product, Add, update and delete #
@@ -81,15 +96,17 @@ def add_main_category(request):
         main_category_name = request.POST['main_category_name']
         description = request.POST['description']
         image = request.FILES.get('image')
+        delete = request.POST.get('delete', False) == 'True'
 
         # Savin Data to the database
         query = Main_Category.objects.create(
             name=main_category_name,
             descriptions=description,
             img=image,
+            deleted = delete
         )
         query.save()
-        return redirect('main_category')
+        return redirect('dashboard_app:main_category')
     return render(request, 'dashboard/add_main_category.html')
 
 
@@ -97,10 +114,11 @@ def add_main_category(request):
 def update_main_category(request, id):
     data = Main_Category.objects.get(id=id)
 
-    if request.method == 'POST':
+    if request.method      == 'POST':
         main_category_name = request.POST['main_category_name']
         description        = request.POST['description']
         image              = request.FILES.get('image')
+        delete             = request.POST.get('delete', False)
 
         # Retrieve existing data
         edit = Main_Category.objects.get(id=id)
@@ -109,6 +127,7 @@ def update_main_category(request, id):
         edit.name = main_category_name
         edit.descriptions = description 
         edit.img = image
+        edit.deleted = delete
         
         # Save updated data
         edit.save()
@@ -122,8 +141,9 @@ def update_main_category(request, id):
 def delete_main_category(request,id):
     data = Main_Category.objects.get(id=id) 
     data.delete()  
-    return redirect('main_category')
+    return redirect('dashboard_app:main_category')
  
+
 #############################################################################################
        # Product Section, contains "all_products, add, update and delete product" #
 #############################################################################################
@@ -180,6 +200,11 @@ def add_product(request):
             main_category=main_cat  # Associate the Product with a main_category
         )
         query.save()
+        # Save multiple images associated with the product
+        images = request.FILES.getlist('images')
+        for img in images:
+            ProductImage.objects.create(product=query, image=img)
+            
         return redirect('dashboard_app:all_products')
     # Render the form if it's not a POST request
     return render(request, 'dashboard/add_product.html', {"data": data})
@@ -209,6 +234,8 @@ def update_product(request, id):
         stock = request.POST['stock']
         offer = request.POST['offer']
         delete = request.POST.get('delete', False)
+        images = request.FILES.getlist('images')
+        
 
         # Retrieve existing data
         edit = Product.objects.get(id=id)
@@ -231,8 +258,18 @@ def update_product(request, id):
         edit.deleted=delete
         edit.save()
 
+        # Remove existing images associated with the product
+        existing_images = ProductImage.objects.filter(product=edit)
+        for existing_image in existing_images:
+            existing_image.delete()
+
+        # Save multiple new images associated with the product
+        for img in images:
+            ProductImage.objects.create(product=edit, image=img)
+
         return redirect('dashboard_app:all_products')
     return render(request, "dashboard/update_product.html", {"product": product, "data" : data})
+
 
 
 @login_required(login_url='dashboard_app:dashboard_login')

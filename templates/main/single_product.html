@@ -30,28 +30,16 @@
                            <!-- Product Details Left -->
                             <div class="product-details-left">
                                 <div class="product-details-images slider-navigation-1">
+                                    {% for img in additional_images %}
                                     <div class="lg-image">
-                                        <img src="{{ product.image.url }}" alt="product image">
+                                        <img src="{{ img.image.url }}" alt="product image">
                                     </div>
-                                    <div class="lg-image">
-                                        <img src="{{ product.image.url }}" alt="product image">
-                                    </div>
-                                    <div class="lg-image">
-                                        <img src="{{ product.image.url }}" alt="product image">
-                                    </div>
-                                    <div class="lg-image">
-                                        <img src="{{ product.image.url }}" alt="product image">
-                                    </div>
-                                    <div class="lg-image">
-                                        <img src="{{ product.image.url }}" alt="product image">
-                                    </div>
+                                    {% endfor %}
                                 </div>
                                 <div class="product-details-thumbs slider-thumbs-1">
-                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{{ product.image.url }}" alt="product image thumb"></div>
+                                    {% for img in additional_images %}
+                                        <div class="sm-image"><img src="{{ img.image.url }}" alt="product image thumb"></div>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <!--// Product Details Left -->

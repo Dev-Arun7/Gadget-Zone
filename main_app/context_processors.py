@@ -1,7 +1,7 @@
 from main_app.models import Main_Category, Product
 
 def extras(request):
-    main_category = Main_Category.objects.all()
+    main_category = Main_Category.objects.filter(deleted=False)
     products = Product.objects.filter(deleted=False)
     customer = request.user
     for product in products:

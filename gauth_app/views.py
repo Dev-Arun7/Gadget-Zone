@@ -1,4 +1,5 @@
 from django.contrib.auth import login, authenticate, logout 
+from django.views.decorators.cache import never_cache
 from django.shortcuts import render, redirect
 from .forms import NewUserForm
 from gauth_app.models import Address
@@ -11,6 +12,8 @@ from django.contrib.auth.decorators import login_required
                               # User Login related views #
 #############################################################################################
 
+
+@never_cache
 def user_signup(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
@@ -32,7 +35,7 @@ def user_signup(request):
     return render(request=request, template_name="main/signup.html", context={"register_form": form})
 
 
-
+@never_cache
 def user_login(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -49,7 +52,7 @@ def user_login(request):
                 else:
                     login(request, user)
                     messages.success(request, f"Welcome back, {username}!")
-                    return redirect("main_app:home", {'messages': messages.get_messages(request)})
+                    return redirect("main_app:home")
             else:
                 messages.error(request, "Invalid username or password. Please check your credentials.")
         else:
@@ -60,6 +63,7 @@ def user_login(request):
     return render(request=request, template_name="main/login.html", context={"login_form": form})
 
 
+@never_cache
 def user_logout(request):
     logout(request)
     return redirect('gauth_app:user_login')
@@ -76,9 +80,18 @@ def profile(request):
     return render(request, 'main/profile.html', {'customer': customer, 'default_address': default_address})
 
 
+@login_required
 def address(request):
-    data = Address.objects.all()
+    current_user = request.user
+    data = Address.objects.filter(user=current_user)
+    
     return render(request, 'main/address.html', {'data': data})
+
+
+
+# def address(request):
+#     data = Address.objects.all()
+#     return render(request, 'main/address.html', {'data': data})
 
 
 def add_address(request):

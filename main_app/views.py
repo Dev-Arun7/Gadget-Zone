@@ -26,18 +26,19 @@ def category_products(request,id):
     return render(request, "main/product_list.html", {'data': products})
 
 
+
 def single_product(request, id):
-    product = Product.objects.get(id=id)
+    product = get_object_or_404(Product, id=id)
     similar_products = Product.objects.filter(main_category_id=product.main_category_id, deleted=False).exclude(id=id)
     offer_price = int(product.price * (1 - product.offer / 100))
+    additional_images = product.get_images()
     context = {
         "product": product,
         "offer_price": offer_price,
         "products": similar_products,
+        "additional_images": additional_images,
     }
     return render(request, "main/single_product.html", context)
-
-
 def main_categories(request):
     return render(request,'main/main_categories.html')
 

@@ -6,7 +6,8 @@ from django.db import models
 class Main_Category(models.Model):
     name = models.CharField(max_length=100)
     descriptions = models.TextField(default='Default Description')
-    img = models.ImageField(upload_to='categories', default='null')
+    img = models.ImageField(upload_to='categories', default='null', null=True, blank=True)
+    deleted = models.BooleanField(default=False)
     objects = models.Manager()
 
     def __str__(self):
@@ -34,6 +35,16 @@ class Product(models.Model):
     deleted = models.BooleanField(default=False)
     objects = models.Manager()
 
+    def get_images(self):
+        return ProductImage.objects.filter(product=self)
+
+    
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='additional_images')
+    image = models.ImageField(upload_to='product_images', blank=True, null=True)
+    objects = models.Manager()
     def __str__(self):
-        return f"Featurephone - {self.model}"
+        return f"Image for {self.product.model}"
 
