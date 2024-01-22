@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from main_app.models import Main_Category, Product
-from gauth_app.models import Cart, Wishlist
+from gauth_app.models import Cart, Wishlist, Address, Order
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.contrib import messages
 
 
 def home(request):
@@ -25,19 +26,21 @@ def category_products(request,id):
     return render(request, "main/product_list.html", {'data': products})
 
 
-
 def single_product(request, id):
     product = get_object_or_404(Product, id=id)
     similar_products = Product.objects.filter(main_category_id=product.main_category_id, deleted=False).exclude(id=id)
-    offer_price = int(product.price * (1 - product.offer / 100))
-    additional_images = product.get_images()
+    
+    # Fetch additional images from the related ProductImage model
+    additional_images = product.additional_images.all()
+
     context = {
         "product": product,
-        "offer_price": offer_price,
         "products": similar_products,
         "additional_images": additional_images,
     }
     return render(request, "main/single_product.html", context)
+
+
 def main_categories(request):
     return render(request,'main/main_categories.html')
 
@@ -45,10 +48,6 @@ def main_categories(request):
 ###############################################################################################################
                         # Sorting and showing products on page #
 ###############################################################################################################
-
-
-
-
 
 
 def product_search(request):
@@ -110,59 +109,56 @@ def budget_phones(request):
 
 
 ###############################################################################################################
-                            # Cart and Wishlist #
+                                # Cart and Wishlist #
 ###############################################################################################################
 
+
 def cart(request):
-    cart_items = Cart.objects.filter(user=request.user)
-     # Create a list to store product details for each item in the cart
-    cart_data = []
+    raw_carts = Cart.objects.filter(user=request.user)
 
     # Loop through each item in the cart
-    for item in cart_items:
-        # Get the associated product for the current cart item
-        print(f"Product ID: {item.product_id}, Image: {item.image}")
-        product = item.product
-        discounted_price = product.price - (product.price * (product.offer / 100))
-        total = discounted_price * item.quantity
+    for item in raw_carts:
+        if item.quantity > item.product.stock:
+            item.delete()
 
-        # Append a dictionary with product details to the cart_data list
-        cart_data.append({
-            'product_name': product.model,  
-            'product_brand': product.brand, 
-            'product_price': discounted_price,
-            'product_offer': product.offer,  
-            'quantity': item.quantity,
-            'total': total,
-            'image': product.image,
-            'product_id': product.id,
-        })
-    context = {'cart' : cart_data}
-    return render(request,"main/cart.html", context)
-  
+    cart_items = Cart.objects.filter(user=request.user)
+    subtotal = 0
+    for item in cart_items: 
+        subtotal = subtotal + item.product.offer_price * item.quantity
+
+    context = {'cart': cart_items, 'subtotal': subtotal}
+    return render(request, "main/cart.html", context)
+
 
 
 def add_to_cart(request, product_id):
+    # This function is responsible for adding a product to the user's cart.
+
+    # Check if the request method is POST.
     if request.method == 'POST':
+        # Check if the user is authenticated.
         if request.user.is_authenticated:
+            # Get the product ID from the request.
             prod_id = int(request.POST.get('product_id'))
+
+            # Retrieve the product from the database based on the product ID.
             product_check = Product.objects.get(id=prod_id)
-            if(product_check):
-                if(Cart.objects.filter(user=request.user.id, product_id=prod_id)):
-                    return JsonResponse({'status':"Product Already in cart..!"})
-                else:
-                    prod_qty = int(request.POST.get('product_qty'))
-                    
-                    if product_check.stock >= prod_qty:
-                        Cart.objects.create(user=request.user, product_id=prod_id, quantity=prod_qty)
-                        return JsonResponse({'status':"Prduct added successfully"})
-                    else:
-                        return JsonResponse({'status':"Only " + str(product_check.quantity) + "quantity available"})
-            else:
-                return JsonResponse({'status': "No such product found"})
+
+            # Check if the product exists.
+            if product_check:
+                # Check if the product is already in the user's cart.
+                if Cart.objects.filter(user=request.user.id, product_id=prod_id):
+                    return JsonResponse({'status': "Product Already in cart..!"})
+                else: 
+                    # Create a new Cart object for the user and add the product.
+                    Cart.objects.create(user=request.user, product_id=prod_id, quantity=1, total=product_check.offer_price)
+                    return JsonResponse({'status': "Product added successfully"})
         else:
             return JsonResponse({'status': "Login to continue"})
+
+    # If the request method is not POST, redirect to the home page.
     return redirect('/')
+
 
 
 def update_cart(request):
@@ -172,6 +168,7 @@ def update_cart(request):
             prod_qty = int(request.POST.get('product_qty'))
             cart_data = Cart.objects.get(product_id=prod_id, user=request.user)
             cart_data.quantity = prod_qty
+            cart_data.total = prod_qty * cart_data.product.offer_price
             cart_data.save()
             return JsonResponse({'status':"Updated Successfully"})
     return redirect('/')  
@@ -186,6 +183,54 @@ def delete_cart(request):
         return JsonResponse({'status':"Deleted Successfully"})
     return redirect('/')
 
+
+def checkout(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    addresses = Address.objects.filter(user=request.user)
+    subtotal = 0
+    for item in cart_items:
+        subtotal = subtotal +item.product.offer_price * item.quantity
+
+    context = {'subtotal': subtotal,
+               'addresses': addresses,
+               }
+
+    return render(request, "main/checkout.html", context)
+
+
+def orders(request):
+    user = request.user
+    cart_items = Cart.objects.filter(user=user)
+    total_amount = sum(item.total for item in cart_items)
+
+    if request.method == 'POST':
+        address_id = request.POST.get('address_id')
+        payment_type = request.POST.get('payment_type')
+
+        # Create an order
+        order = Order.objects.create(
+            user=user,
+            address_id=address_id,
+            amount=total_amount,
+            payment_type=payment_type,
+            status='pending',
+        )
+
+        # Copy cart items to order
+        for item in cart_items:
+            order_items = order.orderitem_set.create(
+                product=item.product,
+                quantity=item.quantity,
+                image=item.image,
+            )
+
+        # Clear the cart
+        cart_items.delete()
+        messages.success(request, 'Order placed successfully')
+
+        return redirect('main/success.html')
+
+    return render(request, 'main/orders.html')
 
 
 def base(request):

@@ -66,8 +66,8 @@
                                         </ul>
                                     </div>
                                     <div class="price-box pt-20">
-                                        <span class="new-price new-price-2">₹ {{ offer_price }}</span>
-                                        <span class="review-item">MRP ₹ {{ product.price }}</span>
+                                        <span class="new-price new-price-2">₹ {{ product.offer_price }}</span>
+                                        <span class="review-item">MRP ₹<del>{{ product.price }} </del></span>
                                     </div>
                                     <div class="product-desc">
                                         <p>
@@ -81,11 +81,7 @@
                                                 {% csrf_token %}
                                                 <input type="hidden" value="{{ product.id }}" class="prod_id">
                                                 <label for="quantity">Quantity</label>
-                                                <div class="input-group text-center mb-3" style="width: 130px;">
-                                                    <button class="input-group-text decrement-btn">-</button>
-                                                    <input type="text" name="quantity" class="form-control qty-input text-center" value="1">
-                                                    <button class="input-group-text increment-btn">+</button>
-                                                </div>
+                                                
                                             </div>
                                             {% if product.stock > 0 %}
                                                 <button class="add-to-cart addToCartBtn" type="submit">Add to Cart</button>

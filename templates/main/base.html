@@ -101,6 +101,7 @@
                                                         <li><a href="{% url 'gauth_app:profile' %}">Profile</a></li>
                                                         <li><a href="checkout.html">Checkout</a></li>
                                                         <li><a href="{% url 'gauth_app:user_logout' %}">Logout</a></li>
+                                                        <li><a href="{% url 'main_app:orders' %}">Orders</a></li>
                                                     {% else %}
                                                         <li><a href="{% url 'gauth_app:user_login' %}">Sign In</a></li>
                                                         <li><a href="{% url 'gauth_app:user_signup' %}">Signup</a></li>
@@ -155,43 +156,15 @@
                                         <li class="hm-minicart">
                                             <div class="hm-minicart-trigger">
                                                 <span class="item-icon"></span>
-                                                <span class="item-text">£80.00
-                                                    <span class="cart-item-count">2</span>
+                                                <span class="item-text">Cart
                                             </div>
                                             <span></span>
                                             <div class="minicart">
-                                                <ul class="minicart-product-list">
-                                                    <li>
-                                                        <a href="single-product.html" class="minicart-product-image">
-                                                            <img src="{% static 'main/images/product/small-size/5.jpg' %}" alt="cart products">
-                                                        </a>
-                                                        <div class="minicart-product-details">
-                                                            <h6><a href="single-product.html">Aenean eu tristique</a></h6>
-                                                            <span>£40 x 1</span>
-                                                        </div>
-                                                        <button class="close" title="Remove">
-                                                            <i class="fa fa-close"></i>
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <a href="single-product.html" class="minicart-product-image">
-                                                            <img src="{% static 'main/images/product/small-size/6.jpg' %}" alt="cart products">
-                                                        </a>
-                                                        <div class="minicart-product-details">
-                                                            <h6><a href="single-product.html">Aenean eu tristique</a></h6>
-                                                            <span>£40 x 1</span>
-                                                        </div>
-                                                        <button class="close" title="Remove">
-                                                            <i class="fa fa-close"></i>
-                                                        </button>
-                                                    </li>
-                                                </ul>
-                                                <p class="minicart-total">SUBTOTAL: <span>£80.00</span></p>
                                                 <div class="minicart-button">
                                                     <a href="{% url 'main_app:cart' %}" class="li-button li-button-fullwidth li-button-dark">
                                                         <span>View Full Cart</span>
                                                     </a>
-                                                    <a href="checkout.html" class="li-button li-button-fullwidth">
+                                                    <a href="{% url 'main_app:checkout' %}" class="li-button li-button-fullwidth">
                                                         <span>Checkout</span>
                                                     </a>
                                                 </div>

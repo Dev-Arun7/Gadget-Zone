@@ -42,8 +42,8 @@ class Address(models.Model):
     last_name         = models.CharField(max_length=50, null=False,blank=True)
     email             = models.EmailField()
     phone             = models.BigIntegerField(blank=True)
-    address_1         = models.CharField(max_length=250, blank=True)
-    address_2         = models.CharField(max_length=250, blank=True)
+    address_1         = models.CharField(max_length=250, blank=True, null=True)
+    address_2         = models.CharField(max_length=250, blank=True, null=True)
     country           = models.CharField(max_length=15)
     state             = models.CharField(max_length=15)
     city              = models.CharField(max_length=15)
@@ -76,10 +76,22 @@ class Order(models.Model):
     quantity          = models.IntegerField(default=0, null=True, blank=True)
     image             = models.ImageField(upload_to='products', null=True, blank=True)
     date              = models.DateField(default=date.today) 
+    objects           = models.Manager()
             
     def __str__(self):
         return f"Order #{self.pk} - {self.product}"
 
+
+class OrderItem(models.Model):
+    order          =   models.ForeignKey(Order,on_delete=models.CASCADE)
+    product        =   models.ForeignKey(Product,on_delete=models.CASCADE)
+    quantity       =   models.IntegerField(default=1)
+    image          =   models.ImageField(upload_to='products_order', null=True, blank=True)
+    objects        =   models.Manager()
+
+    def __str__(self):
+        return str(self.order)
+    
 
 class Cart(models.Model):
     user = models.ForeignKey(Customer, on_delete = models.CASCADE, null=True, blank=True)
@@ -92,6 +104,7 @@ class Cart(models.Model):
 
     def __str__(self) -> str:
         return f"Cart - {self.user} - {self.product} - Quantity: {self.quantity}"
+
 
 class Wishlist(models.Model):
     user = models.ForeignKey(Customer, on_delete = models.CASCADE, null=True, blank=True)
