@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# from .manager import UserManager
+from .manager import UserManager
 from datetime import date
 from django.utils import timezone
 from main_app.models import *
@@ -22,6 +22,7 @@ class Customer(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    objects = UserManager()
 
     def save(self, *args, **kwargs):
         # Truncate the username (email) if it's longer than 20 characters
