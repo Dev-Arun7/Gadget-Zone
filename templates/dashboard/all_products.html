@@ -48,7 +48,11 @@
 											{% endif %}
 										</td>
 										<td style="width: 150px; height: 100px;">
-											<img style="width: 100%; height: 100%; object-fit: contain;" src="{{i.image.url}}" alt="Image">
+											{% if i.image and i.image.url %}
+												<img style="width: 100%; height: 100%; object-fit: contain;" src="{{ i.image.url }}" alt="Image">
+											{% else %}
+												<p>No image available</p>
+											{% endif %}
 										</td>	
 										<td>{{i.brand}}</td>
 										<td>{{i.model}}</td>
@@ -68,8 +72,16 @@
 											<a type="button" href="{% url 'dashboard_app:update_product' id=i.id %}" class="btn btn-success">Edit</a>
 										</td>
 										<td>
-											<a type="button" href="{% url 'dashboard_app:delete_product' id=i.id %}" class="btn btn-danger">Remove</a>
-										</td>
+											<a href="{% url 'dashboard_app:soft_delete_product' id=i.id %}">
+												<button type="submit" name="toggle_deleted" class="btn btn-danger">
+													{% if i.deleted %}
+														 Activate 
+													{% else %}
+														Deactivate
+													{% endif %}
+												</button>
+											</a>
+										</td>	
 									</tr>
 									{% endfor%} 
 								</tbody>

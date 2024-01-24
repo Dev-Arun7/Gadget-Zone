@@ -10,7 +10,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
-                        <form action="{% url 'dashboard_app:add_main_category' id=data.id %}" method="post" enctype="multipart/form-data">
+                        <form action="{% url 'dashboard_app:add_main_category' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
                                 <label>Main category name</label>

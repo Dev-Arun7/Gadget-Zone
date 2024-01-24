@@ -35,10 +35,26 @@
 											{% endif %}
 										</td>
 										<td>{{i.name}}</td>
-										<td><img width="90" height="50" src="{{i.img.url}}" alt="Li's Product Image"></td>
+										<td style="width: 150px; height: 100px;">
+											{% if i.img and i.img.url %}
+												<img style="width: 100%; height: 100%; object-fit: contain;" src="{{ i.img.url }}" alt="Image">
+											{% else %}
+												<p>No image available</p>
+											{% endif %}
+										</td>
 										<td>{{i.descriptions}}</td>
 										<td><a type="button" href="{% url 'dashboard_app:update_main_category' id=i.id %}" class="btn btn-success">Edit</a></td>
-										<td><a type="button" href="{% url 'dashboard_app:delete_main_category' id=i.id %}" class="btn btn-danger">Remove</a></td>
+										<td>
+											<a href="{% url 'dashboard_app:soft_delete_category' id=i.id %}">
+												<button type="submit" name="toggle_deleted" class="btn btn-danger">
+													{% if i.deleted %}
+														 Activate 
+													{% else %}
+														Deactivate
+													{% endif %}
+												</button>
+											</a>
+										</td>	
 									</tr>	
 									{% endfor%} 
 								</tbody>

@@ -39,6 +39,7 @@ class Product(models.Model):
     def __str__(self):
             return f"{self.brand} {self.model}"
 
+
     @staticmethod
     def search_by_model(query):
         return Product.objects.filter(model__icontains=query)
@@ -51,3 +52,12 @@ class ProductImage(models.Model):
     def __str__(self):
         return f"Image for {self.product.model}"
 
+
+
+
+
+
+
+    def toggle_deleted(self):
+        self.deleted = not self.deleted
+        self.save()

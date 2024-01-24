@@ -91,7 +91,7 @@ def dashboard_logout(request):
 @admin_required
 @login_required(login_url='dashboard_app:dashboard_login')
 def main_category(request):
-    data = Main_Category.objects.all()
+    data = Main_Category.objects.all().order_by('id')
     return render(request,"dashboard/main_category.html",{"data": data})
 
 
@@ -131,7 +131,6 @@ def update_main_category(request, id):
     if request.method      == 'POST':
         main_category_name = request.POST['main_category_name']
         description        = request.POST['description']
-        image              = request.FILES.get('image')
         delete             = request.POST.get('delete', False)
 
         # Retrieve existing data
@@ -140,8 +139,11 @@ def update_main_category(request, id):
         # Update fields
         edit.name = main_category_name
         edit.descriptions = description 
-        edit.img = image
         edit.deleted = delete
+
+        if 'image' in request.FILES:
+            image = request.FILES['image']
+            edit.img = image
         
         # Save updated data
         edit.save()
@@ -149,6 +151,16 @@ def update_main_category(request, id):
         return redirect('dashboard_app:main_category')
 
     return render(request, "dashboard/update_main_category.html", {"data": data})
+
+
+
+def soft_delete_category(request, id):
+    data = Main_Category.objects.get(id=id)
+
+    data.deleted = not data.deleted
+    data.save()
+
+    return redirect('dashboard_app:main_category')
 
 
 @login_required(login_url='dashboard_app:dashboard_login')
@@ -165,7 +177,7 @@ def delete_main_category(request,id):
 
 @login_required(login_url='dashboard_app:dashboard_login')
 def all_products(request):
-    data = Product.objects.all()
+    data = Product.objects.all().order_by('id')
     return render(request, "dashboard/all_products.html", {"data": data})
 
 
@@ -251,11 +263,12 @@ def update_product(request, id):
         network = request.POST.get('network', False)
         smart = request.POST.get('smart', False)
         battery = request.POST['battery']
-        image = request.FILES.get('image')
+
         stock = request.POST['stock']
         offer = request.POST['offer']
         delete = request.POST.get('delete', False)
         images = request.FILES.getlist('images')
+
 
         # Calculate offer price
         offer_price = int(price) - (int(price) * int(offer) / 100)
@@ -276,11 +289,15 @@ def update_product(request, id):
         edit.network = network
         edit.smart = smart
         edit.battery = battery
-        edit.image = image
         edit.stock = stock
         edit.offer = offer
         edit.deleted = delete
         edit.offer_price = offer_price
+        # Update main image only if the user provided
+        if 'image' in request.FILES:
+            image = request.FILES['image']
+            edit.image = image
+
         edit.save()
 
         # Remove existing images associated with the product
@@ -295,6 +312,16 @@ def update_product(request, id):
         return redirect('dashboard_app:all_products')
 
     return render(request, "dashboard/update_product.html", {"product": product, "data": data})
+
+
+
+def soft_delete_product(request, id):
+    product = Product.objects.get(id=id)
+
+    product.deleted = not product.deleted
+    product.save()
+
+    return redirect('dashboard_app:all_products')
 
 
 
