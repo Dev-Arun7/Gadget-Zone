@@ -24,15 +24,17 @@ $(document).ready(function(){
 
     $('.addToCartBtn').click(function (e) {
         e.preventDefault();
-
-        var product_id = $(this).closest('.product_data').find('.prod_id').val();
-        var product_qty = $(this).closest('.product_data').find('.qty-input').val();
+    
+        var product_id = $(this).closest('.single-add-to-cart').find('.prod_id').val();
+        var variant_id = $(this).closest('.single-add-to-cart').find('.variant_id').val(); 
+        var product_qty = $(this).closest('.single-add-to-cart').find('.qty-input').val(); 
         var token = $('input[name=csrfmiddlewaretoken]').val(); 
         $.ajax({
             method: "POST",
-            url: "/add_to_cart/" + product_id + "/",
+            url: "/add_to_cart/" + product_id  + "/" + variant_id + "/",
             data: {
                 'product_id': product_id,
+                'variant_id': variant_id, 
                 'product_qty': product_qty,
                 'csrfmiddlewaretoken': token  
             },
@@ -42,29 +44,36 @@ $(document).ready(function(){
             }
         });
     });
-
+    
     $('.changeQuantity').click(function (e) {
         e.preventDefault();
     
         var product_id = $(this).closest('.tr').find('.prod_id').val();
+        var variant_id = $(this).closest('.tr').find('.variant_id').val(); 
         var product_qty = $(this).closest('.tr').find('.qty-input').val();
-        var token = $('input[name=csrfmiddlewaretoken]').val();           
+        var token = $('input[name=csrfmiddlewaretoken]').val();
+        var subtotalElement = $('.cart-page-total').find('ul').find('li:first-child span');
+    
         $.ajax({
             method: "POST",
             url: "/update_cart/",
-
             data: {
                 'product_id': product_id,
+                'variant_id': variant_id,
                 'product_qty': product_qty,
-                'csrfmiddlewaretoken': token  
+                'csrfmiddlewaretoken': token
             },
             success: function (response) {
                 alertify.success(response.status);
-                $('.cart_data').load(location.href + " .cart_data");
+                $('.cart_data').load(location.href + " .cart_data", function() {
+                    // Update the subtotal dynamically
+                    var newSubtotal = response.new_subtotal;
+                    subtotalElement.text('₹' + newSubtotal);
+                });
             }
         });
     });
-
+    
 
     $('.delete_cart_item').click(function (e) {
         e.preventDefault();

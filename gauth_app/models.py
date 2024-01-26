@@ -92,11 +92,13 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return str(self.order)
+
     
 
 class Cart(models.Model):
     user = models.ForeignKey(Customer, on_delete = models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.IntegerField(default=0)
     image = models.ImageField(upload_to="products", null=True, blank=True)
     total = models.IntegerField(default=0)

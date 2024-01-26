@@ -23,8 +23,9 @@
 										<th class="text-center">Color</th>
 										<th class="text-center">Storage</th>
 										<th class="text-center">Ram</th>
-										<th class="text-center">Stock</th>
+										<th class="text-center">Price</th>
 										<th class="text-center">Offer</th>
+										<th class="text-center">Stock</th>
 										<th class="text-center">Edit</th>
 									</tr>
 								</thead>
@@ -55,6 +56,7 @@
 										<td class ="text-center">{{ variant.ram }} GB</td>																	
 										<td class ="text-center">{{ variant.price }}</td>
 										<td class ="text-center">{{ variant.offer }}</td>
+										<td class ="text-center">{{ variant.stock }}</td>
 										<td class ="text-center">
 											<a type="button" href="{% url 'dashboard_app:update_variant' id=variant.id %}" class="btn btn-success">Edit</a>
 										</td>	

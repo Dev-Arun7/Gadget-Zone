@@ -86,17 +86,16 @@
                                             <div class="quantity">
                                                 {% csrf_token %}
                                                 <input type="hidden" value="{{ product.id }}" class="prod_id">
+                                                <input type="hidden" value="{{ variant.id }}" class="variant_id"> <!-- Add input field for variant_id -->
                                                 <label for="quantity">Quantity</label>
-                                                
                                             </div>
                                             {% if variant.stock > 0 %}
                                                 <button class="add-to-cart addToCartBtn" type="submit">Add to Cart</button>
                                             {% else %}
                                                 <p class="out-of-stock-message">Sorry, this item is currently out of stock.</p>
                                             {% endif %}
-
                                         </form>
-                                    </div>
+                                    </div>                            
                                     
 
                                                               
@@ -324,6 +323,7 @@
                             <div class="row">
                                 <div class="product-active owl-carousel">
                                     {% for i in similar_products|slice:":7" %}
+                                    {% for variant in i.productvariant_set.all %}
                                     <div class="col-lg-12">
                                        
                                         <!-- single-product-wrap start -->
@@ -337,7 +337,7 @@
                                                 <div class="product_desc_info">
                                                     <div class="product-review">
                                                         <h5 class="manufacturer">
-                                                            <a href="product-details.html"> {{ i.color }} {{ i.storage }} GB</a>
+                                                            <a href="product-details.html"> {{ i.color }} {{ variant.storage }} GB</a>
                                                         </h5>
                                                         <div class="rating-box">
                                                             <ul class="rating">
@@ -349,11 +349,11 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <h4><a class="product_name"href="{% url 'main_app:single_product' i.id  %}">{{ i.brand }} {{ i.model }}</a></h4>
+                                                    <h4><a class="product_name"href="{% url 'main_app:single_product' i.id variant.id  %}">{{ i.brand }} {{ i.model }}</a></h4>
                                                     <div class="price-box">
-                                                        <span class="new-price new-price-2">₹ {{ i.offer_price }}</span>
-                                                        <span class="old-price">{{i.price}}</span>
-                                                        <span class="discount-percentage">{{i.offer}} % Off</span>
+                                                        <span class="new-price new-price-2">₹ {{ variant.offer_price }}</span>
+                                                        <span class="old-price">{{varinat.price}}</span>
+                                                        <span class="discount-percentage">{{variant.offer}} % Off</span>
                                                     </div>
                                                 </div>
                                                 <div class="add-actions">
@@ -367,6 +367,7 @@
                                         </div>
                                         <!-- single-product-wrap end -->
                                     </div>
+                                    {% endfor %}                                   
                                     {% endfor %}                                   
                                 </div>
                             </div>

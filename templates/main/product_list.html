@@ -44,8 +44,8 @@
                                     <div class="product-view-mode">
                                         <!-- shop-item-filter-list start -->
                                         <ul class="nav shop-item-filter-list" role="tablist">
-                                            <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="grid-view" href="#grid-view"><i class="fa fa-th"></i></a></li>
-                                            <li class="active" role="presentation"><a aria-selected="true" class="active show" data-toggle="tab" role="tab" aria-controls="list-view" href="#list-view"><i class="fa fa-th-list"></i></a></li>
+                                            <li class="active" role="presentation"><a data-toggle="tab"  class="active show" role="tab" aria-controls="grid-view" href="#grid-view"><i class="fa fa-th"></i></a></li>
+                                            <li role="presentation"><a aria-selected="true" data-toggle="tab" role="tab" aria-controls="list-view" href="#list-view"><i class="fa fa-th-list"></i></a></li>
                                         </ul>
                                         <!-- shop-item-filter-list end -->
                                     </div>
@@ -75,7 +75,7 @@
                             <div class="shop-products-wrapper">
                                 <div class="tab-content">
 
-                                    <div id="list-view" class="tab-pane fade product-list-view active show" role="tabpanel">
+                                    <div id="list-view"  class="tab-pane fade" role="tabpanel">
                                         {% for product in products %}
                                         {% for variant in product.productvariant_set.all %}
                                         <div class="row">
@@ -94,7 +94,7 @@
                                                             <div class="product_desc_info">
                                                                 <div class="product-review">
                                                                     <h5 class="manufacturer">
-                                                                        <a href="{% url 'main_app:single_product' product.id %}">{{ product.color }} {{ variant.storage }} GB</a>
+                                                                        <a href="{% url 'main_app:single_product' product.id variant.id %}">{{ product.color }} {{ variant.storage }} GB</a>
                                                                     </h5>
                                                                     <div class="rating-box">
                                                                         <ul class="rating">
@@ -106,7 +106,7 @@
                                                                         </ul>
                                                                     </div>
                                                                 </div>
-                                                                <h4><a class="product_name" href="{% url 'main_app:single_product' product.id %}">{{ product.brand }} {{ product.model }}</a></h4>
+                                                                <h4><a class="product_name" href="{% url 'main_app:single_product' product.id variant.id %}">{{ product.brand }} {{ product.model }}</a></h4>
                                                                 <div class="price-box">
                                                                     <span class="new-price">₹{{ variant.offer_price }}</span>
                                                                 </div>
@@ -132,7 +132,7 @@
                                     </div>
 
 
-                                    <div id="grid-view" class="tab-pane fade" role="tabpanel">
+                                    <div id="grid-view"  class="tab-pane fade product-list-view active show" role="tabpanel">
                                         
                                         <div class="product-area shop-product-area">
                                            
@@ -164,7 +164,7 @@
                                                                             </ul>
                                                                         </div>
                                                                     </div>
-                                                                    <h4><a class="product_name" href="{% url 'main_app:single_product' product.id %}">{{ product.brand }} {{ product.model }}</a></h4>
+                                                                    <h4><a class="product_name" href="{% url 'main_app:single_product' product.id variant.id %}">{{ product.brand }} {{ product.model }}</a></h4>
                                                                     <div class="price-box">
                                                                         <span class="new-price">₹{{ variant.offer_price }}</span>
                                                                     </div>

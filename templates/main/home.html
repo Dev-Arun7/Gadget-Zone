@@ -148,7 +148,7 @@
                             <div class="row">
                                 <div class="product-active owl-carousel">
                                     {% for i in products %}
-                                    {% for variant in i.productvariant_set.all %}
+                                    {% for variant in i.productvariant_set.all|slice:":1" %}
                                         <div class="col-lg-12">
                                             <!-- single-product-wrap start -->
                                             <div class="single-product-wrap">

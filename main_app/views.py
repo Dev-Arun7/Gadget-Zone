@@ -42,7 +42,7 @@ def single_product(request, id, variant_id):
     additional_images = product.additional_images.all()
 
     # Similar Products
-    similar_products = Product.objects.filter(main_category_id=product.main_category_id, deleted=False).exclude(id=id)
+    similar_products = Product.objects.filter(main_category_id=product.main_category_id, deleted=False).prefetch_related('productvariant_set').exclude(id=id)
 
     context = {
         "product": product,
@@ -127,44 +127,47 @@ def budget_phones(request):
 
 
 def cart(request):
-    raw_carts = Cart.objects.filter(user=request.user)
+    # Retrieve all cart items along with related product and product variant details
+    cart_items = Cart.objects.select_related('product', 'product_variant').filter(user=request.user)
 
-    # Loop through each item in the cart
-    for item in raw_carts:
-        if item.quantity > item.product.stock:
-            item.delete()
+    # Calculate subtotal for each item and total price for all items in the cart
+    total_price = 0
+    valid_cart_items = []  # List to store cart items with valid stock
 
-    cart_items = Cart.objects.filter(user=request.user)
-    subtotal = 0
-    for item in cart_items: 
-        subtotal = subtotal + item.product.offer_price * item.quantity
+    for item in cart_items:
+        # Check if there is sufficient stock for the product variant
+        if item.quantity <= item.product_variant.stock:
+            # Calculate subtotal for the item
+            item.subtotal = item.quantity * item.product_variant.offer_price
+            # Add subtotal to the total price
+            total_price += item.subtotal
+            # Append the item to the list of valid cart items
+            valid_cart_items.append(item)
 
-    context = {'cart': cart_items, 'subtotal': subtotal}
-    return render(request, "main/cart.html", context)
+    context = { 'cart': valid_cart_items, 'subtotal': total_price }
+    return render(request, 'main/cart.html', context)
 
 
+def add_to_cart(request, product_id, variant_id):
 
-def add_to_cart(request, product_id):
-    # This function is responsible for adding a product to the user's cart.
-
-    # Check if the request method is POST.
     if request.method == 'POST':
-        # Check if the user is authenticated.
         if request.user.is_authenticated:
-            # Get the product ID from the request.
-            prod_id = int(request.POST.get('product_id'))
-
-            # Retrieve the product from the database based on the product ID.
-            product_check = Product.objects.get(id=prod_id)
+            product = get_object_or_404(Product, id=product_id)
+            variant = get_object_or_404(ProductVariant, id=variant_id)
 
             # Check if the product exists.
-            if product_check:
+            if product:
                 # Check if the product is already in the user's cart.
-                if Cart.objects.filter(user=request.user.id, product_id=prod_id):
+                if Cart.objects.filter(user=request.user, product=product, product_variant=variant).exists():
                     return JsonResponse({'status': "Product Already in cart..!"})
                 else: 
                     # Create a new Cart object for the user and add the product.
-                    Cart.objects.create(user=request.user, product_id=prod_id, quantity=1, total=product_check.offer_price)
+                    Cart.objects.create(user=request.user,
+                                        product=product,
+                                        product_variant=variant,
+                                        quantity=1,
+                                        total=variant.offer_price
+                                        )
                     return JsonResponse({'status': "Product added successfully"})
         else:
             return JsonResponse({'status': "Login to continue"})
@@ -174,27 +177,44 @@ def add_to_cart(request, product_id):
 
 
 
+
 def update_cart(request):
+
     if request.method == 'POST':
         prod_id = int(request.POST.get('product_id'))
-        if(Cart.objects.filter(user=request.user, product_id = prod_id)):
+        var_id = int(request.POST.get('variant_id'))
+        
+        if Cart.objects.filter(user=request.user, product_id=prod_id, product_variant_id=var_id).exists():
             prod_qty = int(request.POST.get('product_qty'))
-            cart_data = Cart.objects.get(product_id=prod_id, user=request.user)
+            cart_data = Cart.objects.get(product_id=prod_id, product_variant_id=var_id, user=request.user)
+            
+            # Check if requested quantity exceeds available stock
+            available_stock = cart_data.product_variant.stock
+            if prod_qty > available_stock:
+                # Update cart with maximum available stock
+                cart_data.quantity = available_stock
+                cart_data.total = available_stock * cart_data.product_variant.offer_price
+                cart_data.save()
+                return JsonResponse({'status': f"Quantity updated to maximum available stock: {available_stock}", 'redirect_url': '/cart/'})
+            
+            # If requested quantity is within available stock, update cart normally
             cart_data.quantity = prod_qty
-            cart_data.total = prod_qty * cart_data.product.offer_price
+            cart_data.total = prod_qty * cart_data.product_variant.offer_price
             cart_data.save()
-            return JsonResponse({'status':"Updated Successfully"})
-    return redirect('/')  
+            return JsonResponse({'status': "Updated Successfully", 'redirect_url': '/main:cart/'})
+        
+        else:
+            return JsonResponse({'status': "Product not found in cart", 'redirect_url': '/main:cart/'})
+    
+    return redirect('main_app:cart.html')  # Redirect to cart.html if it's a GET request
 
 
-def delete_cart(request):
-    if request.method == 'POST':
-        prod_id = int(request.POST.get('product_id'))
-        if(Cart.objects.filter(user = request.user, product_id=prod_id)):
-            cartitem = Cart.objects.get(product_id=prod_id, user=request.user)
-            cartitem.delete()
-        return JsonResponse({'status':"Deleted Successfully"})
-    return redirect('/')
+
+def delete_cart(request, product_id):
+    # Retrieve the cart item to delete
+    cart_item = get_object_or_404(Cart, id=product_id)
+    cart_item.delete()
+    return redirect('main_app:cart') 
 
 
 def checkout(request):

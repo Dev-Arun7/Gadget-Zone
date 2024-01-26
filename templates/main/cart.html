@@ -37,6 +37,7 @@
                                                 <th class="li-product-remove">remove</th>
                                                 <th class="li-product-thumbnail">images</th>
                                                 <th class="cart-product-name">Product</th>
+                                                <th class="cart-product-name">Variant</th>
                                                 <th class="li-product-price">Unit Price</th>
                                                 <th class="li-product-quantity">Quantity</th>
                                                 <th class="li-product-subtotal">Total</th>
@@ -47,7 +48,7 @@
                                             {% for i in cart %}
                                             
                                                 <tr>
-                                                <td class="li-product-remove delete_cart_item "><a href="#"><i class="fa fa-times"></i></a></td>           
+                                                <td> <a href="{% url 'main_app:delete_cart' product_id=i.id %}"><i class="fa fa-times"></i></a> </td>      
                                                 <td class="li-product-thumbnail">
                                                     {% if i.product.image %}
                                                         <a href="#">
@@ -55,13 +56,15 @@
                                                         </a>
                                                     {% else %}
                                                         <span>No Image Available</span>
-                                                    {% endif %}
+                                                     {% endif %}
                                                 </td>                                    
                                                 <td class="li-product-name"><a href="#">{{ i.product.brand }} {{ i.product.model }}</a></td>
-                                                <td class="li-product-price"><span class="amount">₹{{ i.product.offer_price }}</span></td>
+                                                <td class="li-product-name"><a href="#">{{ i.product_variant.ram }} GB + {{ i.product_variant.storage }} GB</a></td>
+                                                <td class="li-product-price"><span class="amount">₹{{ i.product_variant.offer_price }}</span></td>
                                                 <td class="quantity tr " style="text-align: center;">
                                                     <div class="quantity product_data">
                                                         <input type="hidden" value="{{ i.product_id }}" class="prod_id">
+                                                        <input type="hidden" value="{{ i.product_variant_id }}" class="variant_id">
                                                         {% csrf_token %}
                                                         <label for="quantity">Quantity</label>
                                                         <div class="input-group text-center mb-3" style="width: 130px; margin: auto;">
@@ -75,7 +78,6 @@
                                             </tr>
                                         
                                             {% endfor %}
-                                        
                                         </tbody>
                                     </table>
                                 </div>
