@@ -36,13 +36,6 @@
                                 required>
                             </div>
                             <div class="form-group">
-                                <label>Price</label>
-                                <input class="form-control" type="number" 
-                                       placeholder="Enter the price"
-                                       name="price"
-                                       >
-                            </div>
-                            <div class="form-group">
                                 <label>Description</label>
                                 <textarea class="form-control" 
                                           placeholder="Add description"
@@ -61,28 +54,16 @@
                                 <input class="form-control" type="number" 
                                        placeholder="Enter the size of the display"
                                        name="display_size"
-                                       step="1" >
+                                       step="1" 
+                                       min="0">
                             </div>
                             <div class="form-group">
                                 <label>Camera Resolution</label>
                                 <input class="form-control" type="number" 
                                        placeholder="Enter the resolution of the camera"
                                        name="camera"
-                                       step="2" >
-                            </div>
-                            <div class="form-group">
-                                <label>Storage Capacity</label>
-                                <input class="form-control" type="number" 
-                                       placeholder="Enter the storage size"
-                                       name="storage"
-                                       step="16" >
-                            </div>
-                            <div class="form-group">
-                                <label>RAM Size</label>
-                                <input class="form-control" type="number" 
-                                       placeholder="Enter the amount of RAM"
-                                       name="ram"
-                                       step="2" >
+                                       step="2"
+                                       min="0" >
                             </div>
                             <div class="form-group">
                                 <label for="network">Network</label>
@@ -110,10 +91,11 @@
                             <div class="form-group">
                                 <label>Battery Capacity</label>
                                 <input class="form-control" type="number" 
-                                       placeholder="Enter the battery capacity"
-                                       name="battery"
-                                       step="100" >
-                            </div> 
+                                    placeholder="Enter the battery capacity"
+                                    name="battery"
+                                    step="100"
+                                    min="0">
+                            </div>
                             <div class="form-group">
                                 <label>Add images</label>
                                 <div>
@@ -135,24 +117,6 @@
                                            multiple required>
                                     <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
                                 </div>
-                            </div>
-                             <div class="form-group">
-                                <label>Stock</label>
-                                <input class="form-control" type="text" 
-                                       placeholder="Enter the stock"
-                                       name="stock"
-                                       pattern="[0-9]+"
-                                       title= "Please enter a valid number" 
-                                       required>
-                            </div>
-                            <div class="form-group">
-                                <label>Offer</label>
-                                <input class="form-control" type="text" 
-                                       placeholder="Enter the offer percentage"
-                                       name="offer"
-                                       pattern="[0-9]+"
-                                       title= "Please enter a valid number" 
-                                       required>
                             </div>
                             <div class="form-group">
                                 <label for="network">Delete the product from page</label>

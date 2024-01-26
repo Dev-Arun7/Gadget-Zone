@@ -1,0 +1,70 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <h4 class="page-title">Edit Variant</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <form action="{% url 'dashboard_app:update_variant' variant.id %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}           
+                            <div class="form-group">
+                                <label>Price</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the price"
+                                       name="price"
+                                       value="{{variant.price}}"
+                                        >
+                            </div>
+                            <div class="form-group">
+                                <label>Storage Capacity</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the storage size"
+                                       name="storage"
+                                       value="{{ variant.storage }}"
+                                       step="16" >
+                            </div>
+                            <div class="form-group">
+                                <label>RAM Size</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the amount of RAM"
+                                       name="ram"
+                                       value="{{ variant.ram }}"
+                                       step="2" >
+                            </div>                           
+                            <div class="form-group">
+                                <label>Stock</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the stock"
+                                       name="stock"
+                                       value="{{ variant.stock }}"
+                                       step="1"
+                                       min = "1" >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Offer</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Enter the offer percentage"
+                                       name="offer"
+                                       value="{{ variant.offer }}"
+                                       step="1" 
+                                       min = "1"
+                                       max = "99">
+                            </div>
+                            <div class="row">
+                            <div class="m-t-20 text-center">
+                                <button class="btn btn-primary submit-btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+ 

@@ -4,12 +4,11 @@
             <div class="content">
                 <div class="row">
                     <div class="col-sm-4 col-3">
-                        <h4 class="page-title">All Products</h4>
-                    </div>
-                    <div class="col-sm-12 col-9 text-left m-b-20 ml-3">
-                        <a href="{% url 'dashboard_app:add_product' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Product</a>
+                        <h4 class="page-title">All Products and its variants are listed here. </h4>
                     </div>
                 </div>
+				<p> You can edit product variant details from here </p>
+				<br>
 				<div class="row">
 					<div class="col-md-12 pr-2">
 						<div class="table-responsive">
@@ -20,27 +19,21 @@
 										<th class="text-center">Image</th>
 										<th class="text-center">Brand</th>
 										<th class="text-center">Model</th>
-										<th class="text-center">Price</th>
 										{% comment %} <th class="text-center">Description</th> {% endcomment %}
 										<th class="text-center">Color</th>
-										<th class="text-center">Display</th>
-										<th class="text-center">Camera</th>
 										<th class="text-center">Storage</th>
 										<th class="text-center">Ram</th>
-										<th class="text-center">5G</th>
-										<th class="text-center">Smart</th>
-										<th class="text-center">Battery</th>
 										<th class="text-center">Stock</th>
 										<th class="text-center">Offer</th>
 										<th class="text-center">Edit</th>
-										<th class ="text-center">Delete</th>
 									</tr>
 								</thead>
 								
 								<tbody>
-									{% for i in data %}
+									{% for i in products %}
+									{% for variant in i.productvariant_set.all %}
 									<tr>
-										<td>
+										<td class ="text-center">
 											{% if i.deleted %}
 												<span class="badge badge-pill badge-danger">Inactive</span>
 											{% else %}
@@ -54,35 +47,19 @@
 												<p>No image available</p>
 											{% endif %}
 										</td>	
-										<td>{{i.brand}}</td>
-										<td>{{i.model}}</td>
-										<td>{{i.price}}</td>
+										<td class ="text-center" >{{i.brand}}</td>
+										<td class ="text-center">{{i.model}}</td>
 										{% comment %} <td>{{i.description}}</td> {% endcomment %}
-										<td>{{i.color}}</td>
-										<td>{{i.display_size}} Inch</td>
-										<td>{{i.camera}} MP</td>
-										<td>{{i.storage}}</td>
-										<td>{{i.ram}} GB</td>
-										<td>{{i.network}}</td>
-										<td>{{i.smart}}</td>
-										<td>{{i.battery}} mAh</td>									
-										<td>{{i.stock}}</td>
-										<td>{{i.offer}}</td>
-										<td>
-											<a type="button" href="{% url 'dashboard_app:update_product' id=i.id %}" class="btn btn-success">Edit</a>
-										</td>
-										<td>
-											<a href="{% url 'dashboard_app:soft_delete_product' id=i.id %}">
-												<button type="submit" name="toggle_deleted" class="btn btn-danger">
-													{% if i.deleted %}
-														 Activate 
-													{% else %}
-														Deactivate
-													{% endif %}
-												</button>
-											</a>
+										<td class ="text-center" class ="text-center">{{i.color}}</td>
+										<td class ="text-center">{{variant.storage}}</td>
+										<td class ="text-center">{{ variant.ram }} GB</td>																	
+										<td class ="text-center">{{ variant.price }}</td>
+										<td class ="text-center">{{ variant.offer }}</td>
+										<td class ="text-center">
+											<a type="button" href="{% url 'dashboard_app:update_variant' id=variant.id %}" class="btn btn-success">Edit</a>
 										</td>	
 									</tr>
+									{% endfor%} 
 									{% endfor%} 
 								</tbody>
 							</table>

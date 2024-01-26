@@ -1,5 +1,9 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% block title %}
+    Gadget Zone Home
+{% endblock %}
+
 {% block content %}
 
          <!-- Begin Slider With Category Menu Area -->
@@ -143,12 +147,13 @@
                         <div id="li-new-product" class="tab-pane active show" role="tabpanel">
                             <div class="row">
                                 <div class="product-active owl-carousel">
-                                    {% for i in default_product %}
+                                    {% for i in products %}
+                                    {% for variant in i.productvariant_set.all %}
                                         <div class="col-lg-12">
                                             <!-- single-product-wrap start -->
                                             <div class="single-product-wrap">
                                                 <div class="product-image">
-                                                    <a href="{% url 'main_app:single_product' i.id %}">
+                                                    <a href="{% url 'main_app:single_product' i.id variant.id %}">
                                                         <img src="{{ i.image.url }}" alt="Li's Product Image" style="height: 200px; object-fit: contain;">
                                                     </a>
                                                     <span class="sticker">New</span>
@@ -157,7 +162,7 @@
                                                     <div class="product_desc_info">
                                                         <div class="product-review">
                                                             <h5 class="manufacturer">
-                                                                <a href="{% url 'main_app:single_product' i.id %}""> {{ i.color }} {{ i.storage }} GB</a>
+                                                                <a href="{% url 'main_app:single_product' i.id variant.id %}"> {{ i.color }} {{ variant.storage }} GB</a>
                                                             </h5>
                                                             <div class="rating-box">
                                                                 <ul class="rating">
@@ -169,11 +174,11 @@
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                        <h4><a class="product_name" href="{% url 'main_app:single_product' i.id %}">{{ i.brand }} {{ i.model }}</a></h4>
+                                                        <h4><a class="product_name" href="{% url 'main_app:single_product' i.id variant.id %}">{{ i.brand }} {{ i.model }}</a></h4>
                                                         <div class="price-box">
-                                                            <span class="new-price new-price-2">₹ {{ i.offer_price }}</span>
-                                                            <span class="old-price">{{i.price}}</span>
-                                                            <span class="discount-percentage">{{i.offer}} % Off</span>
+                                                            <span class="new-price new-price-2">₹ {{ variant.offer_price }}</span>
+                                                            <span class="old-price">{{variant.price}}</span>
+                                                            <span class="discount-percentage">{{variant.offer}} % Off</span>
                                                         </div>
                                                     </div>
                                                     <div class="add-actions">
@@ -187,6 +192,7 @@
                                             </div>
                                             <!-- single-product-wrap end -->
                                         </div>
+                                    {% endfor %}
                                     {% endfor %}
                                 </div>
                             </div>

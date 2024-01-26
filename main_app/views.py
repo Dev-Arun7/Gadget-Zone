@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from main_app.models import Main_Category, Product
+from main_app.models import Main_Category, Product, ProductVariant
 from gauth_app.models import Cart, Wishlist, Address, Order
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -9,13 +9,16 @@ from django.contrib import messages
 
 
 def home(request):
-    
-    return render(request, "main/home.html")
+    products = Product.objects.prefetch_related('productvariant_set').filter(deleted=False).order_by('id').reverse()
+    context = {'products': products}    
+    return render(request, "main/home.html", context)
 
 
 def product_list(request):
-    products = Product.objects.filter(deleted=False)
-    return render(request, "main/product_list.html",{"data": products})
+    products = Product.objects.prefetch_related('productvariant_set').all().order_by('id')
+    context = {'products': products}
+    return render(request, "main/product_list.html", context)
+
 
 
 def category_products(request,id):
@@ -26,17 +29,27 @@ def category_products(request,id):
     return render(request, "main/product_list.html", {'data': products})
 
 
-def single_product(request, id):
+def single_product(request, id, variant_id):
+    # Get the product and its variants
     product = get_object_or_404(Product, id=id)
-    similar_products = Product.objects.filter(main_category_id=product.main_category_id, deleted=False).exclude(id=id)
-    
+
+    # Fetch the specific variant using the provided variant_id
+    variant = get_object_or_404(ProductVariant, id=variant_id, product=product)
+
+    variants = product.productvariant_set.all()  # Use the related name 'productvariant_set' to access variants
+
     # Fetch additional images from the related ProductImage model
     additional_images = product.additional_images.all()
 
+    # Similar Products
+    similar_products = Product.objects.filter(main_category_id=product.main_category_id, deleted=False).exclude(id=id)
+
     context = {
         "product": product,
-        "products": similar_products,
+        "variants": variants,
+        "variant": variant,
         "additional_images": additional_images,
+        "similar_products": similar_products
     }
     return render(request, "main/single_product.html", context)
 

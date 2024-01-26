@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from main_app.models import Main_Category, Product, ProductImage
+from main_app.models import Main_Category, Product, ProductImage, ProductVariant
 from gauth_app.models import Customer
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
@@ -176,9 +176,9 @@ def delete_main_category(request,id):
 
 
 @login_required(login_url='dashboard_app:dashboard_login')
-def all_products(request):
+def products(request):
     data = Product.objects.all().order_by('id')
-    return render(request, "dashboard/all_products.html", {"data": data})
+    return render(request, "dashboard/products.html", {"data": data})
 
 
 @never_cache
@@ -191,47 +191,34 @@ def add_product(request):
         # Extracting data from the POST request
         brand = request.POST['brand']
         model = request.POST['model']
-        price = request.POST['price']
         description = request.POST['description']
         color = request.POST['color']
         display_size = request.POST['display_size']
         camera = request.POST['camera']
-        storage = request.POST['storage']
-        ram = request.POST['ram']
         network = request.POST.get('network', False) == 'true'
         smart = request.POST.get('smart', False) == 'true'
         battery = request.POST['battery']
         image = request.FILES.get('image')
-        stock = request.POST['stock']
-        offer = request.POST['offer']
         delete = request.POST.get('delete', False) == 'True'
         main_category_id = request.POST.get('main_category_id')  
 
         main_cat = Main_Category.objects.get(id=main_category_id)
 
-        # Calculate offer price
-        offer_price = int(price) - (int(price) * int(offer) / 100)
-
         # Create the Product instance with the calculated offer price
         query = Product.objects.create(
             brand=brand,
             model=model,
-            price=price,
             description=description,
             color=color,
             display_size=display_size,
             camera=camera,
-            storage=storage,
-            ram=ram,
+
             network=network,
             smart=smart,
             battery=battery,
             image=image,
-            stock=stock,
-            offer=offer,
             deleted=delete,
             main_category=main_cat,
-            offer_price=offer_price  # New field
         )
 
         # Save multiple images associated with the product
@@ -239,7 +226,7 @@ def add_product(request):
         for img in images:
             ProductImage.objects.create(product=query, image=img)
             
-        return redirect('dashboard_app:all_products')
+        return redirect('dashboard_app:products')
 
     # Render the form if it's not a POST request
     return render(request, 'dashboard/add_product.html', {"data": data})
@@ -253,46 +240,29 @@ def update_product(request, id):
     if request.method == 'POST':
         brand = request.POST['brand']
         model = request.POST['model']
-        price = request.POST['price']
         description = request.POST['description']
         color = request.POST['color']
         display_size = request.POST['display_size']
         camera = request.POST['camera']
-        storage = request.POST['storage']
-        ram = request.POST['ram']
         network = request.POST.get('network', False)
         smart = request.POST.get('smart', False)
         battery = request.POST['battery']
-
-        stock = request.POST['stock']
-        offer = request.POST['offer']
         delete = request.POST.get('delete', False)
         images = request.FILES.getlist('images')
-
-
-        # Calculate offer price
-        offer_price = int(price) - (int(price) * int(offer) / 100)
-
         # Retrieve existing data
         edit = Product.objects.get(id=id)
 
         # Update data in the table
         edit.brand = brand
         edit.model = model
-        edit.price = price
         edit.description = description
         edit.color = color
         edit.display_size = display_size
         edit.camera = camera
-        edit.storage = storage
-        edit.ram = ram
         edit.network = network
         edit.smart = smart
         edit.battery = battery
-        edit.stock = stock
-        edit.offer = offer
         edit.deleted = delete
-        edit.offer_price = offer_price
         # Update main image only if the user provided
         if 'image' in request.FILES:
             image = request.FILES['image']
@@ -309,7 +279,7 @@ def update_product(request, id):
         for img in images:
             ProductImage.objects.create(product=edit, image=img)
 
-        return redirect('dashboard_app:all_products')
+        return redirect('dashboard_app:products')
 
     return render(request, "dashboard/update_product.html", {"product": product, "data": data})
 
@@ -321,7 +291,7 @@ def soft_delete_product(request, id):
     product.deleted = not product.deleted
     product.save()
 
-    return redirect('dashboard_app:all_products')
+    return redirect('dashboard_app:products')
 
 
 
@@ -330,10 +300,76 @@ def delete_product(request,id):
     data = Product.objects.get(id=id) 
     data.delete()  
     return redirect('dashboard_app:all_products')
+
+
+
+#############################################################################################
+                        # Product Varinats management #
+#############################################################################################
+
+
+@login_required(login_url='dashboard_app:dashboard_login')
+def all_products(request):
+    products = Product.objects.prefetch_related('productvariant_set').all().order_by('id')
+    context = {'products': products}
+    return render(request, "dashboard/all_products.html", context)
+
+
+@never_cache
+@admin_required
+@login_required(login_url='dashboard_app:dashboard_login')
+def add_variant(request, id):
+    product = Product.objects.get(id=id)
+    if request.method == 'POST':
+        # Extracting data from the POST request
+        price = request.POST['price']
+        ram = request.POST['ram']
+        storage = request.POST['storage']
+        stock = request.POST['stock']
+        offer = request.POST['offer'] 
+        product_id = request.POST.get('product_id')
+
+        # Calculate offer price
+        offer_price = int(price) - (int(price) * int(offer) / 100)
+
+        # Create the Product instance with the calculated offer price
+        query = ProductVariant.objects.create(
+            price=price,
+            ram=ram,
+            storage=storage,
+            stock=stock,
+            offer=offer,
+            offer_price=offer_price,
+            product = product
+        )
+  
+        return redirect('dashboard_app:products')
+
+    # Render the form if it's not a POST request
+    return render(request, 'dashboard/add_variant.html', {'product':product})
+
+
+def update_variant(request, id):
+    variant = ProductVariant.objects.get(id=id)
+
+    if request.method == 'POST':
+        price = request.POST['price']
+        ram = request.POST['ram']
+        storage = request.POST['storage']
+        stock = request.POST['stock']
+        offer = request.POST['offer']
+        edit = ProductVariant.objects.get(id=id)
+
+
+        # Udate data in the table
+        edit.price = price
+        edit.ram = ram
+        edit.storage = storage
+        edit.stock = stock
+        edit.offer = offer
+        edit.save()
         
+        return redirect('dashboard_app:all_products')
 
-
-
-
-
-
+    context = {'variant':variant}
+    return render(request, "dashboard/update_variant.html", context)

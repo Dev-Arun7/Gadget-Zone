@@ -53,7 +53,7 @@
                                             <span class="offer">{{ product.offer }}% Off Now</span>
                                         {% endif %}
                                     </div>
-                                    <span class="product-details-ref">{{ product.color }} {{ product.storage }} GB</span>
+                                    <span class="product-details-ref">{{ product.color }} {{ variant.storage }} GB</span>
                                     <div class="rating-box pt-20">
                                         <ul class="rating rating-with-review-item">
                                             <li><i class="fa fa-star-o"></i></li>
@@ -61,20 +61,26 @@
                                             <li><i class="fa fa-star-o"></i></li>
                                             <li class="no-star"><i class="fa fa-star-o"></i></li>
                                             <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                            <li class="review-item"><a href="#">RAM {{ product.ram }} GB</a></li>
-                                            <li class="review-item"><a href="#">Camra {{ product.camera }} MP </a></li>
+                                            <li class="review-item"><a href="#">RAM {{ variant.ram }} GB</a></li>
+                                            <li class="review-item"><a href="#">Camera {{ product.camera }} MP </a></li>
                                         </ul>
                                     </div>
                                     <div class="price-box pt-20">
-                                        <span class="new-price new-price-2">₹ {{ product.offer_price }}</span>
-                                        <span class="review-item">MRP ₹<del>{{ product.price }} </del></span>
+                                        <span class="new-price new-price-2">₹ {{ variant.offer_price }}</span>
+                                        <span class="review-item">MRP ₹<del>{{ variant.price }} </del></span>
                                     </div>
                                     <div class="product-desc">
                                         <p>
                                             <span> {{product.description}}  </span>
                                         </p>
-                                    </div>    
-                                    
+                                        {% for variant in variants %}
+                                        <a href= "{% url 'main_app:single_product' product.id variant.id %}">
+                                        <button type="button" class="btn btn-secondary btn-sm"> {{ variant.ram }} RAM + {{ variant.storage }} Storage</button>
+                                        </a>
+                                        {% endfor %}
+                                         <br>
+                                         <br>
+                                    </div>                   
                                     <div class="single-add-to-cart">
                                         <form action="#" class="cart-quantity">
                                             <div class="quantity">
@@ -83,7 +89,7 @@
                                                 <label for="quantity">Quantity</label>
                                                 
                                             </div>
-                                            {% if product.stock > 0 %}
+                                            {% if variant.stock > 0 %}
                                                 <button class="add-to-cart addToCartBtn" type="submit">Add to Cart</button>
                                             {% else %}
                                                 <p class="out-of-stock-message">Sorry, this item is currently out of stock.</p>
@@ -118,8 +124,8 @@
                         <div class="col-lg-12">
                             <div class="li-product-tab">
                                 <ul class="nav li-product-menu">
-                                   <li><a class="active" data-toggle="tab" href="#description"><span>Description</span></a></li>
-                                   <li><a data-toggle="tab" href="#product-details"><span>Product Details</span></a></li>
+                                   <li><a class="active" data-toggle="tab" href="#description"><span>Product Details</span></a></li>
+                                   <li><a data-toggle="tab" href="#product-details"><span>Description</span></a></li>
                                    <li><a data-toggle="tab" href="#reviews"><span>Reviews</span></a></li>
                                 </ul>               
                             </div>
@@ -128,13 +134,6 @@
                     </div>
                     <div class="tab-content">
                         <div id="description" class="tab-pane active show" role="tabpanel">
-                            <div class="product-description">
-                                <span>{{ product.description }}</span>
-                            </div>
-                        </div>
-
-
-                        <div id="product-details" class="tab-pane" role="tabpanel">
                             <table class="product-details-table">
                                 <tr>
                                     <td><strong>Manufacturer</strong></td>
@@ -146,11 +145,11 @@
                                 </tr>
                                 <tr>
                                     <td><strong>MRP Price</strong></td>
-                                    <td>₹{{ product.price }}</td>
+                                    <td>₹{{ variant.price }}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Offer</strong></td>
-                                    <td>{{ product.offer }} %</td>
+                                    <td>{{ variant.offer }} %</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Color</strong></td>
@@ -166,11 +165,11 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Storage</strong></td>
-                                    <td>{{ product.storage }} GB internal</td>
+                                    <td>{{ variant.storage }} GB internal</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Ram</strong></td>
-                                    <td>{{ product.ram }} GB</td>
+                                    <td>{{ variant.ram }} GB</td>
                                 </tr>
                                 <tr>
                                     <td><strong>5G</strong></td>
@@ -182,8 +181,11 @@
                                 </tr>
                             </table>
                         </div>
-                        
-
+                        <div id="product-details" class="tab-pane" role="tabpanel">
+                            <div class="product-description">
+                                <span>{{ product.description }}</span>
+                            </div>
+                        </div>
                         <div id="reviews" class="tab-pane" role="tabpanel">
                             <div class="product-reviews">
                                 <div class="product-details-comment-block">
@@ -321,7 +323,7 @@
                             </div>
                             <div class="row">
                                 <div class="product-active owl-carousel">
-                                    {% for i in products|slice:":7" %}
+                                    {% for i in similar_products|slice:":7" %}
                                     <div class="col-lg-12">
                                        
                                         <!-- single-product-wrap start -->
@@ -347,7 +349,7 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <h4><a class="product_name"href="{% url 'main_app:single_product' i.id %}">{{ i.brand }} {{ i.model }}</a></h4>
+                                                    <h4><a class="product_name"href="{% url 'main_app:single_product' i.id  %}">{{ i.brand }} {{ i.model }}</a></h4>
                                                     <div class="price-box">
                                                         <span class="new-price new-price-2">₹ {{ i.offer_price }}</span>
                                                         <span class="old-price">{{i.price}}</span>

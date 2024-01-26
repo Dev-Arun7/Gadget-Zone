@@ -1,0 +1,91 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-4 col-3">
+                        <h4 class="page-title">Products</h4>
+                    </div>
+					<div>
+						<P> All the products are listed here without variants. You can add varients from here, list or ullist products from here. </p>
+						</div>
+                    <div class="col-sm-12 col-9 text-left m-b-20 ml-3">
+                        <a href="{% url 'dashboard_app:add_product' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Product</a>
+                    </div>
+                </div>
+				<div class="row">
+					<div class="col-md-12 pr-2">
+						<div class="table-responsive">
+							<table class="table table-striped custom-table">
+								<thead>
+									<tr>
+										<th class="text-center">Active</th>
+										<th class="text-center">Image</th>
+										<th class="text-center">Brand</th>
+										<th class="text-center">Model</th>
+										{% comment %} <th class="text-center">Description</th> {% endcomment %}
+										<th class="text-center">Color</th>
+										<th class="text-center">Display</th>
+										<th class="text-center">Camera</th>
+										<th class="text-center">5G</th>
+										<th class="text-center">Smart</th>
+										<th class="text-center">Battery</th>
+										<th class="text-center">Edit</th>
+										<th class ="text-center">Delete</th>
+										<th class ="text-center">Option</th>
+									</tr>
+								</thead>
+								
+								<tbody>
+									{% for i in data %}
+									<tr>
+										<td class ="text-center">
+											{% if i.deleted %}
+												<span class="badge badge-pill badge-danger">Inactive</span>
+											{% else %}
+												<span class="badge badge-pill badge-success">Active</span>
+											{% endif %}
+										</td>
+										<td class ="text-center" style="width: 150px; height: 100px;">
+											{% if i.image and i.image.url %}
+												<img style="width: 100%; height: 100%; object-fit: contain;" src="{{ i.image.url }}" alt="Image">
+											{% else %}
+												<p>No image available</p>
+											{% endif %}
+										</td>	
+										<td class ="text-center">{{i.brand}}</td>
+										<td class ="text-center">{{i.model}}</td>
+										{% comment %} <td>{{i.description}}</td> {% endcomment %}
+										<td class ="text-center">{{i.color}}</td>
+										<td class ="text-center">{{i.display_size}} Inch</td>
+										<td class ="text-center">{{i.camera}} MP</td>
+										<td class ="text-center">{{i.network}}</td>
+										<td class ="text-center">{{i.smart}}</td>
+										<td class ="text-center">{{i.battery}} mAh</td>									
+										<td class ="text-center">
+											<a type="button" href="{% url 'dashboard_app:update_product' id=i.id %}" class="btn btn-success">Edit</a>
+										</td>
+										<td class ="text-center">
+											<a href="{% url 'dashboard_app:soft_delete_product' id=i.id %}">
+												<button type="submit" name="toggle_deleted" class="btn btn-danger">
+													{% if i.deleted %}
+														 Activate 
+													{% else %}
+														Deactivate
+													{% endif %}
+												</button>
+											</a>
+										</td>	
+										<td class ="text-center">
+											<a type="button" href="{% url 'dashboard_app:add_variant' id=i.id  %}" class="btn btn-success">+ Varient</a>
+										</td>
+									</tr>
+									{% endfor%} 
+								</tbody>
+							</table>
+						</div>
+					</div>
+                </div>
+            </div>
+{% endblock content %}                  
+

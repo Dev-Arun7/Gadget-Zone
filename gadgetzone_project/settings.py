@@ -172,5 +172,4 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 2
-
 LOGIN_REDIRECT_URL = 'main_app:home'
