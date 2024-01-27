@@ -148,8 +148,8 @@ def cart(request):
     return render(request, 'main/cart.html', context)
 
 
-def add_to_cart(request, product_id, variant_id):
 
+def add_to_cart(request, product_id, variant_id):
     if request.method == 'POST':
         if request.user.is_authenticated:
             product = get_object_or_404(Product, id=product_id)
@@ -168,18 +168,18 @@ def add_to_cart(request, product_id, variant_id):
                                         quantity=1,
                                         total=variant.offer_price
                                         )
-                    return JsonResponse({'status': "Product added successfully"})
+                    # Return success message
+                    return JsonResponse({'status': "Product added successfully", 'added': True})
         else:
             return JsonResponse({'status': "Login to continue"})
 
     # If the request method is not POST, redirect to the home page.
-    return redirect('/')
+    return redirect('main_app:home')
 
 
 
 
 def update_cart(request):
-
     if request.method == 'POST':
         prod_id = int(request.POST.get('product_id'))
         var_id = int(request.POST.get('variant_id'))
@@ -195,18 +195,21 @@ def update_cart(request):
                 cart_data.quantity = available_stock
                 cart_data.total = available_stock * cart_data.product_variant.offer_price
                 cart_data.save()
-                return JsonResponse({'status': f"Quantity updated to maximum available stock: {available_stock}", 'redirect_url': '/cart/'})
+                return JsonResponse({'status': f"Quantity updated to maximum available stock: {available_stock}", 'redirect_url': '/home/'})
             
             # If requested quantity is within available stock, update cart normally
             cart_data.quantity = prod_qty
             cart_data.total = prod_qty * cart_data.product_variant.offer_price
             cart_data.save()
-            return JsonResponse({'status': "Updated Successfully", 'redirect_url': '/main:cart/'})
+            print(cart_data)
+            return JsonResponse({'status': "Updated Successfully", 'redirect_url': '/home/'})
         
         else:
-            return JsonResponse({'status': "Product not found in cart", 'redirect_url': '/main:cart/'})
+            return JsonResponse({'status': "Product not found in cart", 'redirect_url': '/home/'})
     
-    return redirect('main_app:cart.html')  # Redirect to cart.html if it's a GET request
+    return JsonResponse({'status': "Invalid Request", 'redirect_url': '/cart/'})
+
+
 
 
 

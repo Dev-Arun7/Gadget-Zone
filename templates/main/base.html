@@ -50,6 +50,8 @@
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
         <!-- Default theme -->
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+        <!-- Sweet Alert  -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -615,7 +617,6 @@
         <script src="{% static 'main/js/jquery-3.7.1.min.js' %}"></script>
         <script src="{% static 'main/js/custom.js' %}"></script>
         <!-- JavaScript -->
-        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <script> 
             alertify.set('notifier','position', 'top-right');
             {% for msg in messages %}

@@ -53,7 +53,9 @@
                                             <span class="offer">{{ product.offer }}% Off Now</span>
                                         {% endif %}
                                     </div>
-                                    <span class="product-details-ref">{{ product.color }} {{ variant.storage }} GB</span>
+                                    <span class="product-details-ref">{{ product.color }} {{ variant.storage }} GB  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                        {{ variant.ram }} GB RAM </span>
+                                    
                                     <div class="rating-box pt-20">
                                         <ul class="rating rating-with-review-item">
                                             <li><i class="fa fa-star-o"></i></li>
@@ -61,7 +63,6 @@
                                             <li><i class="fa fa-star-o"></i></li>
                                             <li class="no-star"><i class="fa fa-star-o"></i></li>
                                             <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                            <li class="review-item"><a href="#">RAM {{ variant.ram }} GB</a></li>
                                             <li class="review-item"><a href="#">Camera {{ product.camera }} MP </a></li>
                                         </ul>
                                     </div>
@@ -86,7 +87,7 @@
                                             <div class="quantity">
                                                 {% csrf_token %}
                                                 <input type="hidden" value="{{ product.id }}" class="prod_id">
-                                                <input type="hidden" value="{{ variant.id }}" class="variant_id"> <!-- Add input field for variant_id -->
+                                                <input type="hidden" value="{{ variant.id }}" class="variant_id"> 
                                                 <label for="quantity">Quantity</label>
                                             </div>
                                             {% if variant.stock > 0 %}
@@ -95,10 +96,7 @@
                                                 <p class="out-of-stock-message">Sorry, this item is currently out of stock.</p>
                                             {% endif %}
                                         </form>
-                                    </div>                            
-                                    
-
-                                                              
+                                    </div>                                                           
                                     <div class="product-additional-info">
                                         <div class="product-social-sharing">
                                             <ul>
@@ -377,5 +375,10 @@
                 </div>
             </section>
             <!-- Li's Laptop Product Area End Here -->
+
+   <script>
+    
+
+   </script>
         {% endblock content %}
       

@@ -40,19 +40,40 @@ $(document).ready(function(){
             },
             success: function (response) {
                 console.log(response);
-                alertify.success(response.status);
+                if (response.added) {
+                    // Show success message using SweetAlert
+                    Swal.fire({
+                        title: "Success!",
+                        text: response.status,
+                        icon: "success"
+                    });
+                } else {
+                    // Handle other responses or errors
+                    // For example, if the product is already in the cart
+                    // You can show a warning message
+                    Swal.fire({
+                        title: "Warning!",
+                        text: response.status,
+                        icon: "warning"
+                    });
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                // Handle errors if any
+                console.log(xhr.status + ": " + xhr.responseText); // Log the error for debugging
             }
         });
     });
     
     $('.changeQuantity').click(function (e) {
+        console.log("---------------")
         e.preventDefault();
     
         var product_id = $(this).closest('.tr').find('.prod_id').val();
         var variant_id = $(this).closest('.tr').find('.variant_id').val(); 
         var product_qty = $(this).closest('.tr').find('.qty-input').val();
         var token = $('input[name=csrfmiddlewaretoken]').val();
-        var subtotalElement = $('.cart-page-total').find('ul').find('li:first-child span');
+        
     
         $.ajax({
             method: "POST",
@@ -64,16 +85,14 @@ $(document).ready(function(){
                 'csrfmiddlewaretoken': token
             },
             success: function (response) {
-                alertify.success(response.status);
-                $('.cart_data').load(location.href + " .cart_data", function() {
-                    // Update the subtotal dynamically
-                    var newSubtotal = response.new_subtotal;
-                    subtotalElement.text('₹' + newSubtotal);
-                });
+                console.log("response",response)
+                // alert(response.status);
+                // Redirect to the cart page after successful update
+                // window.location.href = response.redirect_url;
+                window.location.href = "/cart/"
             }
         });
     });
-    
 
     $('.delete_cart_item').click(function (e) {
         e.preventDefault();
@@ -105,8 +124,5 @@ $(document).ready(function(){
             console.error("Product ID is undefined or null.");
         }
     });
-    
-    
 
 });
-
