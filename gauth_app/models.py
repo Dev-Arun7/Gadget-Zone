@@ -71,8 +71,8 @@ class Order(models.Model):
     user              = models.ForeignKey(Customer, on_delete=models.CASCADE) 
     address           = models.ForeignKey(Address, on_delete=models.SET_NULL,null=True,blank=True)
     product           = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
-    amount            = models.CharField(max_length=100)  
-    payment_type      = models.CharField(max_length=100)  
+    amount            = models.CharField(max_length=100, null=True,blank=True)  
+    payment_type      = models.CharField(max_length=100, null=True,blank=True)  
     status            = models.CharField(max_length=100, choices=ORDER_STATUS, default='pending' )  
     quantity          = models.IntegerField(default=0, null=True, blank=True)
     image             = models.ImageField(upload_to='products', null=True, blank=True)
@@ -93,13 +93,12 @@ class OrderItem(models.Model):
     def __str__(self):
         return str(self.order)
 
-    
 
 class Cart(models.Model):
     user = models.ForeignKey(Customer, on_delete = models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True)
-    quantity = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=0) 
     image = models.ImageField(upload_to="products", null=True, blank=True)
     total = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now, blank=True)
@@ -117,3 +116,4 @@ class Wishlist(models.Model):
     
     def __str__(self) -> str:
         return f"Wishlist - {self.user} - {self.product}"
+

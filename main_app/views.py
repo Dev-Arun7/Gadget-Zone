@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from main_app.models import Main_Category, Product, ProductVariant
 from gauth_app.models import Cart, Wishlist, Address, Order
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.contrib import messages
+from django.db.models import Sum
+from django.urls import reverse
 
 
 def home(request):
@@ -220,18 +222,25 @@ def delete_cart(request, product_id):
     return redirect('main_app:cart') 
 
 
-def checkout(request):
-    cart_items = Cart.objects.filter(user=request.user)
-    addresses = Address.objects.filter(user=request.user)
-    subtotal = 0
-    for item in cart_items:
-        subtotal = subtotal +item.product.offer_price * item.quantity
+###############################################################################################################
+                                # Checkout and Order #
+###############################################################################################################
 
-    context = {'subtotal': subtotal,
+
+
+def checkout(request):
+
+    cart_items = Cart.objects.filter(quantity__gt=0, product_variant__stock__gt=0)
+    addresses = Address.objects.filter(user=request.user)
+    total_price = cart_items.aggregate(total_price=Sum('total'))['total_price'] or 0
+
+    context = { 'subtotal': total_price,
                'addresses': addresses,
                }
 
     return render(request, "main/checkout.html", context)
+
+
 
 
 def orders(request):
@@ -269,10 +278,50 @@ def orders(request):
     return render(request, 'main/orders.html')
 
 
+def place_order(request):
+    if request.method == 'POST':
+        user = request.user
+        address_id = request.POST.get('addressId')
+        payment_type = request.POST.get('payment')  
+
+        cart_items = Cart.objects.filter(user=user, quantity__gt=0)
+        in_stock_items = []
+        out_of_stock_items = []
+
+        for cart_item in cart_items:
+            if cart_item.quantity <= cart_item.product_variant.stock:
+                in_stock_items.append(cart_item)
+            else:
+                out_of_stock_items.append(cart_item)
+
+        for cart_item in in_stock_items:
+            order = Order.objects.create(
+                user=user,
+                address_id=address_id,
+                product=cart_item.product,
+                amount=cart_item.total,
+                payment_type=payment_type, 
+                status='pending',
+                quantity=cart_item.quantity,
+                image=cart_item.image
+            )
+            cart_item.product_variant.stock -= cart_item.quantity
+            cart_item.product_variant.save()
+            cart_item.delete()
+
+        if out_of_stock_items:
+            messages.warning(request, "Some items are out of stock and were not included in the order.")
+
+        return HttpResponseRedirect(reverse('main_app:home') + '?success=true')
+    else:
+        messages.error(request, "Invalid request method")
+        return redirect('checkout')
+  
+
+
 def base(request):
     return render(request,'main/base.html')
 
 def temp(request):
     return render(request,'main/temparary.html')
-
 
