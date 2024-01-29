@@ -83,7 +83,7 @@ def product_search(request):
     else:
         results = Product.objects.all()
 
-    return render(request, 'main/product_list.html', {'data': results, 'query': query})
+    return render(request, 'main/product_list.html', {'products': results, 'query': query})
 
 
 
