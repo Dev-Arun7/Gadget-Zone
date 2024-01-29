@@ -1,0 +1,69 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content">
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title"> Order list </h4>
+        </div>
+    </div>
+    <p> All Products orders are listed her. Admin can manage all the orders from here. </p>
+    <br>
+    <div class="row">
+        <div class="col-md-12 pr-2">
+            <div class="table-responsive">
+                <table class="table table-striped custom-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Image</th>
+                            <th class="text-center">Product</th>
+                            <th class="text-center">Variant</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-center">Total</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for i in orders %}
+                        <tr>
+                            <td class="text-center">{{ i.date }}</td>
+                            <td style="width: 150px; height: 100px;">
+                                {% if i.product.image %}
+                                    <img style="width: 100%; height: 100%; object-fit: contain;" src="{{ i.product.image.url }}" alt="Image">
+                                {% else %}
+                                    <p>No image available</p>
+                                {% endif %}
+                            </td>   
+                            <td class="text-center">{{ i.product.brand }} {{ i.product.brand }}</td>
+                            <td class="text-center">{{ i.variant.ram }}GB</td>
+                            <td class="text-center">{{ i.quantity }}</td>
+                            <td class="text-center">₹{{ i.amount }}</td>
+                            <form action="{% url 'dashboard_app:update_order_status' i.pk %}" method="post">
+                            <td class="text-center">
+                                
+                                    {% csrf_token %}
+                                    <select name="new_status">
+                                        {% for status_key, status_value in i.ORDER_STATUS %}
+                                            <option value="{{ status_key }}" {% if i.status == status_key %} selected {% endif %}>{{ status_value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                        
+                            </td>
+                            <td><button type="submit" class="btn btn-success text-center">Update</button> </td>
+                        </form>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    
+                    
+                </table>
+            </div>
+        </div>
+    </div>
+</div>   
+{% endblock content %}                  
+

@@ -15,8 +15,7 @@
             <!-- Li's Breadcrumb Area End Here -->
             <!--Checkout Area Strat-->
             <div class="checkout-area pt-60 pb-30">
-                <div class="container">
-                    
+                <div class="container">         
                     <div class="row">
                         <div class="col-lg-6 col-12">
                             <form id="order-form" action="{% url 'main_app:place_order' %}" method="post">
@@ -25,20 +24,16 @@
                                     <h3>Billing Details</h3>
                                     <div class="row">
                                       <div class="error-message">
-                                        {% if messages %}
-                                            {% for message in messages %}
-                                                <p style="font-size: 25px;" class="text-danger">{{ message }}</p>
-                                            {% endfor %}
-                                        {% endif %}
+                        
                                        
                                     </div>
-                                        <label for="addressDropdown">Select Address:</label>
-                                            <select id="addressDropdown" name="addressId">
-                                                <option value="">Select an address</option>
-                                                {% for address in addresses %}
-                                                    <option value="{{ address.address_id }}">{{ address.address_name }} - {{ address.first_name }}, {{ address.last_name }},  {{ address.city }} - {{ address.pin }}</option>
-                                                {% endfor %}
-                                            </select>
+                                    <select id="addressDropdown" name="addressId">
+                                        <option value="">Select an address</option>
+                                        {% for address in addresses %}
+                                            <option value="{{ address.id }}">{{ address.address_name }} - {{ address.first_name }}, {{ address.last_name }},  {{ address.city }} - {{ address.pin }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    
                                     </div>
                                     <br>
                                     <a href="{% url 'gauth_app:address' %}" class="btn btn-secondary btn-sm active" role="button" aria-pressed="true">Manage Address</a>
@@ -60,7 +55,6 @@
                                         </div>                                        
                                         <br>
                                         <br>
-    
                                     </div>
                                 </div>
                                 <div class="card border-secondary mb-5 pt-3">
@@ -104,8 +98,7 @@
                                         <tbody>
                                             {% for cart_item in cart_items %}
                                             <tr class="cart_item">
-                                              <td class="cart-product-name"> {{ cart_item.product.product_name }}<strong class="product-quantity"> x {{ cart_item.quantity }}</strong></td>
-                                              
+                                              <td class="cart-product-name"> {{ cart_item.product.product_name }}<strong class="product-quantity"> x {{ cart_item.quantity }}</strong></td>                                            
                                               {% if cart_item.product.category.category_offer %}
                                               {% with offer_price=cart_item.product.price|add:'-'|add:cart_item.product.category.category_offer %}
                                               <td class="cart-product-total"><span class="amount">₹{{ cart_item.product.price }} - (%{{ cart_item.product.category.category_offer }})</span></td>
@@ -114,9 +107,7 @@
                                               <td class="cart-product-total"><span class="amount">₹{{ cart_item.product.price }}</span></td>
                                               {% endif %}
                                             </tr>
-                                            {% endfor %}
-
-                                          
+                                            {% endfor %}                                       
                                         </tbody>
                                         <tfoot>
                                             <tr class="cart-subtotal">
@@ -179,8 +170,7 @@
                                               </div>
                                             </div>
                                           </div>
-                                        </div>
-                                       
+                                        </div>     
                                     </div>
                                 </div>
                             </div>
@@ -189,22 +179,17 @@
                 </div>
             </div>
             <!--Checkout Area End-->
-
-
             <script>
               document.getElementById('place-order-button').addEventListener('click', function() {
                   document.getElementById('order-form').submit();
               });
-          </script>
-           
+          </script>      
              <script>
         function handlePaymentSelection() {
             var codRadio = document.getElementById("directcheck");
             var placeOrderButton = document.getElementById("place-order-button");
             var razorpayButton = document.getElementById("rzp-button1");
             console.log("Selected Payment Method:", selectedPayment);
-
-    
             if (codRadio.checked) {
                 placeOrderButton.style.display = "block";
                 razorpayButton.style.display = "none";
@@ -218,9 +203,21 @@
        <!-- razorpay -->
        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
        <!-- alert-message -->
-       <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+       <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>  
+       
+       
+       {% if messages %}
+    <script>
+        // Iterate through each message and display using SweetAlert
+        {% for message in messages %}
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '{{ message }}'
+            });
+        {% endfor %}
+    </script>
+    {% endif %}
 
-                               
-                                {% endblock content %}
+    {% endblock content %}
 
-                             

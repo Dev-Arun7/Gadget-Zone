@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from main_app.models import Main_Category, Product, ProductImage, ProductVariant
-from gauth_app.models import Customer
+from gauth_app.models import Customer, Order
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -373,3 +373,24 @@ def update_variant(request, id):
 
     context = {'variant':variant}
     return render(request, "dashboard/update_variant.html", context)
+
+
+#############################################################################################
+                                  # Orders #
+#############################################################################################
+
+
+def orders(request):
+    # Filter orders by the current user
+    user_orders = Order.objects.all().order_by('id')
+
+    # Render the orders template with user's orders data
+    return render(request, 'dashboard/orders.html', {'orders': user_orders})
+
+def update_order_status(request, order_id):
+    if request.method == 'POST':
+        new_status = request.POST.get('new_status')
+        order = Order.objects.get(pk=order_id)
+        order.status = new_status
+        order.save()
+    return redirect('dashboard_app:orders')

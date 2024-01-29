@@ -241,41 +241,13 @@ def checkout(request):
     return render(request, "main/checkout.html", context)
 
 
-
-
 def orders(request):
-    user = request.user
-    cart_items = Cart.objects.filter(user=user)
-    total_amount = sum(item.total for item in cart_items)
+    # Filter orders by the current user
+    user_orders = Order.objects.filter(user=request.user).order_by('id')
 
-    if request.method == 'POST':
-        address_id = request.POST.get('address_id')
-        payment_type = request.POST.get('payment_type')
+    # Render the orders template with user's orders data
+    return render(request, 'main/orders.html', {'orders': user_orders})
 
-        # Create an order
-        order = Order.objects.create(
-            user=user,
-            address_id=address_id,
-            amount=total_amount,
-            payment_type=payment_type,
-            status='pending',
-        )
-
-        # Copy cart items to order
-        for item in cart_items:
-            order_items = order.orderitem_set.create(
-                product=item.product,
-                quantity=item.quantity,
-                image=item.image,
-            )
-
-        # Clear the cart
-        cart_items.delete()
-        messages.success(request, 'Order placed successfully')
-
-        return redirect('main/success.html')
-
-    return render(request, 'main/orders.html')
 
 
 def place_order(request):
@@ -284,6 +256,15 @@ def place_order(request):
         address_id = request.POST.get('addressId')
         payment_type = request.POST.get('payment')  
 
+        # Check if address is selected
+        if not address_id:
+            messages.error(request, "Please select an address.")
+            return HttpResponseRedirect(reverse('main_app:checkout'))  # Redirect back to the checkout page
+        
+        if not payment_type:
+            messages.error(request, "Please select payment method.")
+            return HttpResponseRedirect(reverse('main_app:checkout'))
+        
         cart_items = Cart.objects.filter(user=user, quantity__gt=0)
         in_stock_items = []
         out_of_stock_items = []
@@ -303,7 +284,9 @@ def place_order(request):
                 payment_type=payment_type, 
                 status='pending',
                 quantity=cart_item.quantity,
-                image=cart_item.image
+                image=cart_item.image,
+                variant=cart_item.product_variant
+
             )
             cart_item.product_variant.stock -= cart_item.quantity
             cart_item.product_variant.save()
@@ -315,9 +298,29 @@ def place_order(request):
         return HttpResponseRedirect(reverse('main_app:home') + '?success=true')
     else:
         messages.error(request, "Invalid request method")
-        return redirect('checkout')
-  
+        return HttpResponseRedirect(reverse('main_app:checkout'))  # Redirect back to the checkout page
 
+
+
+def cancel(request, order_id):
+    if request.method == 'POST':
+        # Get the order object based on the order_id
+        order = get_object_or_404(Order, pk=order_id)
+
+        # Check if the status should be changed to Cancelled
+        if order.status in ['pending', 'processing']:
+            order.status = 'cancelled'
+        elif order.staus in ['shipped', 'delivered', 'Completed']:
+            order.status = 'returned'
+            # Assuming you have additional logic for Return status, you can add it here
+
+        order.save()  # Save the updated status
+       
+        # Redirect to the same page or any desired page after status change
+        return redirect('main_app:orders')
+    
+    
+    
 
 def base(request):
     return render(request,'main/base.html')

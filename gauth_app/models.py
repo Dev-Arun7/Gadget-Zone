@@ -4,7 +4,6 @@ from .manager import UserManager
 from datetime import date
 from django.utils import timezone
 from main_app.models import *
-# Create your models here.
 
 
 class Customer(AbstractUser):
@@ -71,6 +70,7 @@ class Order(models.Model):
     user              = models.ForeignKey(Customer, on_delete=models.CASCADE) 
     address           = models.ForeignKey(Address, on_delete=models.SET_NULL,null=True,blank=True)
     product           = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    variant           = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True)
     amount            = models.CharField(max_length=100, null=True,blank=True)  
     payment_type      = models.CharField(max_length=100, null=True,blank=True)  
     status            = models.CharField(max_length=100, choices=ORDER_STATUS, default='pending' )  

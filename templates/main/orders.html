@@ -28,84 +28,55 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
-                            {% if cart %}
+                            {% if orders %}
                             <form action="#">
                                 <div class="table-content table-responsive">
                                     <table class="table  cart_data">
                                         <thead>
                                             <tr>
-                                                <th class="li-product-remove">remove</th>
+                                                <th class="li-product-remove">Date</th>
                                                 <th class="li-product-thumbnail">images</th>
                                                 <th class="cart-product-name">Product</th>
-                                                <th class="li-product-price">Unit Price</th>
+                                                <th class="cart-product-name">Variant</th>
                                                 <th class="li-product-quantity">Quantity</th>
                                                 <th class="li-product-subtotal">Total</th>
+                                                <th class="li-product-subtotal">Status</th>
+                                                <th class="li-product-subtotal">Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody >
-                                            
-                                            {% for i in cart %}
-                                            
-                                                <tr>
-                                                <td class="li-product-remove delete_cart_item "><a href="#"><i class="fa fa-times"></i></a></td>           
+                                        <tbody>
+                                            {% for i in orders %}
+                                            <tr>
+                                                <td class="li-product-name"><a href="#">{{ i.date }}</a></td>
                                                 <td class="li-product-thumbnail">
                                                     {% if i.product.image %}
-                                                        <a href="#">
-                                                            <img class="product-image" src="{{ i.product.image.url }}" alt="Li's Product Image">
-                                                        </a>
+                                                    <a href="#">
+                                                        <img class="product-image" src="{{ i.product.image.url }}" alt="Li's Product Image">
+                                                    </a>
                                                     {% else %}
-                                                        <span>No Image Available</span>
+                                                    <span>No Image Available</span>
                                                     {% endif %}
                                                 </td>                                    
                                                 <td class="li-product-name"><a href="#">{{ i.product.brand }} {{ i.product.model }}</a></td>
-                                                <td class="li-product-price"><span class="amount">₹{{ i.product.offer_price }}</span></td>
-                                                <td class="quantity tr " style="text-align: center;">
-                                                    <div class="quantity product_data">
-                                                        <input type="hidden" value="{{ i.product_id }}" class="prod_id">
-                                                        {% csrf_token %}
-                                                        <label for="quantity">Quantity</label>
-                                                        <div class="input-group text-center mb-3" style="width: 130px; margin: auto;">
-                                                            <button class="input-group-text changeQuantity decrement-btn">-</button>
-                                                            <input type="text" name="quantity" class="form-control qty-input text-center" value="{{ i.quantity }}">
-                                                            <button class="input-group-text changeQuantity increment-btn">+</button>
-                                                        </div>
-                                                    </div>
-                                                </td>                                                
-                                                <td class="product-subtotal"><span class="amount">₹{{ i.total }}</span></td>
+                                                <td class="li-product-name"><a href="#">{{ i.variant.ram }}GB </a></td>                                               
+                                                <td class="li-product-name"><a href="#">{{ i.quantity }}</a></td>                                               
+                                                <td class="li-product-name"><a href="#">{{ i.amount }}</a></td>                                               
+                                                <td class="li-product-name"><a href="#">{{ i.status }}</a></td>                                               
+                                                <td class="product-subtotal">
+                                                    {% if i.status == 'pending' or i.status == 'processing' or i.status == 'shipped' %}                
+                                                        <form method="post" action="{% url 'main_app:cancel' order_id=i.id %}">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-danger">Cancel</button>
+                                                        </form>
+                                                    {% else %}
+                                                        <button type="submit" class="btn btn-success">Return</button>
+                                                    {% endif %}
+                                                </td>
                                             </tr>
-                                        
                                             {% endfor %}
-                                        
                                         </tbody>
+                                        
                                     </table>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="coupon-all">
-                                            <div class="coupon">
-                                                <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text">
-                                                <input class="button" name="apply_coupon" value="Apply coupon" type="submit">
-                                            </div>
-                                            <div class="coupon2"> 
-                                                <a a href="{% url 'main_app:cart' %}">
-                                                    <input class="button" name="update_cart" value="Update cart" type="submit">
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-5 ml-auto">
-                                        <div class="cart-page-total">
-                                            <h2>Cart totals</h2>
-                                            <ul>
-                                                <li>Subtotal <span>₹{{ subtotal }}</span></li>
-                                                <li>Delivery <span>₹50</span></li>
-                                                <li>Total <span>₹{{ subtotal|add:50 }}</span></li>
-                                            </ul>
-                                            <a href="{% url 'main_app:checkout' %}">Proceed to checkout</a>
-                                        </div>
-                                    </div>
                                 </div>
                             </form>
                         </div>
