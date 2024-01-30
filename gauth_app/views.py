@@ -2,7 +2,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
 from django.shortcuts import render, redirect
 from .forms import NewUserForm
-from gauth_app.models import Address
+from gauth_app.models import Address, Customer
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -80,6 +80,22 @@ def profile(request):
     return render(request, 'main/profile.html', {'customer': customer, 'default_address': default_address})
 
 
+def manage_profile(request):
+    if request.method == 'POST':
+        user = request.user
+        # Update user profile information
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.phone = request.POST.get('phone', '')
+        image = request.FILES.get('image')
+        if image:
+            user.profile_photo = image
+        user.save()  # Save the updated user instance
+        return redirect('gauth_app:profile')
+
+    return render(request, 'main/manage_profile.html')
+
+
 @login_required
 def address(request):
     current_user = request.user
@@ -88,14 +104,10 @@ def address(request):
     return render(request, 'main/address.html', {'data': data})
 
 
-
-# def address(request):
-#     data = Address.objects.all()
-#     return render(request, 'main/address.html', {'data': data})
-
-
-def add_address(request):
+def add_address(request, redirect_page):
     if request.method == 'POST':
+        # Retrieve data from the POST request
+        redirect_page = request.POST.get('redirect_page') # redirect parmas is fething from the hiden iput
         user = request.user
         default = request.POST.get('default', False) == 'True'
         address_name = request.POST['address_name']
@@ -110,24 +122,35 @@ def add_address(request):
         email = request.POST['email']
         pin = request.POST['pin']
 
-        query = Address.objects.create(
-            user = user,
-            default = default,
-            address_name = address_name,
-            first_name = first_name,
-            last_name = last_name,
-            address_1 = address_1,
-            address_2 = address_2,
-            country = country,
-            state = state,
-            city = city,
-            phone = phone,
-            email = email,
-            pin = pin,
+        # Create a new Address object
+        new_address = Address.objects.create(
+            user=user,
+            default=default,
+            address_name=address_name,
+            first_name=first_name,
+            last_name=last_name,
+            address_1=address_1,
+            address_2=address_2,
+            country=country,
+            state=state,
+            city=city,
+            phone=phone,
+            email=email,
+            pin=pin,
         )
-        query.save()
-        return redirect('gauth_app:address')
-    return render(request, 'main/add_address.html')
+        # Save the new address
+        new_address.save()
+
+        # Redirect to the appropriate page based on the parameter
+        if redirect_page == 'all_addresses':
+            return redirect('gauth_app:address')
+        elif redirect_page == 'checkout':
+            return redirect('main_app:checkout')
+
+
+    # Render the add_address.html template if it's a GET request
+    return render(request, 'main/add_address.html', { 'redirect_page':redirect_page })
+
 
 def update_address(request, id):
     data = Address.objects.all()
@@ -171,6 +194,8 @@ def update_address(request, id):
             }
 
     return render(request, 'main/update_address.html', context)
+
+
 
 
 def delete_address(request,id):

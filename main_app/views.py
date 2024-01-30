@@ -26,9 +26,7 @@ def product_list(request):
 def category_products(request,id):
     main_category = Main_Category.objects.get(pk=id)
     products = Product.objects.filter(main_category=main_category, deleted=False)
-    for product in products:
-        product.offer_price = int(product.price * (1 - product.offer / 100))
-    return render(request, "main/product_list.html", {'data': products})
+    return render(request, "main/product_list.html", {'products': products})
 
 
 def single_product(request, id, variant_id):
@@ -310,15 +308,18 @@ def cancel(request, order_id):
         # Check if the status should be changed to Cancelled
         if order.status in ['pending', 'processing']:
             order.status = 'cancelled'
-        elif order.staus in ['shipped', 'delivered', 'Completed']:
+        else:
             order.status = 'returned'
             # Assuming you have additional logic for Return status, you can add it here
 
         order.save()  # Save the updated status
-       
+
         # Redirect to the same page or any desired page after status change
+        return redirect('main_app:orders')  # Assuming you have a URL named 'orders' defined in your urls.py file
+    else:
+        # Handle GET requests appropriately, if needed
+        # For now, let's redirect to the 'orders' page
         return redirect('main_app:orders')
-    
     
     
 

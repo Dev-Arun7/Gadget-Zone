@@ -1,0 +1,73 @@
+{% extends 'main/base.html' %} {% load static %} {% block content %}
+<div class="container">
+  <!-- Wrap the content in a container to center it -->
+  <div class="row justify-content-center">
+    <!-- Use Bootstrap classes to center the row -->
+    <div class="col-md-8">
+      <!-- Use col-md-8 to take 8 columns -->
+      <h2 class="text-center mb-4" style="color: grey">Update Address</h2>
+      <!-- Heading with grey color -->
+      <form
+        {% comment %} action="{% url 'gauth_app:update_address' address.id %}" {% endcomment %}
+        method="post"
+        enctype="multipart/form-data"
+      >
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail4">First name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="first_name"
+              value="{{ address.first_name }}"
+              placeholder="First Name"
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Last name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="last_name"
+              value="{{ address.last_name }}"
+              placeholder="Last name"
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Phone</label>
+            <input
+              type="text"
+              class="form-control"
+              name="phone"
+              value="{{ address.last_name }}"
+              placeholder="Phone number"
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label>Select profile image</label>
+            <div>
+                <input class="form-control" type="file"
+                       placeholder="Select image"
+                       name="image"
+                       accept=".jpg, .jpeg, .gif, .png, .webp"
+                       required>
+                <small class="form-text text-muted"></small>
+            </div>
+        </div>
+        </dv>
+        <div class="container">
+            <div class="row">
+              <div class="col text-center"> <!-- Center the content horizontally -->
+                <button type="submit" class="btn btn-warning">Save</button>
+                <br>
+                <br>
+              </div>
+            </div>
+          </div>
+          
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -4853,7 +4853,7 @@ span.required {
 }
 .category-sub-menu li.has-sub > a::after {
 	color: #242424;
-	content: "\f067";
+	content: none;
 	font-family: fontawesome;
 	font-size: 16px;
 	position: absolute;

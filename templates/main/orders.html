@@ -69,13 +69,15 @@
                                                             <button type="submit" class="btn btn-danger">Cancel</button>
                                                         </form>
                                                     {% else %}
-                                                        <button type="submit" class="btn btn-success">Return</button>
+                                                        <form method="post" action="{% url 'main_app:cancel' order_id=i.id %}">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-success">Return</button>
+                                                        </form>
                                                     {% endif %}
                                                 </td>
                                             </tr>
                                             {% endfor %}
-                                        </tbody>
-                                        
+                                        </tbody>  
                                     </table>
                                 </div>
                             </form>
@@ -91,6 +93,41 @@
                 </div>
             </div>
             <!--Shopping Cart Area End-->
+           
+            <script>
+                // Wait for the document to be ready
+                document.addEventListener("DOMContentLoaded", function() {
+                    // Select all cancel and return buttons
+                    const actionButtons = document.querySelectorAll('.btn-danger, .btn-success');
+            
+                    // Attach event listener to each action button
+                    actionButtons.forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.preventDefault(); // Prevent the default action of the button
+            
+                            // Display the confirmation dialog
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, proceed!"
+                            }).then((result) => {
+                                // If the user confirms the action
+                                if (result.isConfirmed) {
+                                    // Submit the form for cancellation or return
+                                    const form = button.closest('form');
+                                    form.submit();
+                                }
+                            });
+                        });
+                    });
+                });
+            </script>
+            
+
         {% endblock content %}
   
    <!-- Add this script to your cart.html file -->
