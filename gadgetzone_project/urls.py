@@ -27,6 +27,7 @@ urlpatterns = [
     path('gauth/',include(('gauth_app.urls', 'gauth_app'), namespace='gauth_app')),
     path('', include(('main_app.urls', 'main_app'), namespace='main_app')),
     path('accounts/', include('allauth.urls')),
+    path('password-reset/', include('django.contrib.auth.urls')),
 ]
    
 

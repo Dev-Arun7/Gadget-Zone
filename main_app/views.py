@@ -10,6 +10,7 @@ from django.db.models import Sum
 from django.urls import reverse
 
 
+
 def home(request):
     products = Product.objects.prefetch_related('productvariant_set').filter(deleted=False).order_by('id').reverse()
     context = {'products': products}    
@@ -126,6 +127,8 @@ def budget_phones(request):
 ###############################################################################################################
 
 
+
+@login_required
 def cart(request):
     # Retrieve all cart items along with related product and product variant details
     cart_items = Cart.objects.select_related('product', 'product_variant').filter(user=request.user)
@@ -178,7 +181,7 @@ def add_to_cart(request, product_id, variant_id):
 
 
 
-
+@login_required
 def update_cart(request):
     if request.method == 'POST':
         prod_id = int(request.POST.get('product_id'))
@@ -212,7 +215,7 @@ def update_cart(request):
 
 
 
-
+@login_required
 def delete_cart(request, product_id):
     # Retrieve the cart item to delete
     cart_item = get_object_or_404(Cart, id=product_id)
@@ -225,7 +228,7 @@ def delete_cart(request, product_id):
 ###############################################################################################################
 
 
-
+@login_required
 def checkout(request):
 
     cart_items = Cart.objects.filter(quantity__gt=0, product_variant__stock__gt=0)
@@ -238,7 +241,7 @@ def checkout(request):
 
     return render(request, "main/checkout.html", context)
 
-
+@login_required
 def orders(request):
     # Filter orders by the current user
     user_orders = Order.objects.filter(user=request.user).order_by('id')
@@ -247,7 +250,7 @@ def orders(request):
     return render(request, 'main/orders.html', {'orders': user_orders})
 
 
-
+@login_required
 def place_order(request):
     if request.method == 'POST':
         user = request.user
@@ -299,7 +302,7 @@ def place_order(request):
         return HttpResponseRedirect(reverse('main_app:checkout'))  # Redirect back to the checkout page
 
 
-
+@login_required
 def cancel(request, order_id):
     if request.method == 'POST':
         # Get the order object based on the order_id

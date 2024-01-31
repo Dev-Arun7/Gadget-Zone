@@ -171,5 +171,20 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+
 SITE_ID = 2
 LOGIN_REDIRECT_URL = 'main_app:home'
+
+
+# For password reset 
+ACCOUNT_EMAIL_REQUIRED = True 
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
+EMAIL_HOST = 'smtp.gmail.com' 
+EMAIL_PORT = 587 
+EMAIL_HOST_USER = '123arunbalakrishnan@gmail.com'  
+EMAIL_HOST_PASSWORD = "zygltiuakwpcdjdg" 
+EMAIL_USE_TLS = True 

@@ -73,13 +73,13 @@ def user_logout(request):
                             # User Profile and address management #
 #############################################################################################
 
-
+@login_required
 def profile(request):
     customer = request.user
     default_address = Address.objects.filter(user=customer, default=True).first()
     return render(request, 'main/profile.html', {'customer': customer, 'default_address': default_address})
 
-
+@login_required
 def manage_profile(request):
     if request.method == 'POST':
         user = request.user
@@ -104,6 +104,7 @@ def address(request):
     return render(request, 'main/address.html', {'data': data})
 
 
+@login_required
 def add_address(request, redirect_page):
     if request.method == 'POST':
         # Retrieve data from the POST request
@@ -152,6 +153,7 @@ def add_address(request, redirect_page):
     return render(request, 'main/add_address.html', { 'redirect_page':redirect_page })
 
 
+@login_required
 def update_address(request, id):
     data = Address.objects.all()
     address = Address.objects.get(id = id)
@@ -197,7 +199,7 @@ def update_address(request, id):
 
 
 
-
+@login_required
 def delete_address(request,id):
     data = Address.objects.get(id=id) 
     data.delete()  

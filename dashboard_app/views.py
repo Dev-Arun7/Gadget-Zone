@@ -9,20 +9,19 @@ from django.views.decorators.cache import never_cache
 
      # ............. User Priventing Authentication...................
           
-def admin_required(view_func):
-    
-    actual_decorator = user_passes_test(
-        lambda u: u.is_authenticated and u.is_staff,
-        login_url='dashboard_app:dashboard_login'
-    )
-    return actual_decorator(view_func)
-
+def superuser_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated or not request.user.is_superuser:
+            return redirect('dashboard_app:dashboard_login') 
+        return view_func(request, *args, **kwargs)
+    return wrapper
 
 #############################################################################################
                          # User management #
 #############################################################################################
 
 
+@superuser_required
 def users(request):
     if request.method == 'POST':
         user_id = request.POST.get('user_id')
@@ -49,9 +48,8 @@ def users(request):
                             # Login and home #
 #############################################################################################
 
-@never_cache
-@admin_required
-@login_required(login_url='dashboard_app:dashboard_login')
+
+@superuser_required
 def dashboard_home(request):
     return render(request,'dashboard/home.html')
 
@@ -86,18 +84,13 @@ def dashboard_logout(request):
 #############################################################################################
 
 
-
-@never_cache
-@admin_required
-@login_required(login_url='dashboard_app:dashboard_login')
+@superuser_required
 def main_category(request):
     data = Main_Category.objects.all().order_by('id')
     return render(request,"dashboard/main_category.html",{"data": data})
 
 
-@never_cache
-@admin_required
-@login_required(login_url='dashboard_app:dashboard_login')
+@superuser_required
 def add_main_category(request):
     if request.method == 'POST':
         main_category_name = request.POST['main_category_name']
@@ -122,9 +115,7 @@ def add_main_category(request):
     return render(request, 'dashboard/add_main_category.html')
 
 
-@never_cache
-@admin_required
-@login_required(login_url='dashboard_app:dashboard_login')
+@superuser_required
 def update_main_category(request, id):
     data = Main_Category.objects.get(id=id)
 
@@ -153,7 +144,7 @@ def update_main_category(request, id):
     return render(request, "dashboard/update_main_category.html", {"data": data})
 
 
-
+@superuser_required
 def soft_delete_category(request, id):
     data = Main_Category.objects.get(id=id)
 
@@ -163,7 +154,7 @@ def soft_delete_category(request, id):
     return redirect('dashboard_app:main_category')
 
 
-@login_required(login_url='dashboard_app:dashboard_login')
+
 def delete_main_category(request,id):
     data = Main_Category.objects.get(id=id) 
     data.delete()  
@@ -175,15 +166,13 @@ def delete_main_category(request,id):
 #############################################################################################
 
 
-@login_required(login_url='dashboard_app:dashboard_login')
+@superuser_required
 def products(request):
     data = Product.objects.all().order_by('id')
     return render(request, "dashboard/products.html", {"data": data})
 
 
-@never_cache
-@admin_required
-@login_required(login_url='dashboard_app:dashboard_login')
+@superuser_required
 def add_product(request):
     data = Main_Category.objects.all() 
 
@@ -232,7 +221,7 @@ def add_product(request):
     return render(request, 'dashboard/add_product.html', {"data": data})
 
 
-@login_required(login_url='dashboard_app:dashboard_login')
+@superuser_required
 def update_product(request, id):
     data = Main_Category.objects.all()
     product = Product.objects.get(id=id)
@@ -284,7 +273,7 @@ def update_product(request, id):
     return render(request, "dashboard/update_product.html", {"product": product, "data": data})
 
 
-
+@superuser_required
 def soft_delete_product(request, id):
     product = Product.objects.get(id=id)
 
@@ -295,7 +284,7 @@ def soft_delete_product(request, id):
 
 
 
-@login_required(login_url='dashboard_app:dashboard_login')
+@superuser_required
 def delete_product(request,id):
     data = Product.objects.get(id=id) 
     data.delete()  
@@ -308,16 +297,14 @@ def delete_product(request,id):
 #############################################################################################
 
 
-@login_required(login_url='dashboard_app:dashboard_login')
+@superuser_required
 def all_products(request):
     products = Product.objects.prefetch_related('productvariant_set').all().order_by('id')
     context = {'products': products}
     return render(request, "dashboard/all_products.html", context)
 
 
-@never_cache
-@admin_required
-@login_required(login_url='dashboard_app:dashboard_login')
+@superuser_required
 def add_variant(request, id):
     product = Product.objects.get(id=id)
     if request.method == 'POST':
@@ -349,6 +336,7 @@ def add_variant(request, id):
     return render(request, 'dashboard/add_variant.html', {'product':product})
 
 
+@superuser_required
 def update_variant(request, id):
     variant = ProductVariant.objects.get(id=id)
 
@@ -380,6 +368,7 @@ def update_variant(request, id):
 #############################################################################################
 
 
+@superuser_required
 def orders(request):
     # Filter orders by the current user
     user_orders = Order.objects.all().order_by('id')
@@ -387,6 +376,8 @@ def orders(request):
     # Render the orders template with user's orders data
     return render(request, 'dashboard/orders.html', {'orders': user_orders})
 
+
+@superuser_required
 def update_order_status(request, order_id):
     if request.method == 'POST':
         new_status = request.POST.get('new_status')
