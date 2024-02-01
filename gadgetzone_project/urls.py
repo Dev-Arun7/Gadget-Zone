@@ -21,7 +21,6 @@ from django.conf.urls.static import static
 from main_app.views import update_cart
 
 urlpatterns = [
-    path('update_cart/', update_cart, name='update_cart'),
     path('admin/', admin.site.urls),
     path('dashboard/', include(('dashboard_app.urls', 'dashboard_app'), namespace='dashboard_app')),
     path('gauth/',include(('gauth_app.urls', 'gauth_app'), namespace='gauth_app')),

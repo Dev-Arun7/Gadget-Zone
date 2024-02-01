@@ -46,7 +46,8 @@
                                         <tbody >
                                             
                                             {% for i in cart %}
-                                            
+                                            <input type="hidden" value=" {{ index.counter }}" class="prod_id">
+                                           
                                                 <tr>
                                                 <td> <a href="#" class="delete-item" data-id="{{ i.id }}"><i class="fa fa-times"></i></a> </td>
 
@@ -69,9 +70,9 @@
                                                         {% csrf_token %}
                                                         <label for="quantity">Quantity</label>
                                                         <div class="input-group text-center mb-3" style="width: 130px; margin: auto;">
-                                                            <button class="input-group-text changeQuantity decrement-btn">-</button>
+                                                            <button class="input-group-text changeQuantity decrement-btn" onclick="updateCart({{i.id}},{{ i.product_id }},{{ i.product_variant_id }},{{i.quantity}}, {{ i.product_variant.offer_price }}, {{-1}})">-</button>
                                                             <input type="text" name="quantity" class="form-control qty-input text-center" value="{{ i.quantity }}">
-                                                            <button class="input-group-text changeQuantity increment-btn">+</button>
+                                                            <button class="input-group-text changeQuantity increment-btn" onclick="updateCart({{i.id}},{{ i.product_id }},{{ i.product_variant_id }},{{i.quantity}}, {{ i.product_variant.offer_price }}, {{1}})">+</button>
                                                         </div>
                                                     </div
                                                 </td>                                                
@@ -126,9 +127,42 @@
    
   
    <!-- Add this script to your cart.html file -->
+   <script>
+    function updateCart(id, pro_id, pro_var, quantity,action) {
+        console.log("llll");
+        console.log(id, pro_id, pro_var, action);
+        console.log("Quantity:",quantity)
 
-
-   {% comment %} <script>    
+        // Send AJAX request to update cart quantity
+        fetch('/update_cart/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            body: JSON.stringify({
+                product_id: pro_id,
+                variant_id: pro_var,
+                product_qty: quantity,
+                action: action,
+                newQuantity: action + quantity,
+                cartId: id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle response
+            if (data.status === 'Updated Successfully') {
+                // Update UI or show confirmation message
+                console.log('Quantity updated successfully');
+            } else {
+                console.error('Failed to update quantity');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating quantity:', error);
+        });
+    }   
     // Wait for the document to be ready
     document.addEventListener("DOMContentLoaded", function() {
         // Select all delete-item links
@@ -159,6 +193,9 @@
             });
         });
     });
-</script> {% endcomment %}
+
+   
+</script>
+
 
 {% endblock content %}

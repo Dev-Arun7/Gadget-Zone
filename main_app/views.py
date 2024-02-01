@@ -8,6 +8,8 @@ from django.db.models import Q
 from django.contrib import messages
 from django.db.models import Sum
 from django.urls import reverse
+import json
+
 
 
 
@@ -181,38 +183,51 @@ def add_to_cart(request, product_id, variant_id):
 
 
 
-@login_required
+
 def update_cart(request):
+    print(request.body.decode('utf-8'))  # Print raw JSON data
+    
     if request.method == 'POST':
-        prod_id = int(request.POST.get('product_id'))
-        var_id = int(request.POST.get('variant_id'))
+        data = json.loads(request.body)  # Parse JSON data
         
-        if Cart.objects.filter(user=request.user, product_id=prod_id, product_variant_id=var_id).exists():
-            prod_qty = int(request.POST.get('product_qty'))
-            cart_data = Cart.objects.get(product_id=prod_id, product_variant_id=var_id, user=request.user)
-            
-            # Check if requested quantity exceeds available stock
-            available_stock = cart_data.product_variant.stock
-            if prod_qty > available_stock:
-                # Update cart with maximum available stock
-                cart_data.quantity = available_stock
-                cart_data.total = available_stock * cart_data.product_variant.offer_price
-                cart_data.save()
-                return JsonResponse({'status': f"Quantity updated to maximum available stock: {available_stock}", 'redirect_url': '/home/'})
-            
-            # If requested quantity is within available stock, update cart normally
-            cart_data.quantity = prod_qty
-            cart_data.total = prod_qty * cart_data.product_variant.offer_price
-            cart_data.save()
-            print(cart_data)
-            return JsonResponse({'status': "Updated Successfully", 'redirect_url': '/home/'})
+        # Extract data from JSON payload
+        prod_id = int(data.get('product_id', 0))  # Use 0 as default if not present
+        var_id = int(data.get('variant_id', 0))    # Use 0 as default if not present
+        prod_qty = int(data.get('product_qty', 0))  # Use 0 as default if not present
+        action = data.get('action')
+        new_quantity = int(data.get('newQuantity', 0))  # Use 0 as default if not present
+        cart_id = int(data.get('cartId', 0))  # Use 0 as default if not present
+
+        # Check if both product_id and variant_id are present in the POST data
+        if prod_id != 0 and var_id != 0:
+            # Find the cart item
+            try:
+                cart_item = Cart.objects.get(user=request.user, product_id=prod_id, product_variant_id=var_id)
+            except Cart.DoesNotExist:
+                return JsonResponse({'status': "Product not found in cart"}, status=400)
+
+            # Update cart quantity
+            if action == 1:
+                cart_item.quantity += 1
+
+            elif action == -1:
+                cart_item.quantity -= 1
+            else:
+                return JsonResponse({'status': "Invalid action"}, status=400)
+
+            # Ensure quantity is not negative
+            if cart_item.quantity < 0:
+                cart_item.quantity = 0
+
+            # Save cart item
+            cart_item.save()
+
+            return JsonResponse({'status': "Updated Successfully"})
         
         else:
-            return JsonResponse({'status': "Product not found in cart", 'redirect_url': '/home/'})
+            return JsonResponse({'status': "Product ID or Variant ID not provided"}, status=400)
     
-    return JsonResponse({'status': "Invalid Request", 'redirect_url': '/cart/'})
-
-
+    return JsonResponse({'status': "Invalid Request"}, status=400)
 
 
 @login_required

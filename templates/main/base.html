@@ -616,13 +616,13 @@
         <script src="{% static 'main/js/jquery-3.7.1.min.js' %}"></script>
         <script src="{% static 'main/js/custom.js' %}"></script>
         <!-- JavaScript -->
-        <script> 
+        {% comment %} <script> 
             alertify.set('notifier','position', 'top-right');
             {% for msg in messages %}
                 alertify.success('{{ msg }}');
             {% endfor %}
             
-        </script>
+        </script> {% endcomment %}
     </body>
 
 <!-- index30:23-->

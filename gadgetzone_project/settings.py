@@ -53,8 +53,6 @@ INSTALLED_APPS = [
 
 
 
-
-
 SOCIALACCOUNT_PROVIDERS = {'google': {
     'SCOPE': ['profile', 'email', ], 'AUTH_PARAMS': {'access_type': 'online', }}}
 
@@ -177,6 +175,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 SITE_ID = 2
 LOGIN_REDIRECT_URL = 'main_app:home'
 
+LOGIN_URL = '/gauth/login/'
 
 # For password reset 
 ACCOUNT_EMAIL_REQUIRED = True 
@@ -188,3 +187,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = '123arunbalakrishnan@gmail.com'  
 EMAIL_HOST_PASSWORD = "zygltiuakwpcdjdg" 
 EMAIL_USE_TLS = True 
+
+
+
