@@ -164,7 +164,7 @@ def add_to_cart(request, product_id, variant_id):
             if product:
                 # Check if the product is already in the user's cart.
                 if Cart.objects.filter(user=request.user, product=product, product_variant=variant).exists():
-                    return JsonResponse({'status': "Product Already in cart..!"})
+                    return JsonResponse({'status': "Product Already in cart..!", 'added': False})
                 else: 
                     # Create a new Cart object for the user and add the product.
                     Cart.objects.create(user=request.user,

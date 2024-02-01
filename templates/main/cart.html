@@ -128,41 +128,8 @@
   
    <!-- Add this script to your cart.html file -->
    <script>
-    function updateCart(id, pro_id, pro_var, quantity,action) {
-        console.log("llll");
-        console.log(id, pro_id, pro_var, action);
-        console.log("Quantity:",quantity)
-
-        // Send AJAX request to update cart quantity
-        fetch('/update_cart/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-            },
-            body: JSON.stringify({
-                product_id: pro_id,
-                variant_id: pro_var,
-                product_qty: quantity,
-                action: action,
-                newQuantity: action + quantity,
-                cartId: id
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Handle response
-            if (data.status === 'Updated Successfully') {
-                // Update UI or show confirmation message
-                console.log('Quantity updated successfully');
-            } else {
-                console.error('Failed to update quantity');
-            }
-        })
-        .catch(error => {
-            console.error('Error updating quantity:', error);
-        });
-    }   
+   
+    
     // Wait for the document to be ready
     document.addEventListener("DOMContentLoaded", function() {
         // Select all delete-item links
@@ -198,4 +165,4 @@
 </script>
 
 
-{% endblock content %}
+{% endblock content %} 

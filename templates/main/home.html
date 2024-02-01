@@ -132,8 +132,9 @@
                             <!-- Begin Li's Tab Menu Content Area -->
                         </div>
                     </div>
-                    <div class="tab-content">
-
+                    <div class="tab-content product_data">
+                        <form action="#">
+                            {% csrf_token %}
                         <div id="li-new-product" class="tab-pane active show" role="tabpanel">
                             <div class="row">
                                 <div class="product-active owl-carousel">
@@ -171,9 +172,11 @@
                                                             <span class="discount-percentage">{{variant.offer}} % Off</span>
                                                         </div>
                                                     </div>
-                                                    <div class="add-actions">
+                                                    <div class="add-actions  product_data ">
                                                         <ul class="add-actions-link">
-                                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
+                                                            <input type="hidden" value="{{ i.id }}" class="prod_id">
+                                                            <input type="hidden" value="{{ variant.id }}" class="variant_id">   
+                                                            <li class="add-cart addToCartBtn active"><a href="#">Add to cart</a></li>
                                                             <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
                                                             <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
                                                         </ul>
@@ -188,7 +191,7 @@
                             </div>
                         </div>
                         
-  
+                    </form>
                         <div id="li-bestseller-product" class="tab-pane" role="tabpanel">
                             <div class="row">
                                 <div class="product-active owl-carousel">

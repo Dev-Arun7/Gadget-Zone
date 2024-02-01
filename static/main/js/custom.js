@@ -25,9 +25,9 @@ $(document).ready(function(){
     $('.addToCartBtn').click(function (e) {
         e.preventDefault();
     
-        var product_id = $(this).closest('.single-add-to-cart').find('.prod_id').val();
-        var variant_id = $(this).closest('.single-add-to-cart').find('.variant_id').val(); 
-        var product_qty = $(this).closest('.single-add-to-cart').find('.qty-input').val(); 
+        var product_id = $(this).closest('.product_data').find('.prod_id').val();
+        var variant_id = $(this).closest('.product_data').find('.variant_id').val(); 
+        var product_qty = $(this).closest('.product_data').find('.qty-input').val(); 
         var token = $('input[name=csrfmiddlewaretoken]').val(); 
         $.ajax({
             method: "POST",
@@ -47,7 +47,7 @@ $(document).ready(function(){
                         text: response.status,
                         icon: "success"
                     });
-                } else {
+                } else {  
                     // Handle other responses or errors
                     // For example, if the product is already in the cart
                     // You can show a warning message
@@ -65,34 +65,7 @@ $(document).ready(function(){
         });
     });
     
-    // $('.changeQuantity').click(function (e) {
-    //     console.log("---------------")
-    //     e.preventDefault();
-    
-    //     var product_id = $(this).closest('.tr').find('.prod_id').val();
-    //     var variant_id = $(this).closest('.tr').find('.variant_id').val(); 
-    //     var product_qty = $(this).closest('.tr').find('.qty-input').val();
-    //     var token = $('input[name=csrfmiddlewaretoken]').val();
-        
-    
-    //     $.ajax({
-    //         method: "POST",
-    //         url: "/update_cart/",
-    //         data: {
-    //             'product_id': product_id,
-    //             'variant_id': variant_id,
-    //             'product_qty': product_qty,
-    //             'csrfmiddlewaretoken': token
-    //         },
-    //         success: function (response) {
-    //             console.log("response",response)
-    //             // alert(response.status);
-    //             // Redirect to the cart page after successful update
-    //             // window.location.href = response.redirect_url;
-    //             window.location.href = "/cart/"
-    //         }
-    //     });
-    // });
+
 
     $('.delete_cart_item').click(function (e) {
         e.preventDefault();
