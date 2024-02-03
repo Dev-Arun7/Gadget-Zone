@@ -147,13 +147,12 @@
                                     <ul class="hm-menu">
                                         <!-- Begin Header Middle Wishlist Area -->
                                         <li class="hm-wishlist">
-                                            <a href="wishlist.html">
-                                                <span class="cart-item-count wishlist-item-count">0</span>
-                                                <i class="fa fa-heart-o"></i>
+                                            <a href="{% url 'main_app:cart' %}">
+                                                <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </li>
                                         <!-- Header Middle Wishlist Area End Here -->
-                                        <!-- Begin Header Mini Cart Area -->
+                                        <!-- Begin Header Mini Cart Area --> 
                                         <li class="hm-minicart">
                                             <div class="hm-minicart-trigger">
                                                 <span class="item-icon"></span>

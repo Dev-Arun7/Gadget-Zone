@@ -133,11 +133,10 @@ def budget_phones(request):
 @login_required
 def cart(request):
     # Retrieve all cart items along with related product and product variant details
-    cart_items = Cart.objects.select_related('product', 'product_variant').filter(user=request.user)
+    cart_items = Cart.objects.select_related('product', 'product_variant').filter(user=request.user).order_by('id')
 
     # Calculate subtotal for each item and total price for all items in the cart
     total_price = 0
-    valid_cart_items = []  # List to store cart items with valid stock
 
     for item in cart_items:
         # Check if there is sufficient stock for the product variant
@@ -146,10 +145,8 @@ def cart(request):
             item.subtotal = item.quantity * item.product_variant.offer_price
             # Add subtotal to the total price
             total_price += item.subtotal
-            # Append the item to the list of valid cart items
-            valid_cart_items.append(item)
 
-    context = { 'cart': valid_cart_items, 'subtotal': total_price }
+    context = { 'cart': cart_items, 'subtotal': total_price }
     return render(request, 'main/cart.html', context)
 
 
@@ -185,49 +182,29 @@ def add_to_cart(request, product_id, variant_id):
 
 
 def update_cart(request):
-    print(request.body.decode('utf-8'))  # Print raw JSON data
-    
     if request.method == 'POST':
-        data = json.loads(request.body)  # Parse JSON data
+        variant_id = int(request.POST.get('variant_id'))
+        prod_qty = int(request.POST.get('product_qty'))  # Move this line outside the if condition to avoid scope issue
         
-        # Extract data from JSON payload
-        prod_id = int(data.get('product_id', 0))  # Use 0 as default if not present
-        var_id = int(data.get('variant_id', 0))    # Use 0 as default if not present
-        prod_qty = int(data.get('product_qty', 0))  # Use 0 as default if not present
-        action = data.get('action')
-        new_quantity = int(data.get('newQuantity', 0))  # Use 0 as default if not present
-        cart_id = int(data.get('cartId', 0))  # Use 0 as default if not present
-
-        # Check if both product_id and variant_id are present in the POST data
-        if prod_id != 0 and var_id != 0:
-            # Find the cart item
-            try:
-                cart_item = Cart.objects.get(user=request.user, product_id=prod_id, product_variant_id=var_id)
-            except Cart.DoesNotExist:
-                return JsonResponse({'status': "Product not found in cart"}, status=400)
-
-            # Update cart quantity
-            if action == 1:
-                cart_item.quantity += 1
-
-            elif action == -1:
-                cart_item.quantity -= 1
-            else:
-                return JsonResponse({'status': "Invalid action"}, status=400)
-
-            # Ensure quantity is not negative
-            if cart_item.quantity < 0:
-                cart_item.quantity = 0
-
-            # Save cart item
-            cart_item.save()
-
-            return JsonResponse({'status': "Updated Successfully"})
+        # Retrieve the cart object based on user and product_variant_id
+        cart = Cart.objects.get(user=request.user, product_variant_id=variant_id)
         
-        else:
-            return JsonResponse({'status': "Product ID or Variant ID not provided"}, status=400)
-    
-    return JsonResponse({'status': "Invalid Request"}, status=400)
+        # Update the quantity of the cart
+        cart.quantity = prod_qty
+        cart.total = cart.quantity * cart.product_variant.offer_price
+        cart.save()  # Save the changes to the database
+        
+        return JsonResponse({'status': "Quantity updated", 'added': True})  # Return JSON response indicating success
+
+    # If the request method is not POST, redirect to home
+    return redirect('main_app:home')        
+
+
+
+
+
+
+
 
 
 @login_required

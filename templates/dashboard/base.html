@@ -54,28 +54,28 @@
                 <div id="sidebar-menu" class="sidebar-menu">
                     <ul>
                         <li class="menu-title">Main</li>
-                        <li  class="active">
+                        <li  class="{% if request.resolver_match.url_name == 'dashboard_home' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:dashboard_home' %}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                         </li>
-						<li>
+						<li class="{% if request.resolver_match.url_name == 'users' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:users' %}"><i class="fa fa-user-md"></i> <span>Users</span></a>
                         </li>
-                        <li>
+                        <li class="{% if request.resolver_match.url_name == 'main_category' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:main_category' %}"><i class="fa  fa-cubes fa-l"></i> <span>Category</span></a>
                         </li>
-                        <li>
+                        <li class="{% if request.resolver_match.url_name == 'products' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:products' %}"><i class="fa fa-mobile fa-l"></i> <span>Products</span></a>
                         </li>
-                        <li>
+                        <li class="{% if request.resolver_match.url_name == 'all_products' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:all_products' %}"><i class="fa fa-shopping-bag"></i> <span>Product Variants</span></a>
                         </li>
-                        <li>
+                        <li class="{% if request.resolver_match.url_name == 'orders' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:orders' %}"><i class="fa fa-cart-plus"></i> <span>Orders</span></a>
                         </li>
-                        <li>
+                        <li class="{% if request.resolver_match.url_name == 'dashboard_home' %} active {% endif %}">
                             <a href="departments.html"><i class="fa fa-tag"></i> <span>Coupons</span></a>
                         </li>
-                        <li>
+                        <li class="{% if request.resolver_match.url_name == 'dashboard_home' %} active {% endif %}">
                             <a href="departments.html"><i class="fa fa-picture-o"></i> <span>Banners</span></a>
                         </li>
                     </ul>

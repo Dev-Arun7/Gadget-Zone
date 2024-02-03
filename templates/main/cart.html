@@ -27,7 +27,7 @@
             <div class="Shopping-cart-area pt-60 pb-60">
                 <div class="container">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 reload">
                             {% if cart %}
                             <form action="#">
                                 <div class="table-content table-responsive">
@@ -63,7 +63,8 @@
                                                 <td class="li-product-name"><a href="#">{{ i.product.brand }} {{ i.product.model }}</a></td>
                                                 <td class="li-product-name"><a href="#">{{ i.product_variant.ram }} GB + {{ i.product_variant.storage }} GB</a></td>
                                                 <td class="li-product-price"><span class="amount">₹{{ i.product_variant.offer_price }}</span></td>
-                                                <td class="quantity tr " style="text-align: center;">
+                                                <td class="quantity tr product_data " style="text-align: center;">
+                                                    {% if i.quantity <= i.product_variant.stock %}
                                                     <div class="quantity product_data">
                                                         <input type="hidden" value="{{ i.product_id }}" class="prod_id">
                                                         <input type="hidden" value="{{ i.product_variant_id }}" class="variant_id">
@@ -75,6 +76,12 @@
                                                             <button class="input-group-text changeQuantity increment-btn" onclick="updateCart({{i.id}},{{ i.product_id }},{{ i.product_variant_id }},{{i.quantity}}, {{ i.product_variant.offer_price }}, {{1}})">+</button>
                                                         </div>
                                                     </div
+                                                    {% else %}
+                                                    <div class="quantity product_data">
+                                                        <h5> out of stock </h5>
+                                                    </div>
+                                                    {% endif %}
+
                                                 </td>                                                
                                                 <td class="product-subtotal"><span class="amount">₹{{ i.total }}</span></td>
                                             </tr>
