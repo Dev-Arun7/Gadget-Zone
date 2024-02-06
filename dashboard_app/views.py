@@ -188,7 +188,6 @@ def add_product(request):
         smart = request.POST.get('smart', False) == 'true'
         battery = request.POST['battery']
         image = request.FILES.get('image')
-        delete = request.POST.get('delete', False) == 'True'
         main_category_id = request.POST.get('main_category_id')  
 
         main_cat = Main_Category.objects.get(id=main_category_id)
@@ -206,7 +205,6 @@ def add_product(request):
             smart=smart,
             battery=battery,
             image=image,
-            deleted=delete,
             main_category=main_cat,
         )
 
@@ -236,7 +234,6 @@ def update_product(request, id):
         network = request.POST.get('network', False)
         smart = request.POST.get('smart', False)
         battery = request.POST['battery']
-        delete = request.POST.get('delete', False)
         images = request.FILES.getlist('images')
         # Retrieve existing data
         edit = Product.objects.get(id=id)
@@ -251,7 +248,6 @@ def update_product(request, id):
         edit.network = network
         edit.smart = smart
         edit.battery = battery
-        edit.deleted = delete
         # Update main image only if the user provided
         if 'image' in request.FILES:
             image = request.FILES['image']
@@ -275,12 +271,12 @@ def update_product(request, id):
 
 @superuser_required
 def soft_delete_product(request, id):
-    product = Product.objects.get(id=id)
+    product = ProductVariant.objects.get(id=id)
 
     product.deleted = not product.deleted
     product.save()
 
-    return redirect('dashboard_app:products')
+    return redirect('dashboard_app:all_products')
 
 
 
@@ -297,11 +293,12 @@ def delete_product(request,id):
 #############################################################################################
 
 
+
+
 @superuser_required
 def all_products(request):
-    products = Product.objects.prefetch_related('productvariant_set').all().order_by('id')
-    context = {'products': products}
-    return render(request, "dashboard/all_products.html", context)
+    products = ProductVariant.objects.all().order_by('id')
+    return render(request, 'dashboard/all_products.html', {'products': products})
 
 
 @superuser_required
@@ -315,6 +312,8 @@ def add_variant(request, id):
         stock = request.POST['stock']
         offer = request.POST['offer'] 
         product_id = request.POST.get('product_id')
+        delete = request.POST.get('delete', False) == 'True'
+
 
         # Calculate offer price
         offer_price = int(price) - (int(price) * int(offer) / 100)
@@ -327,7 +326,9 @@ def add_variant(request, id):
             stock=stock,
             offer=offer,
             offer_price=offer_price,
-            product = product
+            product = product,
+            deleted=delete,
+
         )
   
         return redirect('dashboard_app:products')
@@ -346,21 +347,29 @@ def update_variant(request, id):
         storage = request.POST['storage']
         stock = request.POST['stock']
         offer = request.POST['offer']
-        edit = ProductVariant.objects.get(id=id)
+        delete = request.POST.get('delete', False)
 
+        # Convert offer to an integer
+        offer = int(offer)
 
-        # Udate data in the table
-        edit.price = price
-        edit.ram = ram
-        edit.storage = storage
-        edit.stock = stock
-        edit.offer = offer
-        edit.save()
+        # Calculate offer price
+        offer_price = int(price) - (int(price) * offer / 100)
+
+        # Update data in the table
+        variant.price = price
+        variant.ram = ram
+        variant.storage = storage
+        variant.stock = stock
+        variant.offer = offer
+        variant.offer_price = offer_price
+        variant.deleted = delete
+        variant.save()
         
         return redirect('dashboard_app:all_products')
 
     context = {'variant':variant}
     return render(request, "dashboard/update_variant.html", context)
+
 
 
 #############################################################################################

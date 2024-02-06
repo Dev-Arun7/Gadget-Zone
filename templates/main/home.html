@@ -139,13 +139,12 @@
                             <div class="row">
                                 <div class="product-active owl-carousel">
                                     {% for i in products %}
-                                    {% for variant in i.productvariant_set.all|slice:":1" %}
                                         <div class="col-lg-12">
                                             <!-- single-product-wrap start -->
                                             <div class="single-product-wrap">
                                                 <div class="product-image">
-                                                    <a href="{% url 'main_app:single_product' i.id variant.id %}">
-                                                        <img src="{{ i.image.url }}" alt="Li's Product Image" style="height: 200px; object-fit: contain;">
+                                                    <a href="{% url 'main_app:single_product' i.product.id i.id %}">
+                                                        <img src="{{ i.product.image.url }}" alt="Li's Product Image" style="height: 200px; object-fit: contain;">
                                                     </a>
                                                     <span class="sticker">New</span>
                                                 </div>                                                
@@ -153,7 +152,7 @@
                                                     <div class="product_desc_info">
                                                         <div class="product-review">
                                                             <h5 class="manufacturer">
-                                                                <a href="{% url 'main_app:single_product' i.id variant.id %}"> {{ i.color }} {{ variant.storage }} GB</a>
+                                                                <a href="{% url 'main_app:single_product' i.product.id i.id %}"> {{ i.product.color }} {{ i.storage }} GB</a>
                                                             </h5>
                                                             <div class="rating-box">
                                                                 <ul class="rating">
@@ -165,17 +164,17 @@
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                        <h4><a class="product_name" href="{% url 'main_app:single_product' i.id variant.id %}">{{ i.brand }} {{ i.model }}</a></h4>
+                                                        <h4><a class="product_name" href="{% url 'main_app:single_product' i.product.id i.id %}">{{ i.product.brand }} {{ i.product.model }}</a></h4>
                                                         <div class="price-box">
-                                                            <span class="new-price new-price-2">₹ {{ variant.offer_price }}</span>
-                                                            <span class="old-price">{{variant.price}}</span>
-                                                            <span class="discount-percentage">{{variant.offer}} % Off</span>
+                                                            <span class="new-price new-price-2">₹ {{ i.offer_price }}</span>
+                                                            <span class="old-price">{{ i.price}}</span>
+                                                            <span class="discount-percentage">{{i.offer}} % Off</span>
                                                         </div>
                                                     </div>
                                                     <div class="add-actions  product_data ">
                                                         <ul class="add-actions-link">
-                                                            <input type="hidden" value="{{ i.id }}" class="prod_id">
-                                                            <input type="hidden" value="{{ variant.id }}" class="variant_id">   
+                                                            <input type="hidden" value="{{ i.product.id }}" class="prod_id">
+                                                            <input type="hidden" value="{{ i.id }}" class="variant_id">   
                                                             <li class="add-cart addToCartBtn active"><a href="#">Add to cart</a></li>
                                                             <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
                                                             <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
@@ -185,7 +184,6 @@
                                             </div>
                                             <!-- single-product-wrap end -->
                                         </div>
-                                    {% endfor %}
                                     {% endfor %}
                                 </div>
                             </div>

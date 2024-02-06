@@ -4,7 +4,7 @@
             <div class="content">
                 <div class="row">
                     <div class="col-sm-4 col-3">
-                        <h4 class="page-title">All Products and its variants are listed here. </h4>
+                        <h4 class="page-title"> Prouduct variants </h4>
                     </div>
                 </div>
 				<p> You can edit product variant details from here </p>
@@ -27,12 +27,11 @@
 										<th class="text-center">Offer</th>
 										<th class="text-center">Stock</th>
 										<th class="text-center">Edit</th>
+										<th class="text-center">Action</th>
 									</tr>
 								</thead>
-								
 								<tbody>
 									{% for i in products %}
-									{% for variant in i.productvariant_set.all %}
 									<tr>
 										<td class ="text-center">
 											{% if i.deleted %}
@@ -42,26 +41,34 @@
 											{% endif %}
 										</td>
 										<td style="width: 150px; height: 100px;">
-											{% if i.image and i.image.url %}
-												<img style="width: 100%; height: 100%; object-fit: contain;" src="{{ i.image.url }}" alt="Image">
+											{% if i.product.image and i.product.image.url %}
+												<img style="width: 100%; height: 100%; object-fit: contain;" src="{{ i.product.image.url }}" alt="Image">
 											{% else %}
 												<p>No image available</p>
 											{% endif %}
 										</td>	
-										<td class ="text-center" >{{i.brand}}</td>
-										<td class ="text-center">{{i.model}}</td>
+										<td class ="text-center" >{{i.product.brand}}</td>
+										<td class ="text-center">{{i.product.model}}</td>
 										{% comment %} <td>{{i.description}}</td> {% endcomment %}
-										<td class ="text-center" class ="text-center">{{i.color}}</td>
-										<td class ="text-center">{{variant.storage}}</td>
-										<td class ="text-center">{{ variant.ram }} GB</td>																	
-										<td class ="text-center">{{ variant.price }}</td>
-										<td class ="text-center">{{ variant.offer }}</td>
-										<td class ="text-center">{{ variant.stock }}</td>
+										<td class ="text-center" class ="text-center">{{i.product.color}}</td>
+										<td class ="text-center">{{i.storage}}</td>
+										<td class ="text-center">{{ i.ram }} GB</td>																	
+										<td class ="text-center">{{ i.price }}</td>
+										<td class ="text-center">{{ i.offer }}</td>
+										<td class ="text-center">{{ i.stock }}</td>
 										<td class ="text-center">
-											<a type="button" href="{% url 'dashboard_app:update_variant' id=variant.id %}" class="btn btn-success">Edit</a>
+											<a type="button" href="{% url 'dashboard_app:update_variant' id=i.id %}" class="btn btn-success">Edit</a>
+										</td>	
+										<td class ="text-center">
+											<a href="{% url 'dashboard_app:soft_delete_product' id=i.id %}">
+													{% if i.deleted %}
+													<button type="submit" name="toggle_deleted" class="btn btn-success">  &nbsp; List &nbsp;  </button>
+													{% else %}
+													<button type="submit" name="toggle_deleted" class="btn btn-danger">  Unlist </button>
+													{% endif %}
+											</a>
 										</td>	
 									</tr>
-									{% endfor%} 
 									{% endfor%} 
 								</tbody>
 							</table>

@@ -19,7 +19,6 @@
 							<table class="table table-striped custom-table">
 								<thead>
 									<tr>
-										<th class="text-center">Active</th>
 										<th class="text-center">Image</th>
 										<th class="text-center">Brand</th>
 										<th class="text-center">Model</th>
@@ -31,7 +30,6 @@
 										<th class="text-center">Smart</th>
 										<th class="text-center">Battery</th>
 										<th class="text-center">Edit</th>
-										<th class ="text-center">Delete</th>
 										<th class ="text-center">Option</th>
 									</tr>
 								</thead>
@@ -39,13 +37,6 @@
 								<tbody>
 									{% for i in data %}
 									<tr>
-										<td class ="text-center">
-											{% if i.deleted %}
-												<span class="badge badge-pill badge-danger">Inactive</span>
-											{% else %}
-												<span class="badge badge-pill badge-success">Active</span>
-											{% endif %}
-										</td>
 										<td class ="text-center" style="width: 150px; height: 100px;">
 											{% if i.image and i.image.url %}
 												<img style="width: 100%; height: 100%; object-fit: contain;" src="{{ i.image.url }}" alt="Image">
@@ -65,17 +56,6 @@
 										<td class ="text-center">
 											<a type="button" href="{% url 'dashboard_app:update_product' id=i.id %}" class="btn btn-success">Edit</a>
 										</td>
-										<td class ="text-center">
-											<a href="{% url 'dashboard_app:soft_delete_product' id=i.id %}">
-												<button type="submit" name="toggle_deleted" class="btn btn-danger">
-													{% if i.deleted %}
-														 Activate 
-													{% else %}
-														Deactivate
-													{% endif %}
-												</button>
-											</a>
-										</td>	
 										<td class ="text-center">
 											<a type="button" href="{% url 'dashboard_app:add_variant' id=i.id  %}" class="btn btn-success">+ Varient</a>
 										</td>

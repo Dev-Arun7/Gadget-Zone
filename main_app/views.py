@@ -14,21 +14,22 @@ import json
 
 
 def home(request):
-    products = Product.objects.prefetch_related('productvariant_set').filter(deleted=False).order_by('id').reverse()
-    context = {'products': products}    
+    products = ProductVariant.objects.filter(deleted=False).order_by('id')
+    context = {'products': products}  
     return render(request, "main/home.html", context)
 
 
 def product_list(request):
-    products = Product.objects.prefetch_related('productvariant_set').all().order_by('id')
+    products = ProductVariant.objects.filter(deleted=False).order_by('-id')
     context = {'products': products}
+    print(context)  
     return render(request, "main/product_list.html", context)
 
 
 
 def category_products(request,id):
     main_category = Main_Category.objects.get(pk=id)
-    products = Product.objects.filter(main_category=main_category, deleted=False)
+    products = ProductVariant.objects.filter(main_category=main_category, deleted=False)
     return render(request, "main/product_list.html", {'products': products})
 
 
@@ -45,7 +46,10 @@ def single_product(request, id, variant_id):
     additional_images = product.additional_images.all()
 
     # Similar Products
-    similar_products = Product.objects.filter(main_category_id=product.main_category_id, deleted=False).prefetch_related('productvariant_set').exclude(id=id)
+    similar_products = ProductVariant.objects.filter(
+        product__main_category=product.main_category
+    ).exclude(id=variant.id)[:4]
+    
 
     context = {
         "product": product,
@@ -252,7 +256,7 @@ def place_order(request):
         # Check if address is selected
         if not address_id:
             messages.error(request, "Please select an address.")
-            return HttpResponseRedirect(reverse('main_app:checkout'))  # Redirect back to the checkout page
+            return HttpResponseRedirect(reverse('main_app:checkout')) 
         
         if not payment_type:
             messages.error(request, "Please select payment method.")
@@ -291,7 +295,7 @@ def place_order(request):
         return HttpResponseRedirect(reverse('main_app:home') + '?success=true')
     else:
         messages.error(request, "Invalid request method")
-        return HttpResponseRedirect(reverse('main_app:checkout'))  # Redirect back to the checkout page
+        return HttpResponseRedirect(reverse('main_app:checkout')) 
 
 
 @login_required

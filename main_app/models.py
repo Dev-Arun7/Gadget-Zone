@@ -27,7 +27,6 @@ class Product(models.Model):
     battery = models.IntegerField()
     image = models.ImageField(upload_to='products',
                               default='default_image.jpg')
-    deleted = models.BooleanField(default=False)
     objects = models.Manager()
 
     def __str__(self):
@@ -46,6 +45,7 @@ class ProductVariant(models.Model):
     stock = models.IntegerField(default=3)
     offer = models.PositiveBigIntegerField(default=0, null=True, blank=True)
     offer_price = models.IntegerField(null=True, blank=True)
+    deleted = models.BooleanField(default=False)
     objects = models.Manager()
 
     def __str__(self):
