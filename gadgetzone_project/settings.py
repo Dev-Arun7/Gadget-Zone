@@ -138,7 +138,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -161,6 +160,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 ############################################################################################
                       # all auth configurations #
 ############################################################################################
+
 AUTHENTICATION_BACKENDS = (
     # used for default signin such as loggin into admin panel
     'django.contrib.auth.backends.ModelBackend',

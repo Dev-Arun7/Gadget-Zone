@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.db.models import Sum
 from django.urls import reverse
 import json
+import random
 
 
 
@@ -27,10 +28,14 @@ def product_list(request):
 
 
 
-def category_products(request,id):
-    main_category = Main_Category.objects.get(pk=id)
-    products = ProductVariant.objects.filter(main_category=main_category, deleted=False)
-    return render(request, "main/product_list.html", {'products': products})
+
+def category_products(request, id):
+    # Retrieve the product variants associated with the selected main category
+    product_variants = ProductVariant.objects.filter(product__main_category_id=id, deleted=False)
+
+    # Pass the product variants to the template for rendering
+    return render(request, "main/product_list.html", {'products': product_variants})
+
 
 
 def single_product(request, id, variant_id):
@@ -46,11 +51,12 @@ def single_product(request, id, variant_id):
     additional_images = product.additional_images.all()
 
     # Similar Products
-    similar_products = ProductVariant.objects.filter(
-        product__main_category=product.main_category
-    ).exclude(id=variant.id)[:4]
     
-
+    similar_products = ProductVariant.objects.filter(
+    product__main_category=product.main_category
+    ).exclude(id=variant.id).order_by('?')
+    
+    print(similar_products)
     context = {
         "product": product,
         "variants": variants,
@@ -89,6 +95,7 @@ def product_search(request):
         results = Product.objects.all()
 
     return render(request, 'main/product_list.html', {'products': results, 'query': query})
+
 
 
 

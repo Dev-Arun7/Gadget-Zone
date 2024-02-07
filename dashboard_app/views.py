@@ -128,6 +128,10 @@ def update_main_category(request, id):
         edit = Main_Category.objects.get(id=id)
 
         # Update fields
+        if Main_Category.objects.filter(name = main_category_name).exists():
+            messages.error(request, "Category is already exists.")
+            return render(request, 'dashboard/add_main_category.html')
+            
         edit.name = main_category_name
         edit.descriptions = description 
         edit.deleted = delete

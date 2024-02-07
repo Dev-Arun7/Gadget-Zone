@@ -49,7 +49,7 @@ class ProductVariant(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"{self.product} - {self.ram} RAM"
+        return f"{self.product} - {self.ram} RAM" 
 
 
 
@@ -65,3 +65,4 @@ class ProductImage(models.Model):
         self.save()
 
 
+ 

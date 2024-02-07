@@ -93,7 +93,7 @@
                                                             <div class="product_desc_info">
                                                                 <div class="product-review">
                                                                     <h5 class="manufacturer">
-                                                                        {% comment %} <a href="{% url 'main_app:single_product' i.product.id i.id %}">{{ i.product.color }} {{ i.storage }} GB</a> {% endcomment %}
+                                                                       <a href="{% url 'main_app:single_product' i.product.id i.id %}">{{ i.ram }}GB &nbsp; &nbsp; &nbsp; {{ i.storage }} GB Storage</a>
                                                                     </h5>
                                                                     <div class="rating-box">
                                                                         <ul class="rating">
@@ -105,9 +105,10 @@
                                                                         </ul>
                                                                     </div>
                                                                 </div>
-                                                                {% comment %} <h4><a class="product_name" href="{% url 'main_app:single_product' i.product.id i.id %}">{{ i.product.brand }} {{ i.product.model }}</a></h4> {% endcomment %}
+                                                                <h4><a class="product_name" href="{% url 'main_app:single_product' i.product.id i.id %}">{{ i.product.brand }} {{ i.product.model }} &nbsp; ({{ i.product.color }})</a></h4>
                                                                 <div class="price-box">
-                                                                    <span class="new-price">₹{{ i.offer_price }}</span>
+                                                                    <span class="new-price">₹{{ i.offer_price }}</span> &nbsp;  &nbsp;
+                                                                    <span class="new-price-2">{{ i.offer }}% Off</span>
                                                                 </div>
                                                                 <p>{{ i.description }}</p>
                                                             </div>
@@ -122,7 +123,7 @@
                                                             <ul class="add-actions-link">
                                                                 {% if i.stock > 0 %}
                                                                 <li class="add-cart addToCartBtn pl-3"> <type="submit"> Add to Cart </li>
-                                                                <li class="wishlist"><a href="wishlist.html"><i class="fa fa-heart-o"></i>Add to wishlist</a></li>
+                                                                <li class="wishlist"><a href="###"><i class="fa fa-heart-o"></i>Add to wishlist</a></li>
                                                                 
                                                                 {% else %}
                                                                 <p> Out of stock </p>
@@ -157,7 +158,7 @@
                                                                 <div class="product_desc_info">
                                                                     <div class="product-review">
                                                                         <h5 class="manufacturer">
-                                                                            <a href="product-details.html">{{ i.product.color }} {{ i.storage }} GB</a>
+                                                                            <a href="{% url 'main_app:single_product' i.product.id i.id %}"> &nbsp; &nbsp; {{ i.ram}}GB  RAM +  {{ i.storage }} GB</a>
                                                                         </h5>
                                                                         <div class="rating-box">
                                                                             <ul class="rating">
@@ -171,9 +172,10 @@
                                                                     </div>
                                                                     <input type="hidden" value="{{ i.product.id }}" class="prod_id">
                                                                     <input type="hidden" value="{{ i.id }}" class="variant_id">  
-                                                                    {% comment %} <h4><a class="product_name" href="{% url 'main_app:single_product' i.product.id i.id %}">{{ i.product.brand }} {{ i.product.model }}</a></h4> {% endcomment %}
+                                                                    <h4><a class="product_name" href="{% url 'main_app:single_product' i.product.id i.id %}">{{ i.product.brand }} {{ i.product.model }} &nbsp; ({{ i.product.color }})</a></h4>
                                                                     <div class="price-box">
-                                                                        <span class="new-price">₹{{ i.offer_price }}</span>
+                                                                        <span class="new-price ">₹ {{ i.offer_price }}</span>
+                                                                        <span class="new-price-2  pl-5 ml-6"> &nbsp; {{ i.offer }}% off now </span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="add-actions">
@@ -185,11 +187,11 @@
                                                                             {% if i.stock > 0 %}
                                                                                 <li class="add-cart active addToCartBtn "> <type="submit">Add to cart</li>
                                                                                 <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
+                                                                                <li><a class="links-details" href="###"><i class="fa fa-heart-o"></i></a></li>
                                                                             {% else %}
                                                                                 <p> Out of Stock </p>
                                                                                 <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
+                                                                                <li><a class="links-details" href="###"><i class="fa fa-heart-o"></i></a></li>
                                                                             {% endif %}
                                                                         </ul>
                                                                     </form>
