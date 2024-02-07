@@ -1,5 +1,5 @@
-from django.shortcuts import render,redirect
-from main_app.models import Main_Category, Product, ProductImage, ProductVariant
+from django.shortcuts import render,redirect, get_object_or_404
+from main_app.models import Main_Category, Product, ProductImage, ProductVariant, Brand
 from gauth_app.models import Customer, Order
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
@@ -90,6 +90,7 @@ def main_category(request):
     return render(request,"dashboard/main_category.html",{"data": data})
 
 
+
 @superuser_required
 def add_main_category(request):
     if request.method == 'POST':
@@ -115,6 +116,7 @@ def add_main_category(request):
     return render(request, 'dashboard/add_main_category.html')
 
 
+
 @superuser_required
 def update_main_category(request, id):
     data = Main_Category.objects.get(id=id)
@@ -122,19 +124,18 @@ def update_main_category(request, id):
     if request.method      == 'POST':
         main_category_name = request.POST['main_category_name']
         description        = request.POST['description']
-        delete             = request.POST.get('delete', False)
 
         # Retrieve existing data
         edit = Main_Category.objects.get(id=id)
 
         # Update fields
-        if Main_Category.objects.filter(name = main_category_name).exists():
+        if Main_Category.objects.filter(name = main_category_name).exclude(id=id).exists():
             messages.error(request, "Category is already exists.")
-            return render(request, 'dashboard/add_main_category.html')
+            return render(request, 'dashboard/update_main_category.html', {"data": data})
+
             
         edit.name = main_category_name
         edit.descriptions = description 
-        edit.deleted = delete
 
         if 'image' in request.FILES:
             image = request.FILES['image']
@@ -163,7 +164,89 @@ def delete_main_category(request,id):
     data = Main_Category.objects.get(id=id) 
     data.delete()  
     return redirect('dashboard_app:main_category')
- 
+
+
+
+#############################################################################################
+                             # Brand management #
+#############################################################################################
+
+
+@superuser_required
+def brands(request):
+    data = Brand.objects.all().order_by('id')
+    return render(request, "dashboard/brands.html", {"data": data})
+
+
+@superuser_required
+def add_brand(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        description = request.POST['description']
+        image = request.FILES.get('image')
+        delete = request.POST.get('delete', False) == 'True'
+        
+        # Check the category name is already there
+        if Brand.objects.filter(name = name).exists():
+            messages.error(request, "Category is already exists.")
+            return render(request, 'dashboard/add_brand.html')
+
+        # Savin Data to the database
+        query = Brand.objects.create(
+            name=name,
+            description=description,
+            image=image,
+            deleted = delete
+        )
+        query.save()
+        return redirect('dashboard_app:brands')
+    return render(request, 'dashboard/add_brand.html')
+
+
+@superuser_required
+def update_brand(request, id):
+    data = Brand.objects.get(id=id)
+
+    if request.method      == 'POST':
+        name               = request.POST['name']
+        description        = request.POST['description']
+
+        # Retrieve existing data
+        edit = Brand.objects.get(id=id)
+
+        # Update fields
+        if Brand.objects.filter(name=name).exclude(id=id).exists():
+            messages.error(request, "Another brand with this name already exists.")
+            return render(request, 'dashboard/update_brand.html', {"data": data})
+            
+        edit.name = name
+        edit.description = description 
+
+
+        if 'image' in request.FILES:
+            image = request.FILES['image']
+            edit.image = image
+        
+        # Save updated data
+        edit.save()
+
+        return redirect('dashboard_app:brands')
+
+    return render(request, "dashboard/update_brand.html", {"data": data})
+
+
+
+
+@superuser_required
+def delete_brand(request, id):
+    data = Brand.objects.get(id=id)
+
+    data.deleted = not data.deleted
+    data.save()
+
+    return redirect('dashboard_app:brands')
+
+
 
 #############################################################################################
        # Product Section, contains "all_products, add, update and delete product" #
@@ -178,11 +261,11 @@ def products(request):
 
 @superuser_required
 def add_product(request):
-    data = Main_Category.objects.all() 
+    data = Main_Category.objects.all()
+    brand = Brand.objects.all() 
 
     if request.method == 'POST':
         # Extracting data from the POST request
-        brand = request.POST['brand']
         model = request.POST['model']
         description = request.POST['description']
         color = request.POST['color']
@@ -193,7 +276,10 @@ def add_product(request):
         battery = request.POST['battery']
         image = request.FILES.get('image')
         main_category_id = request.POST.get('main_category_id')  
+        brand_id = request.POST.get('brand')
 
+        # Getting brand and main category objects
+        brand = Brand.objects.get(id=brand_id)
         main_cat = Main_Category.objects.get(id=main_category_id)
 
         # Create the Product instance with the calculated offer price
@@ -219,17 +305,23 @@ def add_product(request):
             
         return redirect('dashboard_app:products')
 
+    context = {
+        "data" : data,
+        "brand" : brand
+    }
+
     # Render the form if it's not a POST request
-    return render(request, 'dashboard/add_product.html', {"data": data})
+    return render(request, 'dashboard/add_product.html', context)
 
 
 @superuser_required
 def update_product(request, id):
     data = Main_Category.objects.all()
+    brands = Brand.objects.all()
     product = Product.objects.get(id=id)
 
     if request.method == 'POST':
-        brand = request.POST['brand']
+
         model = request.POST['model']
         description = request.POST['description']
         color = request.POST['color']
@@ -239,11 +331,18 @@ def update_product(request, id):
         smart = request.POST.get('smart', False)
         battery = request.POST['battery']
         images = request.FILES.getlist('images')
+
+        brand_id = request.POST.get('brand')
+        main_cat_id = request.POST.get('phone_category')
+        brand = Brand.objects.get(id=brand_id)
+        main_cat = Main_Category.objects.get(id=main_cat_id)
+
         # Retrieve existing data
         edit = Product.objects.get(id=id)
 
         # Update data in the table
         edit.brand = brand
+        edit.main_category = main_cat  
         edit.model = model
         edit.description = description
         edit.color = color
@@ -252,6 +351,7 @@ def update_product(request, id):
         edit.network = network
         edit.smart = smart
         edit.battery = battery
+
         # Update main image only if the user provided
         if 'image' in request.FILES:
             image = request.FILES['image']
@@ -270,7 +370,13 @@ def update_product(request, id):
 
         return redirect('dashboard_app:products')
 
-    return render(request, "dashboard/update_product.html", {"product": product, "data": data})
+    context = {
+        'product': product,
+        'data': data,
+        'brands': brands,
+    }
+
+    return render(request, "dashboard/update_product.html", context)
 
 
 @superuser_required

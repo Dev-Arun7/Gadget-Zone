@@ -13,10 +13,20 @@ class Main_Category(models.Model):
     def __str__(self):
         return str(self.name)
 
+class Brand(models.Model):
+    name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='products', null=True, blank=True)
+    description = models.TextField()
+    deleted = models.BooleanField(default=False)
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     main_category = models.ForeignKey(Main_Category, on_delete=models.CASCADE)
-    brand = models.CharField(max_length=50)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     model = models.CharField(max_length=100)
     description = models.TextField()
     color = models.CharField(max_length=10)
@@ -30,7 +40,7 @@ class Product(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-            return f"{self.brand} {self.model}"
+        return self.model
 
     @staticmethod
     def search_by_model(query):

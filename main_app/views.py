@@ -27,8 +27,6 @@ def product_list(request):
     return render(request, "main/product_list.html", context)
 
 
-
-
 def category_products(request, id):
     # Retrieve the product variants associated with the selected main category
     product_variants = ProductVariant.objects.filter(product__main_category_id=id, deleted=False)
@@ -76,27 +74,30 @@ def main_categories(request):
 ###############################################################################################################
 
 
+
 def product_search(request):
-    query = request.GET.get('q', '')
+    if request.method == "POST":
+        searched = request.POST.get('searched')
 
-    if query:
-        query_parts = query.split(' ')
-        # if user provide more than two words it splits and check both model name or brand name
-        if len(query_parts) > 1:
-            results = Product.objects.filter(
-                Q(brand__icontains=query_parts[0]) & Q(model__icontains=query_parts[1])
-            )
-            # if the user provide only one word as a keyword search both field separately using OR
-        else:
-            results = Product.objects.filter(
-                Q(model__icontains=query) | Q(brand__icontains=query)
-            )
-    else:
-        results = Product.objects.all()
+        # Split the searched term into individual words
+        search_terms = searched.split()
 
-    return render(request, 'main/product_list.html', {'products': results, 'query': query})
+        # Initialize an empty Q object to build the query dynamically
+        q_objects = Q()
 
+        # Iterate through each search term and construct the query
+        for term in search_terms:
+            q_objects |= Q(product__model__icontains=term) | Q(product__brand__name__icontains=term)
 
+        # Filter products based on the constructed query
+        products = ProductVariant.objects.filter(q_objects).distinct()
+
+        context = {
+            'products': products,
+        }
+        return render(request, 'main/product_list.html', context)
+
+    return redirect('main_app:home')
 
 
 def all_featutephones(request):

@@ -136,11 +136,12 @@
                             <!-- Begin Header Middle Right Area -->
                             <div class="col-lg-9'  pl-0 ml-sm-15 ml-xs-15">
                                 <!-- Begin Header Middle Searchbox Area -->
-                                <form action="{% url 'main_app:product_search' %}" method="GET" class="hm-searchbox">
-                                    
-                                    <input type="text" name = "q" placeholder="Enter your search key ..."  value="{{ query }}">
+                                <form action="{% url 'main_app:product_search' %}" method="POST" class="hm-searchbox">
+                                    {% csrf_token %}
+                                    <input type="text" name="searched" placeholder="Enter your search key ..." value="{{ query }}">
                                     <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                                 </form>
+                                
                                 <!-- Header Middle Searchbox Area End Here -->
                                 <!-- Begin Header Middle Right Area -->
                                 <div class="header-middle-right">

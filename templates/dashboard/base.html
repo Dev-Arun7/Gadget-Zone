@@ -63,6 +63,9 @@
                         <li class="{% if request.resolver_match.url_name == 'main_category' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:main_category' %}"><i class="fa  fa-cubes fa-l"></i> <span>Category</span></a>
                         </li>
+                        <li class="{% if request.resolver_match.url_name == 'brands' %} active {% endif %}">
+                            <a href="{% url 'dashboard_app:brands' %}"><i class="fa  fa-cubes fa-l"></i> <span>Brands</span></a>
+                        </li>
                         <li class="{% if request.resolver_match.url_name == 'products' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:products' %}"><i class="fa fa-mobile fa-l"></i> <span>Products</span></a>
                         </li>

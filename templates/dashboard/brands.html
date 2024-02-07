@@ -7,7 +7,7 @@
                         <h4 class="page-title">Brands</h4>
                     </div>
                     <div class="col-sm-8 col-9 text-left m-b-20 ml-3">
-                        <a href="add-appointment.html" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Brand</a>
+                        <a href="{% url 'dashboard_app:add_brand' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Brand</a>
                     </div>
                 </div>
 				<div class="row">
@@ -16,19 +16,41 @@
 							<table class="table table-striped custom-table">
 								<thead>
 									<tr>
-										<th>Brand Name</th>
-										<th>Description</th>
-										<th>Edit</th>
-                                        <th>Delete</th>
+										<th class="text-center">Image</th>
+										<th class="text-center">Name</th>
+										<th class="text-center">Update</th>
+										<th class="text-center">Action</th>
 									</tr>
 								</thead>
 								<tbody>
+									{% for i in data %}
 									<tr>
-										<td>Samsung</td>
-										<td>The No one brnad in the world</td>
-										<td><button type="button" class="btn btn-success">Edit</button></td>
-										<td><button type="button" class="btn btn-danger">Remove</button></td>	
+										<td style="width: 150px; height: 100px;">
+											{% if i.image %}
+												<img style="width: 100%; height: 100%; object-fit: contain;" src="{{ i.image.url }}" alt="Image">
+											{% else %}
+												<p>No image available</p>
+											{% endif %}
+										</td>	
+										<td class ="text-center" >{{ i.name }}</td>
+
+										<td class ="text-center">
+											<a type="button" href="{% url 'dashboard_app:update_brand' id=i.id %}" class="btn btn-success">Edit</a>
+										</td>
+
+
+
+									         <td class ="text-center">
+											<a href="{% url 'dashboard_app:delete_brand' id=i.id %}">
+													{% if i.deleted %}
+													<button type="submit" name="toggle_deleted" class="btn btn-danger">  &nbsp; List &nbsp;  </button>
+													{% else %}
+													<button type="submit" name="toggle_deleted" class="btn btn-success">  Unlist </button>
+													{% endif %}
+											</a>
+										</td>	 
 									</tr>	
+									{% endfor %}
 								</tbody>
 							</table>
 						</div>

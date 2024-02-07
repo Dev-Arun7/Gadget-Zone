@@ -1,0 +1,58 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <h4 class="page-title">Add a Brand</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <form action="{% url 'dashboard_app:add_brand' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>Brand name</label>
+                                <input class="form-control" type="text"
+                                placeholder="Enter the brand name"
+                                name= "name"
+                                required>
+                            </div>  
+                            <div>   
+                                <div>
+                                    {% for message in messages %}
+                                        <li style="color: red;">{{ message }}</li>
+                                    {% endfor %}
+                                </div>                                
+                            </div>             
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input class="form-control" type="text" 
+                                placeholder="Add description"
+                                name= "description"
+                                required>
+                            </div>
+                            <div class="form-group">
+                                <label>Add image</label>
+                                <div>
+                                    <input class="form-control" type="file"
+                                           placeholder="Select image"
+                                           name="image"
+                                           accept=".jpg, .jpeg, .gif, .png, .webp"
+                                           required>
+                                    <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="m-t-20 text-center">
+                                <button class="btn btn-primary submit-btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+ 
