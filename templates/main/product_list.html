@@ -57,15 +57,14 @@
                                 <div class="product-select-box">
                                     <div class="product-short">
                                         <p>Sort By:</p>
-                                        <select class="nice-select">
-                                            <option value="trending">Relevance</option>
-                                            <option value="sales">Name (A - Z)</option>
-                                            <option value="sales">Name (Z - A)</option>
-                                            <option value="rating">Price (Low &gt; High)</option>
-                                            <option value="date">Rating (Lowest)</option>
-                                            <option value="price-asc">Model (A - Z)</option>
-                                            <option value="price-asc">Model (Z - A)</option>
+                                        <select class="nice-select" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                                            <option value="?sort_by=-id">Default</option>
+                                            <option value="?sort_by=price_low_high">Price (Low &gt; High)</option>
+                                            <option value="?sort_by=price_high_low">Price (High &gt; Low)</option>
+                                            <option value="?sort_by=name_az">Name (A - Z)</option>
+                                            <option value="?sort_by=name_za">Name (Z - A)</option>
                                         </select>
+                                        
                                     </div>
                                 </div>
                                 <!-- product-select-box end -->

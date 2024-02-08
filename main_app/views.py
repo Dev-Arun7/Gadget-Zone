@@ -20,13 +20,30 @@ def home(request):
     return render(request, "main/home.html", context)
 
 
+
 def product_list(request):
-    products = ProductVariant.objects.filter(deleted=False).order_by('-id')
+    # Get sorting parameter from the request, default to '-id' if not provided
+    sort_by = request.GET.get('sort_by', '-id')
+
+    # Sort products based on the sorting parameter
+    if sort_by == 'price_low_high':
+        products = ProductVariant.objects.filter(deleted=False).order_by('price')
+    elif sort_by == 'price_high_low':
+        products = ProductVariant.objects.filter(deleted=False).order_by('-price')
+    elif sort_by == 'name_az':
+        products = ProductVariant.objects.filter(deleted=False).order_by('product__model')
+    elif sort_by == 'name_za':
+        products = ProductVariant.objects.filter(deleted=False).order_by('-product__model')
+    else:
+        # Default sorting by '-id'
+        products = ProductVariant.objects.filter(deleted=False).order_by('-id')
+
     context = {'products': products}
-    print(context)  
     return render(request, "main/product_list.html", context)
 
 
+
+    
 def category_products(request, id):
     # Retrieve the product variants associated with the selected main category
     product_variants = ProductVariant.objects.filter(product__main_category_id=id, deleted=False)

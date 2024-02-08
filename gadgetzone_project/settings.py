@@ -172,14 +172,14 @@ AUTHENTICATION_BACKENDS = (
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 
-SITE_ID = 2
+SITE_ID = 1
 LOGIN_REDIRECT_URL = 'main_app:home'
 
 LOGIN_URL = '/gauth/login/'
 
 # For password reset 
 ACCOUNT_EMAIL_REQUIRED = True 
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'none' 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
 EMAIL_HOST = 'smtp.gmail.com' 
