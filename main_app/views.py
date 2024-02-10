@@ -24,22 +24,49 @@ def home(request):
 
 
 def product_list(request):
-    # Specify the number of items per page
-    items_per_page = 9
-
-    # Initialize Paginator with the specified number of items per page
-    p = Paginator(ProductVariant.objects.filter(deleted=False).order_by('-id'), items_per_page)
-
-    page = request.GET.get('page')
-    products = p.get_page(page)
+    # Retrieve all products
+    products = ProductVariant.objects.filter(deleted=False).order_by('-id')
     brands = Brand.objects.all()
-    
+
+    # Filter products based on user input
+    if request.GET:
+        category_ids = request.GET.getlist('category')
+        brand_ids = request.GET.getlist('brand')
+        price_ranges = request.GET.getlist('price_range')  
+        ram_values = request.GET.getlist('ram') 
+        color_values = request.GET.getlist('color_range')
+
+        # Filter by category
+        if category_ids:
+            products = products.filter(product__main_category__id__in=category_ids)
+
+        # Filter by brand
+        if brand_ids:
+            products = products.filter(product__brand__id__in=brand_ids)
+
+        # Filter by price range
+        for price_range in price_ranges:
+            min_price, max_price = map(int, price_range.split('-'))
+            products = products.filter(price__range=(min_price, max_price))
+
+        # Filter by color
+        if color_values:
+            # Assuming color is a field in ProductVariant model
+            products = products.filter(product__color__in=color_values)
+
+
+    # Paginator
+    items_per_page = 9
+    paginator = Paginator(products, items_per_page)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'products': products,
+        'products': page_obj,
         'brands': brands,
     }
     return render(request, "main/product_list.html", context)
+
 
     
 def category_products(request, id):
@@ -91,47 +118,6 @@ def brand_products(request, id):
 ###############################################################################################################
 
 
-def filter_products(request):
-    # Retrieve all available brands for the filter
-    brands = Brand.objects.all()
-
-    # Initialize product queryset to all products
-    products = Product.objects.all()
-
-    # Check if form is submitted
-    if request.method == 'GET':
-        # Filter by brand
-        selected_brands = request.GET.getlist('brand')
-        if selected_brands:
-            products = products.filter(brand__id__in=selected_brands)
-
-        # Filter by price
-        selected_prices = request.GET.getlist('price')
-        price_ranges = {
-            '1': (0, 3000),
-            '2': (3000, 10000),
-            '3': (10000, 250000),
-            '4': (250000, 1000000),  # Assuming the last price range is infinite
-        }
-        for price_range in selected_prices:
-            start_price, end_price = price_ranges.get(price_range, (0, 1000000))
-            products = products.filter(productvariant__price__gte=start_price, productvariant__price__lte=end_price)
-
-        # Filter by RAM
-        selected_ram = request.GET.getlist('ram')
-        if selected_ram:
-            products = products.filter(productvariant__ram__in=selected_ram)
-
-        # Filter by color (assuming color is a field in Product model)
-        selected_colors = request.GET.getlist('color')
-        if selected_colors:
-            products = products.filter(color__in=selected_colors)
-
-    context = {
-        'products': products,
-        'brands': brands,
-    }
-    return render(request, "main/product_list.html", context)
 
 def product_search(request):
     if request.method == "POST":

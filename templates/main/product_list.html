@@ -262,7 +262,7 @@
                             </div>
                             <!--sidebar-categores-box end  -->
                             <!--sidebar-categores-box start  -->
-                            <form action="{% url 'main_app:filter_products' %}">
+                            <form method="GET" action="">
                             <div class="sidebar-categores-box">
                                 <div class="sidebar-title">
                                     <h2>Filter By</h2>
@@ -272,68 +272,59 @@
                                 <!-- btn-clear-all end -->
                                 <!-- filter-sub-area start -->
                                 <div class="filter-sub-area">
-                                    <h5 class="filter-sub-titel">Brand</h5>
+                                    <h5 class="filter-sub-titel">Categories</h5>
                                     <div class="categori-checkbox">
-
                                             <ul> 
-                                                {% for i in brands %}
-                                                    <li><input type="checkbox" name="product-categori"><a href="#"> {{ i.name }}</a></li>
+                                                {% for i in default_main_category %}
+                                                    <li><input type="checkbox" name="category" id="category_checkbox_{{i.id}}" value="{{i.id}}"><a href="#"> {{ i.name }}</a></li>
                                                 {% endfor %}
                                             </ul>
-                                        
                                     </div>
                                  </div>
                                 <!-- filter-sub-area end -->
                                 <!-- filter-sub-area start -->
-                                <div class="filter-sub-area pt-sm-10 pt-xs-10">
-                                    <h5 class="filter-sub-titel"> Price </h5>
-                                    <div class="size-checkbox">
-                                    
-                                            <ul>
-                                                <li><input type="checkbox" name="product-size"><a href="#">Less than ₹3000</a></li>
-                                                <li><input type="checkbox" name="product-size"><a href="#">₹3000 - ₹10000</a></li>
-                                                <li><input type="checkbox" name="product-size"><a href="#">₹10000 - ₹250000</a></li>
-                                                <li><input type="checkbox" name="product-size"><a href="#">₹250000 - ₹100000</a></li>
-                                                <li><input type="checkbox" name="product-size"><a href="#">Above - ₹100000</a></li>
+                                <div class="filter-sub-area">
+                                    <h5 class="filter-sub-titel">Brand</h5>
+                                    <div class="categori-checkbox">
+                                            <ul> 
+                                                {% for i in brands %}
+                                                    <li><input type="checkbox" name="brand" id="brand_checkbox_{{i.id}}" value="{{i.id}}"><a href="#"> {{ i.name }}</a></li>
+                                                {% endfor %}
                                             </ul>
-                                        
                                     </div>
-                                </div>
+                                 </div>
                                 <!-- filter-sub-area end -->
-                            
-                                <!-- filter-sub-area start -->
+                                <!-- Price range -->
                                 <div class="filter-sub-area pt-sm-10 pt-xs-10">
-                                    <h5 class="filter-sub-titel">RAM</h5>
+                                    <h5 class="filter-sub-titel">Price range</h5>
                                     <div class="size-checkbox">
-                                    
-                                            <ul>
-                                                <li><input type="checkbox" name="product-size"><a href="#">4 GB</a></li>
-                                                <li><input type="checkbox" name="product-size"><a href="#">6 GB</a></li>
-                                                <li><input type="checkbox" name="product-size"><a href="#">8 GB</a></li>
-                                            </ul>
-                                        
+                                        <ul>
+                                            <li><input type="checkbox" name="price_range" value="0-3000"><a href="#">Less than ₹3000</a></li>
+                                            <li><input type="checkbox" name="price_range" value="3000-10000"><a href="#">₹3000 - ₹10,000</a></li>
+                                            <li><input type="checkbox" name="price_range" value="10000-250000"><a href="#">₹10,000 - ₹25,0000</a></li>
+                                            <li><input type="checkbox" name="price_range" value="250000-1000000"><a href="#">₹25,000 - ₹100,000</a></li>
+                                            <li><input type="checkbox" name="price_range" value="1000000-100000000"><a href="#">Above - ₹100,000</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <!-- filter-sub-area end -->
                                 <!-- filter-sub-area start -->
                                 <div class="filter-sub-area pt-sm-10 pt-xs-10">
                                     <h5 class="filter-sub-titel">Color</h5>
-                                    <div class="color-categoriy">
-                                    
-                                            <ul>
-                                                <li><span class="white"></span><a href="#">White</a></li>
-                                                <li><span class="black"></span><a href="#">Black</a></li>
-                                                <li><span class="Orange"></span><a href="#">Green </a></li>
-                                                <li><span class="Blue"></span><a href="#">Blue </a></li>
-                                            </ul>
-                                            
-                                        
+                                    <div class="size-checkbox">
+                                        <ul>
+                                            <li><input type="checkbox" name="color_range" value="Black"><a href="#">Black</a></li>
+                                            <li><input type="checkbox" name="color_range" value="White"><a href="#">White</a></li>
+                                            <li><input type="checkbox" name="color_range" value="Green"><a href="#">Green</a></li>
+                                            <li><input type="checkbox" name="color_range" value="Blue"><a href="#">Blue</a></li>
+                                            <li><input type="checkbox" name="color_range" value="Red"><a href="#">Red</a></li>
+                                        </ul>  
                                     </div>
                                 </div>
                                 <!-- filter-sub-area end -->
-                            
+
                             </div>
-                            <button type="submit">Apply Filters</button>
+                            <button class="btn mt-20 w-100" type="submit">Apply </button>
                             <br>
                             <br>
                             <br>

@@ -96,14 +96,12 @@
                                     <ul class="ht-menu">
                                         <!-- Begin Setting Area -->
                                         <li>
-                                            <div class="ht-setting-trigger"><span>My Account</div>
                                             <div class="setting ht-setting">
                                                 <ul class="ht-setting-list">
                                                     {% if user.is_authenticated %}
                                                         <li><a href="{% url 'gauth_app:profile' %}">Profile</a></li>
-                                                        <li><a href="checkout.html">Checkout</a></li>
-                                                        <li><a href="{% url 'gauth_app:user_logout' %}">Logout</a></li>
                                                         <li><a href="{% url 'main_app:orders' %}">Orders</a></li>
+                                                        <li><a href="{% url 'gauth_app:user_logout' %}">Logout</a></li>
                                                     {% else %}
                                                         <li><a href="{% url 'gauth_app:user_login' %}">Sign In</a></li>
                                                         <li><a href="{% url 'gauth_app:user_signup' %}">Signup</a></li>
@@ -144,14 +142,22 @@
                                 
                                 <!-- Header Middle Searchbox Area End Here -->
                                 <!-- Begin Header Middle Right Area -->
-                                <div class="header-middle-right">
+                                <div class="header-middle-right pl-4">
                                     <ul class="hm-menu">
                                         <!-- Begin Header Middle Wishlist Area -->
                                         <li class="hm-wishlist">
                                             <a href="{% url 'main_app:cart' %}">
+                                                <span class="cart-item-count wishlist-item-count">{{ cart_count }}</span>
+
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
+                                            
                                         </li>
+                                        {% comment %} <li class="hm-wishlist">
+                                            <a href="">
+                                                <i class="fa fa-heart-o"></i>
+                                            </a>
+                                        </li> {% endcomment %}
                                         <!-- Header Middle Wishlist Area End Here -->
                                         <!-- Begin Header Mini Cart Area --> 
                                         <li class="hm-minicart">
@@ -191,7 +197,7 @@
                                     <nav>
                                         <ul>
                                             <li class="{% url 'main_app:home' %}"><a href="{% url 'main_app:home' %}">Home</a></li>
-                                            <li class="megamenu-static-holder"><a href="index.html"> Shop all</a>
+                                            <li class="megamenu-static-holder"><a href="{% url 'main_app:product_list'%}"> Shop all</a>
                                                 <ul class="megamenu hb-megamenu">
                                                     <li><a href="blog-left-sidebar.html">Android</a>
                                                         <ul>
@@ -224,70 +230,46 @@
                                                     </li>
                                                 </ul>
                                             </li>
-                                            <li class="dropdown-holder"><a href="blog-left-sidebar.html">Blog</a>
-                                                <ul class="hb-dropdown">
-                                                    <li class="sub-dropdown-holder"><a href="blog-left-sidebar.html">Blog Grid View</a>
-                                                        <ul class="hb-dropdown hb-sub-dropdown">
-                                                            <li><a href="blog-2-column.html">Blog 2 Column</a></li>
-                                                            <li><a href="blog-3-column.html">Blog 3 Column</a></li>
-                                                            <li><a href="blog-left-sidebar.html">Grid Left Sidebar</a></li>
-                                                            <li><a href="blog-right-sidebar.html">Grid Right Sidebar</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li class="sub-dropdown-holder"><a href="blog-list-left-sidebar.html">Blog List View</a>
-                                                        <ul class="hb-dropdown hb-sub-dropdown">
-                                                            <li><a href="blog-list.html">Blog List</a></li>
-                                                            <li><a href="blog-list-left-sidebar.html">List Left Sidebar</a></li>
-                                                            <li><a href="blog-list-right-sidebar.html">List Right Sidebar</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li class="sub-dropdown-holder"><a href="blog-details-left-sidebar.html">Blog Details</a>
-                                                        <ul class="hb-dropdown hb-sub-dropdown">
-                                                            <li><a href="blog-details-left-sidebar.html">Left Sidebar</a></li>
-                                                            <li><a href="blog-details-right-sidebar.html">Right Sidebar</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li class="sub-dropdown-holder"><a href="blog-gallery-format.html">Blog Format</a>
-                                                        <ul class="hb-dropdown hb-sub-dropdown">
-                                                            <li><a href="blog-audio-format.html">Blog Audio Format</a></li>
-                                                            <li><a href="blog-video-format.html">Blog Video Format</a></li>
-                                                            <li><a href="blog-gallery-format.html">Blog Gallery Format</a></li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="about-us.html"> About Us</a></li>
-                                            <li><a href="contact.html">Contact</a></li>
-                                            <li class="megamenu-holder"><a href="shop-left-sidebar.html">Browse</a>
+                                            
+                                            <li class="megamenu-holder"><a href="#">Browse</a>
                                                 <ul class="megamenu hb-megamenu">
-                                                    <li><a href="shop-left-sidebar.html">Categories</a>
+                                                    <li><a href="{% url 'main_app:main_categories' %}">Categories</a>
                                                         <ul>
                                                             {% for i in default_main_category %}
                                                             <li><a href="{% url 'main_app:category_products' i.id %}"> {{ i.name }} </a></li>
                                                             {% endfor %}
                                                         </ul>
                                                     </li>
-                                                    <li><a href="single-product-gallery-left.html">Brands</a>
+                                                    <li><a href="#">Brands</a>
                                                         <ul>
                                                             {% for i in brands %}
                                                             <li><a href="{% url 'main_app:brand_products' i.id %}">{{ i.name }}</a></li>
                                                             {% endfor %}
                                                         </ul>
                                                     </li>
-                                                    <li><a href="single-product.html">Single Products</a>
-                                                        <ul>
-                                                            <li><a href="single-product.html">Single Product</a></li>
-                                                            <li><a href="single-product-sale.html">Single Product Sale</a></li>
-                                                            <li><a href="single-product-group.html">Single Product Group</a></li>
-                                                            <li><a href="single-product-normal.html">Single Product Normal</a></li>
-                                                            <li><a href="single-product-affiliate.html">Single Product Affiliate</a></li>
-                                                        </ul>
-                                                    </li>
+                                                    
                                                 </ul>
+                                            
                                             </li>
                                             <li><a href="{% url 'main_app:product_list'%}">All Products</a></li>
                                             <li><a href="{% url 'main_app:main_categories' %}">All Categories</a></li>
-                                            <li><a href="{% url 'gauth_app:profile' %}">Profile</a></li>
+                                            <li class="megamenu-holder"><a href="{% url 'gauth_app:profile' %}">Profile</a>
+                                                <ul class="megamenu hb-megamenu">
+                                                    <li><a href="{% url 'gauth_app:profile' %}">Account</a>
+                                                        <ul>
+                                                            {% if user.is_authenticated %}
+                                                        <li><a href="{% url 'main_app:orders' %}">Orders</a></li>
+                                                        <li><a href="{% url 'gauth_app:user_logout' %}">Logout</a></li>
+                                                        {% else %}
+                                                        <li><a href="{% url 'gauth_app:user_login' %}">Sign In</a></li>
+                                                        <li><a href="{% url 'gauth_app:user_signup' %}">Signup</a></li>
+                                                        {% endif %}
+
+                                                        </ul>
+                                                    </li>
+                                                    
+                                                </ul>
+                                           
 
                                         </ul>
                                     </nav>
