@@ -32,9 +32,12 @@ def product_list(request):
 
     page = request.GET.get('page')
     products = p.get_page(page)
+    brands = Brand.objects.all()
+    
 
     context = {
         'products': products,
+        'brands': brands,
     }
     return render(request, "main/product_list.html", context)
 
@@ -88,6 +91,47 @@ def brand_products(request, id):
 ###############################################################################################################
 
 
+def filter_products(request):
+    # Retrieve all available brands for the filter
+    brands = Brand.objects.all()
+
+    # Initialize product queryset to all products
+    products = Product.objects.all()
+
+    # Check if form is submitted
+    if request.method == 'GET':
+        # Filter by brand
+        selected_brands = request.GET.getlist('brand')
+        if selected_brands:
+            products = products.filter(brand__id__in=selected_brands)
+
+        # Filter by price
+        selected_prices = request.GET.getlist('price')
+        price_ranges = {
+            '1': (0, 3000),
+            '2': (3000, 10000),
+            '3': (10000, 250000),
+            '4': (250000, 1000000),  # Assuming the last price range is infinite
+        }
+        for price_range in selected_prices:
+            start_price, end_price = price_ranges.get(price_range, (0, 1000000))
+            products = products.filter(productvariant__price__gte=start_price, productvariant__price__lte=end_price)
+
+        # Filter by RAM
+        selected_ram = request.GET.getlist('ram')
+        if selected_ram:
+            products = products.filter(productvariant__ram__in=selected_ram)
+
+        # Filter by color (assuming color is a field in Product model)
+        selected_colors = request.GET.getlist('color')
+        if selected_colors:
+            products = products.filter(color__in=selected_colors)
+
+    context = {
+        'products': products,
+        'brands': brands,
+    }
+    return render(request, "main/product_list.html", context)
 
 def product_search(request):
     if request.method == "POST":

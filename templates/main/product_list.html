@@ -209,8 +209,6 @@
                                     <br>
                                     <br>
                                     <br>
-
-
                                     <div class="pagination-area">
                                         <div class="row">
                                             <div class="col-lg-6 col-md-6">
@@ -242,6 +240,10 @@
                             </div>
                             <!-- shop-products-wrapper end -->
                         </div>
+
+
+
+
                         <div class="col-lg-3 order-2 order-lg-1">
                             <!--sidebar-categores-box start  -->
                             <div class="sidebar-categores-box mt-sm-30 mt-xs-30">
@@ -260,6 +262,7 @@
                             </div>
                             <!--sidebar-categores-box end  -->
                             <!--sidebar-categores-box start  -->
+                            <form action="{% url 'main_app:filter_products' %}">
                             <div class="sidebar-categores-box">
                                 <div class="sidebar-title">
                                     <h2>Filter By</h2>
@@ -271,41 +274,44 @@
                                 <div class="filter-sub-area">
                                     <h5 class="filter-sub-titel">Brand</h5>
                                     <div class="categori-checkbox">
-                                        <form action="#">
-                                            <ul>
-                                                <li><input type="checkbox" name="product-categori"><a href="#">Prime Video (13)</a></li>
-                                                <li><input type="checkbox" name="product-categori"><a href="#">Computers (12)</a></li>
-                                                <li><input type="checkbox" name="product-categori"><a href="#">Electronics (11)</a></li>
+
+                                            <ul> 
+                                                {% for i in brands %}
+                                                    <li><input type="checkbox" name="product-categori"><a href="#"> {{ i.name }}</a></li>
+                                                {% endfor %}
                                             </ul>
-                                        </form>
+                                        
                                     </div>
                                  </div>
                                 <!-- filter-sub-area end -->
                                 <!-- filter-sub-area start -->
                                 <div class="filter-sub-area pt-sm-10 pt-xs-10">
-                                    <h5 class="filter-sub-titel">Categories</h5>
-                                    <div class="categori-checkbox">
-                                        <form action="#">
-                                            <ul>
-                                                <li><input type="checkbox" name="product-categori"><a href="#">Graphic Corner (10)</a></li>
-                                                <li><input type="checkbox" name="product-categori"><a href="#"> Studio Design (6)</a></li>
-                                            </ul>
-                                        </form>
-                                    </div>
-                                 </div>
-                                <!-- filter-sub-area end -->
-                                <!-- filter-sub-area start -->
-                                <div class="filter-sub-area pt-sm-10 pt-xs-10">
-                                    <h5 class="filter-sub-titel">Size</h5>
+                                    <h5 class="filter-sub-titel"> Price </h5>
                                     <div class="size-checkbox">
-                                        <form action="#">
+                                    
                                             <ul>
-                                                <li><input type="checkbox" name="product-size"><a href="#">S (3)</a></li>
-                                                <li><input type="checkbox" name="product-size"><a href="#">M (3)</a></li>
-                                                <li><input type="checkbox" name="product-size"><a href="#">L (3)</a></li>
-                                                <li><input type="checkbox" name="product-size"><a href="#">XL (3)</a></li>
+                                                <li><input type="checkbox" name="product-size"><a href="#">Less than ₹3000</a></li>
+                                                <li><input type="checkbox" name="product-size"><a href="#">₹3000 - ₹10000</a></li>
+                                                <li><input type="checkbox" name="product-size"><a href="#">₹10000 - ₹250000</a></li>
+                                                <li><input type="checkbox" name="product-size"><a href="#">₹250000 - ₹100000</a></li>
+                                                <li><input type="checkbox" name="product-size"><a href="#">Above - ₹100000</a></li>
                                             </ul>
-                                        </form>
+                                        
+                                    </div>
+                                </div>
+                                <!-- filter-sub-area end -->
+                            
+                                <!-- filter-sub-area start -->
+                                <div class="filter-sub-area pt-sm-10 pt-xs-10">
+                                    <h5 class="filter-sub-titel">RAM</h5>
+                                    <div class="size-checkbox">
+                                    
+                                            <ul>
+                                                <li><input type="checkbox" name="product-size"><a href="#">4 GB</a></li>
+                                                <li><input type="checkbox" name="product-size"><a href="#">6 GB</a></li>
+                                                <li><input type="checkbox" name="product-size"><a href="#">8 GB</a></li>
+                                            </ul>
+                                        
                                     </div>
                                 </div>
                                 <!-- filter-sub-area end -->
@@ -313,46 +319,37 @@
                                 <div class="filter-sub-area pt-sm-10 pt-xs-10">
                                     <h5 class="filter-sub-titel">Color</h5>
                                     <div class="color-categoriy">
-                                        <form action="#">
+                                    
                                             <ul>
-                                                <li><span class="white"></span><a href="#">White (1)</a></li>
-                                                <li><span class="black"></span><a href="#">Black (1)</a></li>
-                                                <li><span class="Orange"></span><a href="#">Orange (3) </a></li>
-                                                <li><span class="Blue"></span><a href="#">Blue  (2) </a></li>
+                                                <li><span class="white"></span><a href="#">White</a></li>
+                                                <li><span class="black"></span><a href="#">Black</a></li>
+                                                <li><span class="Orange"></span><a href="#">Green </a></li>
+                                                <li><span class="Blue"></span><a href="#">Blue </a></li>
                                             </ul>
-                                        </form>
+                                            
+                                        
                                     </div>
                                 </div>
                                 <!-- filter-sub-area end -->
-                                <!-- filter-sub-area start -->
-                                <div class="filter-sub-area pt-sm-10 pb-sm-15 pb-xs-15">
-                                    <h5 class="filter-sub-titel">Dimension</h5>
-                                    <div class="categori-checkbox">
-                                        <form action="#">
-                                            <ul>
-                                                <li><input type="checkbox" name="product-categori"><a href="#">40x60cm (6)</a></li>
-                                                <li><input type="checkbox" name="product-categori"><a href="#">60x90cm (6)</a></li>
-                                                <li><input type="checkbox" name="product-categori"><a href="#">80x120cm (6)</a></li>
-                                            </ul>
-                                        </form>
-                                    </div>
-                                 </div>
-                                <!-- filter-sub-area end -->
+                            
                             </div>
+                            <button type="submit">Apply Filters</button>
+                            <br>
+                            <br>
+                            <br>
+                        </form>
                             <!--sidebar-categores-box end  -->
                             <!-- category-sub-menu start -->
                             <div class="sidebar-categores-box mb-sm-0">
                                 <div class="sidebar-title">
-                                    <h2>Laptop</h2>
+                                    <h2>Brands</h2>
                                 </div>
                                 <div class="category-tags">
                                     <ul>
-                                        <li><a href="# ">Devita</a></li>
-                                        <li><a href="# ">Cameras</a></li>
-                                        <li><a href="# ">Sony</a></li>
-                                        <li><a href="# ">Computer</a></li>
-                                        <li><a href="# ">Big Sale</a></li>
-                                        <li><a href="# ">Accessories</a></li>
+                                        {% for i in brands %}
+                                        <li><a href=" {% url 'main_app:brand_products' i.id %}"> {{ i.name  }}</a></li>
+                                        {% endfor %}
+                          
                                     </ul>
                                 </div>
                                 <!-- category-sub-menu end -->
@@ -363,4 +360,4 @@
             </div>
             <!-- Content Wraper Area End Here -->
         {% endblock content %}
-           
+
