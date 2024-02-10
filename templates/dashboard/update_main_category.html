@@ -17,6 +17,7 @@
                         <input class="form-control" type="text"
                         placeholder="Enter the main category here"
                         name= "main_category_name"
+                        pattern="^\S(.*\S)?$"
                         value="{{data.name}}"
                         required>
                     </div>
@@ -32,6 +33,7 @@
                         <input class="form-control" type="text" 
                         placeholder="Add description"
                         name= "description"
+                        pattern="^\S(.*\S)?$"
                         value="{{ data.descriptions }}"
                         required>
                     </div>

@@ -190,13 +190,7 @@
                                 <div class="hb-menu">
                                     <nav>
                                         <ul>
-                                            <li class="{% url 'main_app:home' %}"><a href="{% url 'main_app:home' %}">Home</a>
-                                                <ul class="hb-dropdown">
-                                                    <li><a href="smartphones.html">Smartphones</a></li>
-                                                    <li><a href="featurephones.html">Featurephones</a></li>
-                                                    <li><a href="ruggedphones.html">Ruggeed Phones</a></li>
-                                                </ul>
-                                            </li>
+                                            <li class="{% url 'main_app:home' %}"><a href="{% url 'main_app:home' %}">Home</a></li>
                                             <li class="megamenu-static-holder"><a href="index.html"> Shop all</a>
                                                 <ul class="megamenu hb-megamenu">
                                                     <li><a href="blog-left-sidebar.html">Android</a>
@@ -226,40 +220,6 @@
                                                         <ul>
                                                             <li><a href="contact.html">Nokia</a></li>
                                                             <li><a href="about-us.html">Samsung</a></li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li class="megamenu-holder"><a href="shop-left-sidebar.html">Shop</a>
-                                                <ul class="megamenu hb-megamenu">
-                                                    <li><a href="shop-left-sidebar.html">Shop Page Layout</a>
-                                                        <ul>
-                                                            <li><a href="shop-3-column.html">Shop 3 Column</a></li>
-                                                            <li><a href="shop-4-column.html">Shop 4 Column</a></li>
-                                                            <li><a href="shop-left-sidebar.html">Shop Left Sidebar</a></li>
-                                                            <li><a href="shop-right-sidebar.html">Shop Right Sidebar</a></li>
-                                                            <li><a href="shop-list.html">Shop List</a></li>
-                                                            <li><a href="shop-list-left-sidebar.html">Shop List Left Sidebar</a></li>
-                                                            <li><a href="shop-list-right-sidebar.html">Shop List Right Sidebar</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="single-product-gallery-left.html">Single Product Style</a>
-                                                        <ul>
-                                                            <li><a href="single-product-carousel.html">Single Product Carousel</a></li>
-                                                            <li><a href="single-product-gallery-left.html">Single Product Gallery Left</a></li>
-                                                            <li><a href="single-product-gallery-right.html">Single Product Gallery Right</a></li>
-                                                            <li><a href="single-product-tab-style-top.html">Single Product Tab Style Top</a></li>
-                                                            <li><a href="single-product-tab-style-left.html">Single Product Tab Style Left</a></li>
-                                                            <li><a href="single-product-tab-style-right.html">Single Product Tab Style Right</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="single-product.html">Single Products</a>
-                                                        <ul>
-                                                            <li><a href="single-product.html">Single Product</a></li>
-                                                            <li><a href="single-product-sale.html">Single Product Sale</a></li>
-                                                            <li><a href="single-product-group.html">Single Product Group</a></li>
-                                                            <li><a href="single-product-normal.html">Single Product Normal</a></li>
-                                                            <li><a href="single-product-affiliate.html">Single Product Affiliate</a></li>
                                                         </ul>
                                                     </li>
                                                 </ul>
@@ -298,8 +258,36 @@
                                             </li>
                                             <li><a href="about-us.html"> About Us</a></li>
                                             <li><a href="contact.html">Contact</a></li>
-                                            <li><a href="shop-left-sidebar.html">Smartwatch</a></li>
+                                            <li class="megamenu-holder"><a href="shop-left-sidebar.html">Browse</a>
+                                                <ul class="megamenu hb-megamenu">
+                                                    <li><a href="shop-left-sidebar.html">Categories</a>
+                                                        <ul>
+                                                            {% for i in default_main_category %}
+                                                            <li><a href="{% url 'main_app:category_products' i.id %}"> {{ i.name }} </a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="single-product-gallery-left.html">Brands</a>
+                                                        <ul>
+                                                            {% for i in brands %}
+                                                            <li><a href="{% url 'main_app:brand_products' i.id %}">{{ i.name }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="single-product.html">Single Products</a>
+                                                        <ul>
+                                                            <li><a href="single-product.html">Single Product</a></li>
+                                                            <li><a href="single-product-sale.html">Single Product Sale</a></li>
+                                                            <li><a href="single-product-group.html">Single Product Group</a></li>
+                                                            <li><a href="single-product-normal.html">Single Product Normal</a></li>
+                                                            <li><a href="single-product-affiliate.html">Single Product Affiliate</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="{% url 'main_app:product_list'%}">All Products</a></li>
                                             <li><a href="{% url 'main_app:main_categories' %}">All Categories</a></li>
+                                            <li><a href="{% url 'gauth_app:profile' %}">Profile</a></li>
 
                                         </ul>
                                     </nav>

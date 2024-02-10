@@ -1,0 +1,75 @@
+
+{% extends 'main/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<section class="vh-100 gradient-custom-2">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-12 col-lg-10 col-xl-8">
+          <div class="card card-stepper" style="border-radius: 16px;">
+            <div class="card-header p-4">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <p class="text-muted mb-2"> Order ID <span class="fw-bold text-body">{{ product.id }}</span></p>
+                  <p class="text-muted mb-0"> Place On <span class="fw-bold text-body"> {{ product.date }}</span> </p>
+                </div>
+                <div>
+                  <h6 class="mb-0"> <a href="#">{{ product.status }}</a> </h6>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-4">
+              <div class="d-flex flex-row mb-4 pb-2">
+                <div class="flex-fill">
+                  <h5 class="bold">{{ product.product.brand.name }} {{ product.product.model }}</h5>
+                  <p class="text-muted"> Qt: {{ product.quantity }} item</p>
+                  <h4 class="mb-3"> ₹{{  product.amount }} <span class="small text-muted"> via ({{ product.payment_type }}) </span></h4>
+                  <br>
+                  <br>
+                  <p class="text-muted mb-0"> <span class="fw-bold text-body"> {{ product.address.first_name }} {{ product.address.first_name }}</span> </p>
+                  <p class="text-muted mb-0"> <span class="fw-bold text-body"> {{ product.address.address_1 }} {{ product.address.address_2 }}</span> </p>
+                  <p class="text-muted mb-0"> <span class="fw-bold text-body"> {{ product.address.state }} {{ product.address.country }}</span> </p>
+                  <p class="text-muted mb-0"> <span class="fw-bold text-body"> {{ product.address.city }} {{ product.address.pin }}</span> </p>
+                  <p class="text-muted mb-0"> <span class="fw-bold text-body">PIN {{ product.address.pin}}</span> </p>
+                  <p class="text-muted mb-0"> <span class="fw-bold text-body">Phone {{ product.address.phone}}</span> </p>
+                </div>
+                <div>
+                  <img class="align-self-center img-fluid ml-100"
+                    src= {{ product.product.image.url }} width="250">
+                </div>
+              </div>
+            </div>
+            <div class="card-footer p-4">
+              <div class="d-flex justify-content-between">
+                <h5 class="fw-normal mb-0"><a href="#!"> </a></h5>
+                <div class="border-start h-100"></div>
+                {% if product.status == 'pending' or product.status == 'processing' or product.status == 'shipped' %}                
+                <form method="post" action="{% url 'main_app:cancel' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Cancel</button>
+                </form>
+                 {% elif product.status == 'completed' or product.status == 'delivered' %}
+                <form method="post" action="{% url 'main_app:cancel' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Return</button>
+                </form>
+                {% else %}
+                   <p>  </p>
+                 {% endif %}
+                <div class="border-start h-100"></div>
+                <h5 class="fw-normal mb-0"><a href="#!"> </a></h5>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+{% endblock content %}
+
+

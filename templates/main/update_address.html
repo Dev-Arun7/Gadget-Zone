@@ -1,157 +1,122 @@
-{% extends 'main/base.html' %} {% load static %} {% block content %}
-<div class="container">
-  <!-- Wrap the content in a container to center it -->
-  <div class="row justify-content-center">
-    <!-- Use Bootstrap classes to center the row -->
-    <div class="col-md-8">
-      <!-- Use col-md-8 to take 8 columns -->
-      <h2 class="text-center mb-4" style="color: grey">Update Address</h2>
-      <!-- Heading with grey color -->
-      <form
-        action="{% url 'gauth_app:update_address' address.id %}"
-        method="post"
-        enctype="multipart/form-data"
-      >
-        {% csrf_token %}
-        <div class="form-row">
-          <div class="form-group col-md-8">
-            <label for="inputEmail4">Address Name</label>
-            <input
-              type="text"
-              class="form-control"
-              name="address_name"
-              value="{{ address.address_name }}"
-              placeholder="First Name"
-            />
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <h2 class="text-center mb-4" style="color: grey;">Edit Address</h2>
+        <form action="{% url 'gauth_app:update_address' form.instance.id %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="redirect_page" value="{{ redirect_page }}">
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label for="inputEmail4">Address Name</label>
+              <input type="text" class="form-control" name="address_name" value="{{ form.address_name.value }}" placeholder="First Name" >
+              {% if form.errors.address_name %}
+              <p style="color: red;">{{ form.errors.address_name }}</p>
+              {% endif %}
+            </div>
+            <div class="form-group col-md-4">
+              <label for="network">Default</label>
+              <div class="form-check">
+                <input type="checkbox" 
+                       id="network" 
+                       name="default" 
+                       {% if form.instance.default %}
+                         checked
+                       {% endif %}
+                       class="form-check-input">
+                <label class="form-check-label" for="network"></label>
+              </div>
+            </div>            
           </div>
-          <div class="form-group col-md-4">
-            <label for="network">Default</label>
-            <div class="form-check">
-              <input
-                type="checkbox"
-                id="network"
-                name="default"
-                value="True"
-                {% if address.default %}
-                checked
-                {% endif %}
-                class="form-check-input"
-              />
-              <label class="form-check-label" for="network"> </label>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputEmail4">First name</label>
+              <input type="text" class="form-control" name="first_name" value="{{ form.first_name.value }}" placeholder="First Name" >
+              {% if form.errors.first_name %}
+              <p style="color: red;">{{ form.errors.first_name }}</p>
+              {% endif %}
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputPassword4">Last name</label>
+              <input type="text" class="form-control" name="last_name" value="{{ form.last_name.value }}" placeholder="Last name" >
+              {% if form.errors.last_name %}
+              <p style="color: red;">{{ form.errors.last_name }}</p>
+              {% endif %}
             </div>
           </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputEmail4">First name</label>
-            <input
-              type="text"
-              class="form-control"
-              name="first_name"
-              value="{{ address.first_name }}"
-              placeholder="First Name"
-            />
+          <div class="form-group">
+            <label for="inputAddress">Address line 1</label>
+            <input type="text" class="form-control" name="address_1" value="{{ form.address_1.value }}" placeholder="First Line" >
+            {% if form.errors.address_1 %}
+            <p style="color: red;">{{ form.errors.address_1 }}</p>
+            {% endif %}
           </div>
-          <div class="form-group col-md-6">
-            <label for="inputPassword4">Last name</label>
-            <input
-              type="text"
-              class="form-control"
-              name="last_name"
-              value="{{ address.last_name }}"
-              placeholder="Last name"
-            />
+          <div class="form-group">
+            <label for="inputAddress2">Address line 2</label>
+            <input type="text" class="form-control" name="address_2" value="{{ form.address_2.value }}" placeholder="Apartment, studio, or floor" >
+            {% if form.errors.address_2 %}
+            <p style="color: red;">{{ form.errors.address_2 }}</p>
+            {% endif %}
           </div>
-        </div>
-        <div class="form-group">
-          <label for="inputAddress">Address line 1</label>
-          <input
-            type="text"
-            class="form-control"
-            name="address_1"
-            value="{{ address.address_1 }}"
-            placeholder="Frist Line"
-          />
-        </div>
-        <div class="form-group">
-          <label for="inputAddress2">Address line 2</label>
-          <input
-            type="text"
-            class="form-control"
-            name="address_2"
-            value="{{ address.address_2 }}"
-            placeholder="Apartment, studio, or floor"
-          />
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label for="inputCity">Country</label>
-            <input
-              type="text"
-              class="form-control"
-              name="country"
-              value="{{ address.country }}"
-              placeholder="Your country"
-            />
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="inputCity">Country</label>
+              <input type="text" class="form-control" name="country" value="{{ form.country.value }}" placeholder="Your country" >
+              {% if form.errors.country %}
+              <p style="color: red;">{{ form.errors.country}}</p>
+              {% endif %}
+            </div>
+            <div class="form-group col-md-5">
+              <label for="inputEmail4">State</label>
+              <input type="text" class="form-control" name="state" value="{{ form.state.value }}" placeholder="Your State" >
+            </div>
+            <div class="form-group col-md-3">
+              <label for="inputZip">City</label>
+              <input type="text" class="form-control" name="city" value="{{ form.city.value }}" placeholder="City" >
+              {% if form.errors.city %}
+              <p style="color: red;">{{ form.errors.city}}</p>
+              {% endif %}
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputZip">Phone</label>
+              <input type="text" class="form-control" name="phone" value="{{ form.phone.value }}" placeholder="Phone number" 
+                     pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+          </div>          
+            <div class="form-group col-md-6">
+              <label for="inputZip">Email</label>
+              <input type="email" class="form-control" name="email" value="{{ form.email.value }}" placeholder="Email" >
+            </div>
+            <div class="form-group col-md-2"> 
+              <label for="inputZip">PIN</label>
+              <input type="number" class="form-control" name="pin" value="{{ form.pin.value }}" placeholder="Post Code" min="0">
+              {% if form.errors.pin %}
+              <p style="color: red;">{{ form.errors.pin }}</p>
+              {% endif %}
+          </div>         
           </div>
-          <div class="form-group col-md-5">
-            <label for="inputEmail4">State</label>
-            <input
-              type="text"
-              class="form-control"
-              name="state"
-              value="{{ address.state }}"
-              placeholder="Your State"
-            />
+          <div class="text-center">
+            <button type="submit" class="btn btn-warning">Save</button>
+            <br>
+            <br>
           </div>
-          <div class="form-group col-md-3">
-            <label for="inputZip">City</label>
-            <input
-              type="text"
-              class="form-control"
-              name="city"
-              value="{{ address.city }}"
-              placeholder="City"
-            />
-          </div>
-          <div class="form-group col-md-4">
-            <label for="inputZip">Phone</label>
-            <input
-              type="text"
-              class="form-control"
-              name="phone"
-              value="{{ address.phone }}"
-              placeholder="Phone number"
-            />
-          </div>
-          <div class="form-group col-md-6">
-            <label for="inputZip">Email</label>
-            <input
-              type="email"
-              class="form-control"
-              name="email"
-              value="{{ address.email }}"
-              placeholder="Email"
-            />
-          </div>
-          <div class="form-group col-md-2">
-            <label for="inputZip">PIN</label>
-            <input
-              type="text"
-              class="form-control"
-              name="pin"
-              value="{{ address.pin }}"
-              placeholder=" 6 Digits"
-            />
-          </div>
-        </div>
-        <div class="text-center">
-          <button type="submit" class="btn btn-warning">Save</button>
-          <br />
-          <br />
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 {% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+

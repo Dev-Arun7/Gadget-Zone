@@ -139,7 +139,8 @@
                                         {% endfor %}
                                     </div>
                                     <div id="grid-view"  class="tab-pane fade product-list-view active show" role="tabpanel">
-                                        
+
+                
                                         <div class="product-area shop-product-area">
                                            
                                             <div class="row">
@@ -204,26 +205,39 @@
                                         </div>
                                         
                                     </div>
-                                    
-                                    <div class="paginatoin-area">
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+
+
+                                    <div class="pagination-area">
                                         <div class="row">
                                             <div class="col-lg-6 col-md-6">
-                                                <p>Showing 1-12 of 13 item(s)</p>
+                                                <p class="pagination-info">Showing 9 items per page</p>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <ul class="pagination-box">
-                                                    <li><a href="#" class="Previous"><i class="fa fa-chevron-left"></i> Previous</a>
+                                            <div class="col-lg-6 col-md-6" >
+                                                <ul class="pagination pagination-sm justify-content-end">
+                                                    <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
+                                                        <a class="page-link" href="{% if products.has_previous %}?page={{ products.previous_page_number }}{% endif %}" aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo; Previous</span>
+                                                        </a>
                                                     </li>
-                                                    <li class="active"><a href="#">1</a></li>
-                                                    <li><a href="#">2</a></li>
-                                                    <li><a href="#">3</a></li>
-                                                    <li>
-                                                      <a href="#" class="Next"> Next <i class="fa fa-chevron-right"></i></a>
+                                                    <li class="page-item disabled">
+                                                        <span class="page-link">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+                                                    </li>
+                                                    <li class="page-item {% if not products.has_next %} disabled {% endif %}">
+                                                        <a class="page-link" href="{% if products.has_next %}?page={{ products.next_page_number }}{% endif %}" aria-label="Next">
+                                                            <span aria-hidden="true">Next &raquo;</span>
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
+                                    
+
+
                                 </div>
                             </div>
                             <!-- shop-products-wrapper end -->

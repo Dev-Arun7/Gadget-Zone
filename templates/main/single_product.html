@@ -54,8 +54,7 @@
                                         {% endif %}
                                     </div>
                                     <span class="product-details-ref">{{ product.color }} {{ variant.ram }}GB RAM   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                                        {{ variant.storage }}GB Internal </span>
-                                    
+                                        {{ variant.storage }}GB Internal </span>          
                                     <div class="rating-box pt-20">
                                         <ul class="rating rating-with-review-item">
                                             <li><i class="fa fa-star-o"></i></li>
@@ -63,7 +62,9 @@
                                             <li><i class="fa fa-star-o"></i></li>
                                             <li class="no-star"><i class="fa fa-star-o"></i></li>
                                             <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                            {% if product.camera %}
                                             <li class="review-item"><a href="#">Camera {{ product.camera }} MP </a></li>
+                                            {% endif %}
                                         </ul>
                                     </div>
                                     <div class="price-box pt-20">

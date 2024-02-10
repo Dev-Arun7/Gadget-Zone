@@ -29,7 +29,6 @@
                     <div class="row">
                         <div class="col-12">
                             {% if orders %}
-                            <form action="#">
                                 <div class="table-content table-responsive">
                                     <table class="table  cart_data">
                                         <thead>
@@ -50,29 +49,31 @@
                                                 <td class="li-product-name"><a href="#">{{ i.date }}</a></td>
                                                 <td class="li-product-thumbnail">
                                                     {% if i.product.image %}
-                                                    <a href="#">
+                                                    <a href="{% url 'main_app:order_detail' i.id %}">
                                                         <img class="product-image" src="{{ i.product.image.url }}" alt="Li's Product Image">
                                                     </a>
                                                     {% else %}
                                                     <span>No Image Available</span>
                                                     {% endif %}
                                                 </td>                                    
-                                                <td class="li-product-name"><a href="#">{{ i.product.brand }} {{ i.product.model }}</a></td>
-                                                <td class="li-product-name"><a href="#">{{ i.variant.ram }}GB </a></td>                                               
-                                                <td class="li-product-name"><a href="#">{{ i.quantity }}</a></td>                                               
-                                                <td class="li-product-name"><a href="#">{{ i.amount }}</a></td>                                               
-                                                <td class="li-product-name"><a href="#">{{ i.status }}</a></td>                                               
+                                                <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.product.brand }} {{ i.product.model }}</a></td>
+                                                <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.variant.ram }}GB </a></td>                                               
+                                                <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.quantity }}</a></td>                                               
+                                                <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.amount }}</a></td>                                               
+                                                <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.status }}</a></td>                                               
                                                 <td class="product-subtotal">
                                                     {% if i.status == 'pending' or i.status == 'processing' or i.status == 'shipped' %}                
                                                         <form method="post" action="{% url 'main_app:cancel' order_id=i.id %}">
                                                             {% csrf_token %}
                                                             <button type="submit" class="btn btn-danger">Cancel</button>
                                                         </form>
-                                                    {% else %}
+                                                    {% elif i.status == 'completed' or i.status == 'delivered' %}
                                                         <form method="post" action="{% url 'main_app:cancel' order_id=i.id %}">
                                                             {% csrf_token %}
                                                             <button type="submit" class="btn btn-success">Return</button>
                                                         </form>
+                                                    {% else %}
+                                                           <p> - </p>
                                                     {% endif %}
                                                 </td>
                                             </tr>
@@ -80,7 +81,6 @@
                                         </tbody>  
                                     </table>
                                 </div>
-                            </form>
                         </div>
                         {% else %}
                         <br>

@@ -37,6 +37,7 @@
                                 <input class="form-control" type="text" 
                                 placeholder="Enter phone model"
                                 name= "model"
+                                pattern="^\S(.*\S)?$"
                                 value="{{product.model}}"
                                 required>
                             </div>
@@ -45,6 +46,7 @@
                                 <textarea class="form-control" 
                                           placeholder="Add description"
                                           name="description"
+                                          pattern="^\S(.*\S)?$"
                                           required>{{ product.description }}</textarea>
                             </div> 
                             <div class="form-group">
@@ -52,6 +54,7 @@
                                 <input class="form-control" type="text" 
                                 placeholder="Enter phone color"
                                 name= "color"
+                                pattern="^\S(.*\S)?$"
                                 value="{{product.color}}"
                                 required>
                             </div>
@@ -61,7 +64,8 @@
                                        placeholder="Enter the size of the display"
                                        name="display_size"
                                        value="{{product.display_size}}"
-                                       step="1" >
+                                       min = 1
+                                        >
                             </div>
                             <div class="form-group">
                                 <label>Camera Resolution</label>
@@ -69,7 +73,8 @@
                                        placeholder="Enter the resolution of the camera"
                                        name="camera"
                                        value="{{product.camera}}"
-                                       step="2" >
+                                       min = "0"
+                                       >
                             </div>
                             <div class="form-group">
                                 <label for="network">Network</label>
@@ -102,7 +107,8 @@
                                        placeholder="Enter the battery capacity"
                                        name="battery"
                                        value="{{product.battery}}"
-                                       step="100" >
+                                       min = 0
+                                        >
                             </div>     
                             <div class="form-group">
                                 <label>Current Image</label>

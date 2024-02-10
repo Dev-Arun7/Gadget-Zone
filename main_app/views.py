@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from main_app.models import Main_Category, Product, ProductVariant
+from main_app.models import Main_Category, Product, ProductVariant, Brand
 from gauth_app.models import Cart, Wishlist, Address, Order
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
@@ -10,38 +10,33 @@ from django.db.models import Sum
 from django.urls import reverse
 import json
 import random
-
-
+from django.core.paginator import Paginator
 
 
 def home(request):
     products = ProductVariant.objects.filter(deleted=False).order_by('id')
-    context = {'products': products}  
+    brands = Brand.objects.all()
+    context = {
+        'products': products,
+        'brands' : brands,
+        }  
     return render(request, "main/home.html", context)
 
 
-
 def product_list(request):
-    # Get sorting parameter from the request, default to '-id' if not provided
-    sort_by = request.GET.get('sort_by', '-id')
+    # Specify the number of items per page
+    items_per_page = 9
 
-    # Sort products based on the sorting parameter
-    if sort_by == 'price_low_high':
-        products = ProductVariant.objects.filter(deleted=False).order_by('price')
-    elif sort_by == 'price_high_low':
-        products = ProductVariant.objects.filter(deleted=False).order_by('-price')
-    elif sort_by == 'name_az':
-        products = ProductVariant.objects.filter(deleted=False).order_by('product__model')
-    elif sort_by == 'name_za':
-        products = ProductVariant.objects.filter(deleted=False).order_by('-product__model')
-    else:
-        # Default sorting by '-id'
-        products = ProductVariant.objects.filter(deleted=False).order_by('-id')
+    # Initialize Paginator with the specified number of items per page
+    p = Paginator(ProductVariant.objects.filter(deleted=False).order_by('-id'), items_per_page)
 
-    context = {'products': products}
+    page = request.GET.get('page')
+    products = p.get_page(page)
+
+    context = {
+        'products': products,
+    }
     return render(request, "main/product_list.html", context)
-
-
 
     
 def category_products(request, id):
@@ -50,8 +45,6 @@ def category_products(request, id):
 
     # Pass the product variants to the template for rendering
     return render(request, "main/product_list.html", {'products': product_variants})
-
-
 
 def single_product(request, id, variant_id):
     # Get the product and its variants
@@ -85,6 +78,10 @@ def single_product(request, id, variant_id):
 def main_categories(request):
     return render(request,'main/main_categories.html')
 
+def brand_products(request, id):
+    product_variants = ProductVariant.objects.filter(product__brand_id=id, deleted=False)
+    return render(request, "main/product_list.html", {'products': product_variants})
+
 
 ###############################################################################################################
                         # Sorting and showing products on page #
@@ -115,41 +112,6 @@ def product_search(request):
         return render(request, 'main/product_list.html', context)
 
     return redirect('main_app:home')
-
-
-def all_featutephones(request):
-    # Get the Main_Category named 'Featurephone'
-    featurephone_category = Main_Category.objects.get(name='Feature Phones')
-
-    # Get all products related to the 'Featurephone' category
-    featurephone_products = Product.objects.filter(main_category=featurephone_category)
-    for product in featurephone_products:
-        product.offer_price = int(product.price * (1 - product.offer / 100))
-
-    return render(request, 'main/product_list.html', {'data': featurephone_products})
-
-
-def all_smartphones(request):
-    # Get the Main_Category named 'Featurephone'
-    smartphone_category = Main_Category.objects.get(name='Smartphones')
-
-    # Get all products related to the 'Featurephone' category
-    smartphones_products = Product.objects.filter(main_category=smartphone_category)
-    for product in smartphones_products:
-        product.offer_price = int(product.price * (1 - product.offer / 100))
-
-    return render(request, 'main/product_list.html', {'data': smartphones_products})
-
-
-def budget_phones(request):
-    # Filter products with prices less than 20000
-    data = Product.objects.filter(price__lt=20000)
-
-    # Calculate offer price for each product and add it to the data dictionary
-    for product in data:
-        product.offer_price = int(product.price * (1 - product.offer / 100))
-    print("Debug - Budget Phones Data:", data) 
-    return render(request, "main/product_list.html", {"budget": data})
 
 
 
@@ -208,8 +170,6 @@ def add_to_cart(request, product_id, variant_id):
     return redirect('main_app:home')
 
 
-
-
 def update_cart(request):
     if request.method == 'POST':
         variant_id = int(request.POST.get('variant_id'))
@@ -231,11 +191,6 @@ def update_cart(request):
 
 
 
-
-
-
-
-
 @login_required
 def delete_cart(request, product_id):
     # Retrieve the cart item to delete
@@ -249,18 +204,27 @@ def delete_cart(request, product_id):
 ###############################################################################################################
 
 
+
 @login_required
 def checkout(request):
-
-    cart_items = Cart.objects.filter(quantity__gt=0, product_variant__stock__gt=0)
+    cart_items = Cart.objects.filter(quantity__gt=0)
+    
+    # Check if all products in the cart are in stock
+    for item in cart_items:
+        if item.product_variant.stock <= item.quantity:
+           messages.warning(request, "Some items are out of stock.")
+           return redirect('main_app:cart')
+    
+    # If all products are in stock, proceed with the checkout process
     addresses = Address.objects.filter(user=request.user)
     total_price = cart_items.aggregate(total_price=Sum('total'))['total_price'] or 0
 
-    context = { 'subtotal': total_price,
-               'addresses': addresses,
-               }
-
+    context = {
+        'subtotal': total_price,
+        'addresses': addresses,
+    }
     return render(request, "main/checkout.html", context)
+
 
 @login_required
 def orders(request):
@@ -269,6 +233,7 @@ def orders(request):
 
     # Render the orders template with user's orders data
     return render(request, 'main/orders.html', {'orders': user_orders})
+
 
 
 @login_required
@@ -297,6 +262,12 @@ def place_order(request):
             else:
                 out_of_stock_items.append(cart_item)
 
+        # If any item is out of stock, return to checkout page
+        if out_of_stock_items:
+            messages.warning(request, "Some items are out of stock. Please remove them from your cart.")
+            return HttpResponseRedirect(reverse('main_app:cart'))
+
+        # Proceed with order placement for in-stock items
         for cart_item in in_stock_items:
             order = Order.objects.create(
                 user=user,
@@ -308,19 +279,15 @@ def place_order(request):
                 quantity=cart_item.quantity,
                 image=cart_item.image,
                 variant=cart_item.product_variant
-
             )
             cart_item.product_variant.stock -= cart_item.quantity
             cart_item.product_variant.save()
             cart_item.delete()
 
-        if out_of_stock_items:
-            messages.warning(request, "Some items are out of stock and were not included in the order.")
-
         return HttpResponseRedirect(reverse('main_app:home') + '?success=true')
     else:
         messages.error(request, "Invalid request method")
-        return HttpResponseRedirect(reverse('main_app:checkout')) 
+        return HttpResponseRedirect(reverse('main_app:checkout'))
 
 
 @login_required
@@ -330,11 +297,14 @@ def cancel(request, order_id):
         order = get_object_or_404(Order, pk=order_id)
 
         # Check if the status should be changed to Cancelled
-        if order.status in ['pending', 'processing']:
+        if order.status in ['pending', 'processing', 'shipped']:
             order.status = 'cancelled'
         else:
             order.status = 'returned'
-            # Assuming you have additional logic for Return status, you can add it here
+
+        variant = order.variant
+        variant.stock += order.quantity
+        variant.save()
 
         order.save()  # Save the updated status
 
@@ -344,6 +314,16 @@ def cancel(request, order_id):
         # Handle GET requests appropriately, if needed
         # For now, let's redirect to the 'orders' page
         return redirect('main_app:orders')
+
+
+
+def order_detail(request, id):
+    product = get_object_or_404(Order, id=id)
+    context = {
+        'product' : product
+    }
+    
+    return render(request, "main/order_detail.html", context)
     
     
 

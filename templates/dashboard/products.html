@@ -7,7 +7,7 @@
                         <h4 class="page-title">Products</h4>
                     </div>
 					<div>
-						<P> All the products are listed here without variants. You can add varients from here, list or ullist products from here. </p>
+						<P> All the products are listed here without variants. You can add varients from here, list or unlist products from here. </p>
 						</div>
                     <div class="col-sm-12 col-9 text-left m-b-20 ml-3">
                         <a href="{% url 'dashboard_app:add_product' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Product</a>
@@ -67,5 +67,28 @@
 					</div>
                 </div>
             </div>
+			<!-- Pagination area -->
+		<!-- Pagination area -->
+		<div class="pagination-area" style="padding: 0 30px;">
+			<div class="row">
+				<div class="col-lg-6 col-md-6">
+					<p>Showing {{ data.start_index }}-{{ data.end_index }} of {{ data.paginator.count }} items</p>
+				</div>
+				<div class="col-lg-6 col-md-6">
+					<ul class="pagination justify-content-end">
+						<li class="page-item {% if not data.has_previous %} disabled {% endif %}">
+							<a class="page-link" href="{% if data.has_previous %}?page={{ data.previous_page_number }}{% endif %}">Previous</a>
+						</li>
+						<li class="page-item active">
+							<span class="page-link">Page {{ data.number }} of {{ data.paginator.num_pages }}</span>
+						</li>
+						<li class="page-item {% if not data.has_next %} disabled {% endif %}">
+							<a class="page-link" href="{% if data.has_next %}?page={{ data.next_page_number }}{% endif %}">Next</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
 {% endblock content %}                  
 

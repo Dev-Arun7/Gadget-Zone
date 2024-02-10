@@ -6,13 +6,16 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
         <h2 class="text-center mb-4" style="color: grey;">Add Address</h2>
-        <form action="{% url 'gauth_app:add_address' redirect_page='redirect_page' %}" method="post" enctype="multipart/form-data">
+        <form action="{% url 'gauth_app:add_address' redirect_page=redirect_page %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <input type="hidden" name="redirect_page" value="{{ redirect_page }}">
           <div class="form-row">
             <div class="form-group col-md-8">
               <label for="inputEmail4">Address Name</label>
-              <input type="text" class="form-control" name="address_name" placeholder="First Name" required>
+              <input type="text" class="form-control" name="address_name" value="{{ form.address_name.value }}" placeholder="First Name" >
+              {% if form.errors.address_name %}
+              <p style="color: red;">{{ form.errors.address_name }}</p>
+              {% endif %}
             </div>
             <div class="form-group col-md-4">
               <label for="network">Default</label>
@@ -20,56 +23,80 @@
                 <input type="checkbox" 
                        id="network" 
                        name="default" 
-                       value="True" 
+                       {% if form.instance.default %}
+                         checked
+                       {% endif %}
                        class="form-check-input">
                 <label class="form-check-label" for="network"></label>
               </div>
             </div>
+            
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="inputEmail4">First name</label>
-              <input type="text" class="form-control" name="first_name" placeholder="First Name" required>
+              <input type="text" class="form-control" name="first_name" value="{{ form.first_name.value }}" placeholder="First Name" >
+              {% if form.errors.first_name %}
+              <p style="color: red;">{{ form.errors.first_name }}</p>
+              {% endif %}
             </div>
             <div class="form-group col-md-6">
               <label for="inputPassword4">Last name</label>
-              <input type="text" class="form-control" name="last_name" placeholder="Last name" required>
+              <input type="text" class="form-control" name="last_name" value="{{ form.last_name.value }}" placeholder="Last name" >
+              {% if form.errors.last_name %}
+              <p style="color: red;">{{ form.errors.last_name }}</p>
+              {% endif %}
             </div>
           </div>
           <div class="form-group">
             <label for="inputAddress">Address line 1</label>
-            <input type="text" class="form-control" name="address_1" placeholder="First Line" required>
+            <input type="text" class="form-control" name="address_1" value="{{ form.address_1.value }}" placeholder="First Line" >
+            {% if form.errors.address_1 %}
+            <p style="color: red;">{{ form.errors.address_1 }}</p>
+            {% endif %}
           </div>
           <div class="form-group">
             <label for="inputAddress2">Address line 2</label>
-            <input type="text" class="form-control" name="address_2" placeholder="Apartment, studio, or floor" required>
+            <input type="text" class="form-control" name="address_2" value="{{ form.address_2.value }}" placeholder="Apartment, studio, or floor" >
+            {% if form.errors.address_2 %}
+            <p style="color: red;">{{ form.errors.address_2 }}</p>
+            {% endif %}
           </div>
           <div class="form-row">
             <div class="form-group col-md-4">
               <label for="inputCity">Country</label>
-              <input type="text" class="form-control" name="country" placeholder="Your country" required>
+              <input type="text" class="form-control" name="country" value="{{ form.country.value }}" placeholder="Your country" >
+              {% if form.errors.country %}
+              <p style="color: red;">{{ form.errors.country}}</p>
+              {% endif %}
             </div>
             <div class="form-group col-md-5">
               <label for="inputEmail4">State</label>
-              <input type="text" class="form-control" name="state" placeholder="Your State" required>
+              <input type="text" class="form-control" name="state" value="{{ form.state.value }}" placeholder="Your State" >
             </div>
             <div class="form-group col-md-3">
               <label for="inputZip">City</label>
-              <input type="text" class="form-control" name="city" placeholder="City" required>
+              <input type="text" class="form-control" name="city" value="{{ form.city.value }}" placeholder="City" >
+              {% if form.errors.city %}
+              <p style="color: red;">{{ form.errors.city}}</p>
+              {% endif %}
             </div>
             <div class="form-group col-md-4">
               <label for="inputZip">Phone</label>
-              <input type="text" class="form-control" name="phone" placeholder="Phone number" required
+              <input type="text" class="form-control" name="phone" value="{{ form.phone.value }}" placeholder="Phone number" 
                      pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
           </div>          
             <div class="form-group col-md-6">
               <label for="inputZip">Email</label>
-              <input type="email" class="form-control" name="email" placeholder="Email" required>
+              <input type="email" class="form-control" name="email" value="{{ form.email.value }}" placeholder="Email" >
             </div>
             <div class="form-group col-md-2"> 
               <label for="inputZip">PIN</label>
-              <input type="number" class="form-control" name="pin" placeholder=" Post Code" required>
-            </div>
+              <input type="number" class="form-control" name="pin" value="{{ form.pin.value }}" placeholder="Post Code" min="0">
+              {% if form.errors.pin %}
+              <p style="color: red;">{{ form.errors.pin }}</p>
+              {% endif %}
+          </div>          
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-warning">Save</button>
@@ -81,3 +108,16 @@
     </div>
   </div>
 {% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.cache import never_cache
+from django.core.paginator import Paginator
 
      # ............. User Priventing Authentication...................
           
@@ -255,11 +256,13 @@ def delete_brand(request, id):
 
 @superuser_required
 def products(request):
-    data = Product.objects.all().order_by('id')
+    items = Product.objects.all().order_by('id')
+    p = Paginator(items, 6)
+    page = request.GET.get('page')
+    data = p.get_page(page)
     return render(request, "dashboard/products.html", {"data": data})
 
 
-@superuser_required
 def add_product(request):
     data = Main_Category.objects.all()
     brand = Brand.objects.all() 
@@ -270,10 +273,10 @@ def add_product(request):
         description = request.POST['description']
         color = request.POST['color']
         display_size = request.POST['display_size']
-        camera = request.POST['camera']
+        camera = request.POST.get('camera', '')  # Get camera data or empty string if not provided
+        battery = request.POST.get('battery', '')  # Get battery data or empty string if not provided
         network = request.POST.get('network', False) == 'true'
         smart = request.POST.get('smart', False) == 'true'
-        battery = request.POST['battery']
         image = request.FILES.get('image')
         main_category_id = request.POST.get('main_category_id')  
         brand_id = request.POST.get('brand')
@@ -289,11 +292,10 @@ def add_product(request):
             description=description,
             color=color,
             display_size=display_size,
-            camera=camera,
-
+            camera=camera if camera else None,  # Save camera if provided, else save None
             network=network,
             smart=smart,
-            battery=battery,
+            battery=battery if battery else None,  # Save battery if provided, else save None
             image=image,
             main_category=main_cat,
         )
@@ -321,17 +323,15 @@ def update_product(request, id):
     product = Product.objects.get(id=id)
 
     if request.method == 'POST':
-
         model = request.POST['model']
         description = request.POST['description']
         color = request.POST['color']
         display_size = request.POST['display_size']
-        camera = request.POST['camera']
+        camera = request.POST.get('camera', '')  # Get camera with default empty string
         network = request.POST.get('network', False)
         smart = request.POST.get('smart', False)
-        battery = request.POST['battery']
+        battery = request.POST.get('battery', '')  # Get battery with default empty string
         images = request.FILES.getlist('images')
-
         brand_id = request.POST.get('brand')
         main_cat_id = request.POST.get('phone_category')
         brand = Brand.objects.get(id=brand_id)
@@ -347,10 +347,10 @@ def update_product(request, id):
         edit.description = description
         edit.color = color
         edit.display_size = display_size
-        edit.camera = camera
+        edit.camera = camera if camera else None  # Set to None if camera is empty
         edit.network = network
         edit.smart = smart
-        edit.battery = battery
+        edit.battery = battery if battery else None  # Set to None if battery is empty
 
         # Update main image only if the user provided
         if 'image' in request.FILES:
@@ -377,6 +377,7 @@ def update_product(request, id):
     }
 
     return render(request, "dashboard/update_product.html", context)
+
 
 
 @superuser_required
@@ -407,8 +408,11 @@ def delete_product(request,id):
 
 @superuser_required
 def all_products(request):
-    products = ProductVariant.objects.all().order_by('id')
-    return render(request, 'dashboard/all_products.html', {'products': products})
+    product_variants = ProductVariant.objects.all().order_by('id')
+    paginator = Paginator(product_variants, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'dashboard/all_products.html', {'products': page_obj})
 
 
 @superuser_required

@@ -13,6 +13,7 @@ class Main_Category(models.Model):
     def __str__(self):
         return str(self.name)
 
+
 class Brand(models.Model):
     name = models.CharField(max_length=50)
     image = models.ImageField(upload_to='products', null=True, blank=True)
@@ -31,10 +32,10 @@ class Product(models.Model):
     description = models.TextField()
     color = models.CharField(max_length=10)
     display_size = models.IntegerField()
-    camera = models.CharField(max_length=20)
+    camera = models.CharField(max_length=20, null=True, blank=True)
     network = models.BooleanField()
     smart = models.BooleanField()
-    battery = models.IntegerField()
+    battery = models.IntegerField(null=True, blank=True)
     image = models.ImageField(upload_to='products',
                               default='default_image.jpg')
     objects = models.Manager()

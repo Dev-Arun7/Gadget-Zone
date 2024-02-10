@@ -34,6 +34,7 @@
                                 <input class="form-control" type="text" 
                                 placeholder="Enter phone model"
                                 name= "model"
+                                pattern="^\S(.*\S)?$"
                                 required>
                             </div>
                             <div class="form-group">
@@ -41,6 +42,7 @@
                                 <textarea class="form-control" 
                                           placeholder="Add description"
                                           name="description"
+                                          pattern="^\S(.*\S)?$"
                                           required></textarea>
                             </div>
                             <div class="form-group">
@@ -48,6 +50,7 @@
                                 <input class="form-control" type="text" 
                                 placeholder="Enter phone color"
                                 name= "color"
+                                pattern="^\S(.*\S)?$"
                                 required>
                             </div>
                             <div class="form-group">
@@ -55,8 +58,7 @@
                                 <input class="form-control" type="number" 
                                        placeholder="Enter the size of the display"
                                        name="display_size"
-                                       step="1" 
-                                       min="0">
+                                       min="1">
                             </div>
                             <div class="form-group">
                                 <label>Camera Resolution</label>

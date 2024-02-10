@@ -22,6 +22,7 @@
                                 <input class="form-control" type="text"
                                 placeholder="Enter brand name"
                                 name= "name"
+                                pattern="^\S(.*\S)?$"
                                 value="{{data.name}}"
                                 required>
                             </div>  
@@ -37,6 +38,7 @@
                                 <input class="form-control" type="text" 
                                 placeholder="Add description"
                                 name= "description"
+                                pattern="^\S(.*\S)?$"
                                 value="{{ data.description }}"
                                 required>
                             </div>

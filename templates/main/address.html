@@ -10,7 +10,6 @@
             <table class="table table-bordered rounded-table">
                 <thead>
                     <tr>
-                        <th scope="col">Default</th>
                         <th scope="col">Address</th>
                         <th scope="col">Name</th>
                         <th scope="col">Address</th>
@@ -22,14 +21,6 @@
                 </thead>
                 <tbody>
                     {% for i in data %}
-                    <tr>
-                        <td>
-                            {% if i.default %}
-                                <span class="badge badge-pill badge-success">Default</span>     
-                            {% else %}
-                            <span class="badge badge-pill badge-danger">No</span>
-                            {% endif %}
-                        </td>
                         <td>{{i.address_name}}</td>
                         <td>{{i.first_name}}</td>
                         <td>{{i.address_1}}</td>

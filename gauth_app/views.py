@@ -1,6 +1,6 @@
 from django.contrib.auth import login, authenticate, logout 
 from django.views.decorators.cache import never_cache
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import NewUserForm
 from gauth_app.models import Address, Customer
 from django.contrib import messages
@@ -124,46 +124,25 @@ def add_address(request, redirect_page):
 
 @login_required
 def update_address(request, id):
-    data = Address.objects.all()
-    address = Address.objects.get(id = id)
-    default = request.POST.get('default')
+    # Retrieve the specific address object by its ID
+    address = get_object_or_404(Address, id=id)
+
     if request.method == 'POST':
-        default = request.POST.get('default', False) == 'True'
-        address_name = request.POST['address_name']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        address_1 = request.POST['address_1']
-        address_2 = request.POST['address_2']
-        country = request.POST['country']
-        state = request.POST['state']
-        city = request.POST['city']
-        phone = request.POST['phone']
-        email = request.POST['email']
-        pin = request.POST['pin']
+        # Populate the form with the POST data and the instance of the address to be edited
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            # Save the updated address details
+            form.save()
+            return redirect('gauth_app:address')
+    else:
+        # If it's a GET request, populate the form with the existing address details
+        form = AddressForm(instance=address)
 
-        # Retrieve existing data
-        edit = Address.objects.get(id = id)
-        # Update data in the table
-        edit.default = default
-        edit.address_name = address_name
-        edit.first_name = first_name
-        edit.last_name = last_name
-        edit.address_1 = address_1
-        edit.address_2 = address_2
-        edit.country = country
-        edit.state = state
-        edit.city = city
-        edit.phone = phone
-        edit.email = email
-        edit.pin = pin
-        edit.save()
-        
-        return redirect('gauth_app:address')
+    # Render the update address form template with the form and address data
     context = {
-           "address": address,
-            "data" : data
-            }
-
+        'form': form,
+        'address': address,
+    }
     return render(request, 'main/update_address.html', context)
 
 

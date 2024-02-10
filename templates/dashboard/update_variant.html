@@ -18,6 +18,7 @@
                                        placeholder="Enter the amount of RAM"
                                        name="ram"
                                        value="{{ variant.ram }}"
+                                       min = "0"
                                 >
                             </div>     
                             <div class="form-group">
@@ -26,7 +27,9 @@
                                        placeholder="Enter the storage size"
                                        name="storage"
                                        value="{{ variant.storage }}"
-                                       step="16" >
+                                       step="1"
+                                       min = "0" 
+                                       >
                             </div>        
                             <div class="form-group">
                                 <label>Price</label>
@@ -34,7 +37,8 @@
                                        placeholder="Enter the price"
                                        name="price"
                                        value="{{variant.price}}"
-                                >
+                                       min = "0"
+                                 >
                             </div>                       
                             <div class="form-group">
                                 <label>Offer</label>
@@ -43,8 +47,8 @@
                                        name="offer"
                                        value="{{ variant.offer }}"
                                        step="1" 
-                                       min = "1"
-                                       max = "99">
+                                       min = "0"
+                                       max = "100">
                             </div>
                             <div class="form-group">
                                 <label>Stock</label>

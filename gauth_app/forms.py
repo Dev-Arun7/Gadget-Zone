@@ -58,8 +58,35 @@ class ProfileForm(forms.ModelForm):
 
 
 
-
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
         fields = ['address_name', 'first_name', 'last_name', 'email', 'phone', 'address_1', 'address_2', 'country', 'state', 'city', 'pin']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        phone = cleaned_data.get('phone')
+
+        # Check if phone is None or not
+        if phone:
+            # Ensure phone is treated as a string for string operations
+            phone_str = str(phone)
+
+            # Validate if phone number has all digits as zero
+            if phone_str == '0' * len(phone_str):
+                self.add_error('phone', 'Phone number cannot consist entirely of zeros.')
+            # Validate if phone number has only digits and is not all zeros
+            elif phone_str.isdigit():
+                # Validate if phone number length is exactly 10 digits
+                if len(phone_str) != 10:
+                    self.add_error('phone', 'Phone number must be 10 digits long.')
+            else:
+                self.add_error('phone', 'Invalid phone number.')
+
+        # Validate all fields for not being whitespace-only
+        for field_name in ['address_name', 'first_name', 'last_name', 'email', 'address_1', 'address_2', 'country', 'state', 'city']:
+            value = cleaned_data.get(field_name)
+            if value and value.isspace():
+                self.add_error(field_name, 'This field must not contain only whitespace.')
+
+        return cleaned_data

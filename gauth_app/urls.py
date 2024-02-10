@@ -11,6 +11,5 @@ urlpatterns = [
     path('add_address/<str:redirect_page>/',views.add_address,name='add_address'),
     path('update_address/<int:id>',views.update_address,name='update_address'),
     path('delete_address/<int:id>/',views.delete_address,name='delete_address'),
-
 ]
 

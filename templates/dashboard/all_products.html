@@ -76,5 +76,30 @@
 					</div>
                 </div>
             </div>
+
+			{% comment %} Pagination area {% endcomment %}
+
+				<!-- Pagination area -->
+				<div class="pagination-area"  style="padding: 0 30px;">
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Showing {{ products.start_index }}-{{ products.end_index }} of {{ products.paginator.count }} items</p>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<ul class="pagination justify-content-end">
+								<li class="page-item {% if not products.has_previous %} disabled {% endif %}">
+									<a class="page-link" href="{% if products.has_previous %}?page={{ products.previous_page_number }}{% endif %}">Previous</a>
+								</li>
+								<li class="page-item active">
+									<span class="page-link">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+								</li>
+								<li class="page-item {% if not products.has_next %} disabled {% endif %}">
+									<a class="page-link" href="{% if products.has_next %}?page={{ products.next_page_number }}{% endif %}">Next</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
 {% endblock content %}                  
 
