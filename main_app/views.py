@@ -11,11 +11,10 @@ from django.urls import reverse
 import json
 import random
 from django.core.paginator import Paginator
-from django.http import QueryDict
 
 
 def home(request):
-    products = ProductVariant.objects.filter(deleted=False).order_by('id')
+    products = ProductVariant.objects.filter(deleted=False).order_by('-id')
     brands = Brand.objects.all()
     context = {
         'products': products,
@@ -29,16 +28,13 @@ def product_list(request):
     products = ProductVariant.objects.filter(deleted=False).order_by('-id')
     brands = Brand.objects.all()
 
-    # Create a copy of the request GET QueryDict to modify it without affecting the original request
-    get_params = request.GET.copy()
-
     # Filter products based on user input
-    if get_params:
-        category_ids = get_params.getlist('category')
-        brand_ids = get_params.getlist('brand')
-        price_ranges = get_params.getlist('price_range')
-        ram_values = get_params.getlist('ram')
-        color_values = get_params.getlist('color_range')
+    if request.GET:
+        category_ids = request.GET.getlist('category')
+        brand_ids = request.GET.getlist('brand')
+        price_ranges = request.GET.getlist('price_range')  
+        ram_values = request.GET.getlist('ram') 
+        color_values = request.GET.getlist('color_range')
 
         # Filter by category
         if category_ids:
@@ -55,41 +51,30 @@ def product_list(request):
 
         # Filter by color
         if color_values:
+            # Assuming color is a field in ProductVariant model
             products = products.filter(product__color__in=color_values)
 
-    # Sorting
-    sort_by = get_params.get('sort_by')  # Get the sorting parameter from GET request
-
-    if sort_by == 'name':
-        products = products.order_by('product__name')
-    elif sort_by == 'price':
-        products = products.order_by('price')
 
     # Paginator
     items_per_page = 9
     paginator = Paginator(products, items_per_page)
-    page_number = get_params.get('page')
+    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     context = {
         'products': page_obj,
         'brands': brands,
-        'get_params': get_params,  # Pass the GET parameters to the template
     }
     return render(request, "main/product_list.html", context)
-
 
 
     
 def category_products(request, id):
+    # Retrieve the product variants associated with the selected main category
     product_variants = ProductVariant.objects.filter(product__main_category_id=id, deleted=False)
 
-    context = {
-        'products': product_variants,
-        'get_params': request.GET,  # Pass the GET parameters to maintain sorting
-    }
-    return render(request, "main/product_list.html", context)
-
+    # Pass the product variants to the template for rendering
+    return render(request, "main/product_list.html", {'products': product_variants})
 
 def single_product(request, id, variant_id):
     # Get the product and its variants
@@ -123,15 +108,10 @@ def single_product(request, id, variant_id):
 def main_categories(request):
     return render(request,'main/main_categories.html')
 
-
 def brand_products(request, id):
     product_variants = ProductVariant.objects.filter(product__brand_id=id, deleted=False)
-    
-    context = {
-        'products': product_variants,
-        'get_params': request.GET,  # Pass the GET parameters to maintain sorting
-    }
-    return render(request, "main/product_list.html", context)
+    return render(request, "main/product_list.html", {'products': product_variants})
+
 
 ###############################################################################################################
                         # Sorting and showing products on page #
@@ -163,6 +143,25 @@ def product_search(request):
 
     return redirect('main_app:home')
 
+
+
+
+def sort(request):
+    products = ProductVariant.objects.filter(deleted=False).order_by('-id')  # Retrieve all products initially
+
+    # Sorting logic
+    sort_by = request.GET.get('sort_by')
+    if sort_by:
+        if sort_by == 'price+':
+            products = products.order_by('offer_price')
+        elif sort_by == 'price-':
+            products = products.order_by('-offer_price')
+        elif sort_by == 'name+':
+            products = products.order_by('product__model')
+        elif sort_by == 'release_date-':
+            products = products.order_by('-product__id')
+
+    return render(request, 'main/product_list.html', {'products': products})
 
 
 ###############################################################################################################

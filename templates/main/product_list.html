@@ -53,29 +53,31 @@
                                         <span>Showing 1 to 9 of 15</span>
                                     </div>
                                 </div>
-                                <!-- product-select-box start -->
-                              <form method="get" action="{% url 'main_app:product_list' %}">
-                                <input type="hidden" name="category" value="{{ get_params.category }}">
-                                <input type="hidden" name="brand" value="{{ get_params.brand }}">
-                               <div class="product-select-box">
-                                    <div class="product-short">
-                                        <p>Sort By:</p>
-                                        <select class="nice-select" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-                                            <option value="">Default</option>
-                                            <option value="price+">Price (Low &gt; High)</option>
-                                            <option value="price-">Price (High &gt; Low)</option>
-                                            <option value="name+">Name (A - Z)</option>
-                                            <option value="name-">Name (Z - A)</option>
-                                        </select>
+                                <form method="get" action="{% url 'main_app:sort' %}">
+                                    <div class="product-select-box">
+                                        <div class="product-short">
+                                            <p>Sort By:</p>
+                                            <select class="nice-select" name="sort_by">
+                                                <option value="">Default</option>
+                                                <option value="price+">Price (Low &gt; High)</option>
+                                                <option value="price-">Price (High &gt; Low)</option>
+                                                <option value="name+">Name (A - Z)</option>
+                                                <option value="release_date-">Release Date</option> <!-- corrected spelling -->
+                                            </select>
+                                            <button type="submit">Sort</button>
+                                        </div>
                                     </div>
-                                </div> 
-                              </form>
-                                <!-- product-select-box end -->                                
+                                </form>                              
+                              <!-- product-select-box end -->                                
                             </div>
                             <!-- shop-top-bar end -->
                             <!-- shop-products-wrapper start -->
                             <div class="shop-products-wrapper">
                                 <div class="tab-content">
+
+
+
+                                    <!-- PRODUCT LIST VIEW -->
 
                                     <div id="list-view"  class="tab-pane fade" role="tabpanel">
                                         {% for i in products %}
@@ -141,6 +143,10 @@
                                         </div>
                                         {% endfor %}
                                     </div>
+
+
+
+                                    <!-- PRODUCT GRID VIEW -->
                                     <div id="grid-view"  class="tab-pane fade product-list-view active show" role="tabpanel">
 
                 
@@ -211,30 +217,7 @@
                                     <br>
                                     <br>
                                     <br>
-                                    <div class="pagination-area">
-                                        <div class="row">
-                                            <div class="col-lg-6 col-md-6">
-                                                <p class="pagination-info">Showing 9 items per page</p>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6" >
-                                                <ul class="pagination pagination-sm justify-content-end">
-                                                    <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
-                                                        <a class="page-link" href="{% if products.has_previous %}?page={{ products.previous_page_number }}{% endif %}" aria-label="Previous">
-                                                            <span aria-hidden="true">&laquo; Previous</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="page-item disabled">
-                                                        <span class="page-link">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
-                                                    </li>
-                                                    <li class="page-item {% if not products.has_next %} disabled {% endif %}">
-                                                        <a class="page-link" href="{% if products.has_next %}?page={{ products.next_page_number }}{% endif %}" aria-label="Next">
-                                                            <span aria-hidden="true">Next &raquo;</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     
 
 
@@ -352,21 +335,6 @@
                 </div>
             </div>
             <!-- Content Wraper Area End Here -->
+            
         {% endblock content %}
 
-        <form>
-            {% csrf_token %}
-            <input type="hidden" value="{{ i.product.id }}" class="prod_id">
-            <input type="hidden" value="{{ i.id }}" class="variant_id"> 
-            <ul class="add-actions-link">
-                {% if i.stock > 0 %}
-                    <li class="add-cart active addToCartBtn "> <type="submit">Add to cart</li>
-                    <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                    <li><a class="links-details" href="###"><i class="fa fa-heart-o"></i></a></li>
-                {% else %}
-                    <p> Out of Stock </p>
-                    <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                    <li><a class="links-details" href="###"><i class="fa fa-heart-o"></i></a></li>
-                {% endif %}
-            </ul>
-        </form>
