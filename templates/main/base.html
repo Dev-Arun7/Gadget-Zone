@@ -96,13 +96,14 @@
                                     <ul class="ht-menu">
                                         <!-- Begin Setting Area -->
                                         <li>
+                                            <div class="ht-setting-trigger"><span>My Account</div>
                                             <div class="setting ht-setting">
                                                 <ul class="ht-setting-list">
-                                                    <li> hii </li>
                                                     {% if user.is_authenticated %}
                                                         <li><a href="{% url 'gauth_app:profile' %}">Profile</a></li>
-                                                        <li><a href="{% url 'main_app:orders' %}">Orders</a></li>
+                                                        <li><a href="checkout.html">Checkout</a></li>
                                                         <li><a href="{% url 'gauth_app:user_logout' %}">Logout</a></li>
+                                                        <li><a href="{% url 'main_app:orders' %}">Orders</a></li>
                                                     {% else %}
                                                         <li><a href="{% url 'gauth_app:user_login' %}">Sign In</a></li>
                                                         <li><a href="{% url 'gauth_app:user_signup' %}">Signup</a></li>
