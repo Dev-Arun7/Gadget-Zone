@@ -15,10 +15,12 @@ from django.core.paginator import Paginator
 
 def home(request):
     products = ProductVariant.objects.filter(deleted=False).order_by('-id')
+    deals = ProductVariant.objects.filter(deleted=False).order_by('-offer')
     brands = Brand.objects.all()
     context = {
         'products': products,
         'brands' : brands,
+        'deals': deals,
         }  
     return render(request, "main/home.html", context)
 
