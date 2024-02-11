@@ -186,6 +186,7 @@
                                                                         {% csrf_token %}
                                                                         <input type="hidden" value="{{ i.product.id }}" class="prod_id">
                                                                         <input type="hidden" value="{{ i.id }}" class="variant_id"> 
+                                                                        <ul class="add-actions-link">
                                                                             {% if i.stock > 0 %}
                                                                                 <li class="add-cart active addToCartBtn "> <type="submit">Add to cart</li>
                                                                                 <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
@@ -353,3 +354,19 @@
             <!-- Content Wraper Area End Here -->
         {% endblock content %}
 
+        <form>
+            {% csrf_token %}
+            <input type="hidden" value="{{ i.product.id }}" class="prod_id">
+            <input type="hidden" value="{{ i.id }}" class="variant_id"> 
+            <ul class="add-actions-link">
+                {% if i.stock > 0 %}
+                    <li class="add-cart active addToCartBtn "> <type="submit">Add to cart</li>
+                    <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
+                    <li><a class="links-details" href="###"><i class="fa fa-heart-o"></i></a></li>
+                {% else %}
+                    <p> Out of Stock </p>
+                    <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
+                    <li><a class="links-details" href="###"><i class="fa fa-heart-o"></i></a></li>
+                {% endif %}
+            </ul>
+        </form>
