@@ -2,6 +2,23 @@
 {% load static %}
 {% block content %}
 
+<style>
+    .product-image {
+        text-align: center;
+    }
+
+    .product-image a {
+        display: inline-block;
+    }
+
+    .product-image img {
+        max-width: 100%;
+        height: auto;
+        width: 150px; /* Set the desired width */
+        height: 150px; /* Set the desired height */
+    }
+</style>
+
                 <!-- Begin Mobile Menu Area -->
                 <div class="mobile-menu-area d-lg-none d-xl-none col-12">
                     <div class="container"> 
@@ -20,7 +37,7 @@
                     <div class="breadcrumb-content">
                         <ul>
                             <li><a href="index.html">Home</a></li>
-                            <li class="active">Shop List Left Sidebar</li>
+                            <li class="active">Product List</li>
                         </ul>
                     </div>
                 </div>
@@ -50,7 +67,7 @@
                                         <!-- shop-item-filter-list end -->
                                     </div>
                                     <div class="toolbar-amount">
-                                        <span>Showing 1 to 9 of 15</span>
+                                        <span> </span>
                                     </div>
                                 </div>
                                 <form method="get" action="{% url 'main_app:sort' %}">
@@ -143,9 +160,6 @@
                                         </div>
                                         {% endfor %}
                                     </div>
-
-
-
                                     <!-- PRODUCT GRID VIEW -->
                                     <div id="grid-view"  class="tab-pane fade product-list-view active show" role="tabpanel">
 
@@ -156,13 +170,15 @@
                                                 {% for i in products %}
                                                     <div class="col-lg-4 col-md-4 col-sm-6 mt-40 product_data">
                                                         <div class="single-product-wrap">
+                        
 
                                                             <div class="product-image" style="text-align: center;">
-                                                                <td style="width: 150px; height: 150px; display: inline-block;">
-                                                                    <img height="180" src="{{ i.product.image.url}}" alt="Image" style="display: block; margin: 0 auto;">
-                                                                </td>
+                                                                <a href="{% url 'main_app:single_product' i.product.id i.id %}">
+                                                                    <img src="{{ i.product.image.url }}" alt="Image" style="display: block; margin: 0 auto;">
+                                                                </a>
                                                                 {% comment %} <span class="sticker">New</span> {% endcomment %}
                                                             </div>
+                                                            
                                                             <div class="product_desc">
                                                                 <div class="product_desc_info">
                                                                     <div class="product-review">
@@ -209,18 +225,13 @@
                                                         </div>
                                                     </div>
                                                     {% endfor %}
-                                            </div>
-                                           
+                                            </div>                                          
                                         </div>
                                     </div>
                                     <br>
                                     <br>
                                     <br>
                                     <br>
-                                    
-                                    
-
-
                                 </div>
                             </div>
                             <!-- shop-products-wrapper end -->
@@ -253,7 +264,8 @@
                                     <h2>Filter By</h2>
                                 </div>
                                 <!-- btn-clear-all start -->
-                                <button class="btn-clear-all mb-sm-30 mb-xs-30">Clear all</button>
+
+                                <button class="btn mt-20 w-100" type="submit" style="background-color: grey; color: white;">Apply</button>
                                 <!-- btn-clear-all end -->
                                 <!-- filter-sub-area start -->
                                 <div class="filter-sub-area">
@@ -309,32 +321,45 @@
                                 <!-- filter-sub-area end -->
 
                             </div>
-                            <button class="btn mt-20 w-100" type="submit">Apply </button>
+                                                            <button class="btn-clear-all mb-sm-30 mb-xs-30">Clear all</button>
                             <br>
                             <br>
                             <br>
+                            
                         </form>
-                            <!--sidebar-categores-box end  -->
-                            <!-- category-sub-menu start -->
-                            <div class="sidebar-categores-box mb-sm-0">
-                                <div class="sidebar-title">
-                                    <h2>Brands</h2>
-                                </div>
-                                <div class="category-tags">
-                                    <ul>
-                                        {% for i in brands %}
-                                        <li><a href=" {% url 'main_app:brand_products' i.id %}"> {{ i.name  }}</a></li>
-                                        {% endfor %}
-                          
-                                    </ul>
-                                </div>
-                                <!-- category-sub-menu end -->
+      
+                        </div>
+                    </div>
+                    <div class="pagination-area">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <p class="pagination-info"> </p>
+                            </div>
+                            <div class="col-lg-6 col-md-6" >
+                                <ul class="pagination pagination-sm justify-content-end">
+                                    <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
+                                        <a class="page-link" href="{% if products.has_previous %}?page={{ products.previous_page_number }}{% endif %}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo; Previous</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+                                    </li>
+                                    <li class="page-item {% if not products.has_next %} disabled {% endif %}">
+                                        <a class="page-link" href="{% if products.has_next %}?page={{ products.next_page_number }}{% endif %}" aria-label="Next">
+                                            <span aria-hidden="true">Next &raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
+                
             </div>
             <!-- Content Wraper Area End Here -->
+
+            
             
         {% endblock content %}
 

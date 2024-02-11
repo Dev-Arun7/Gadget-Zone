@@ -4702,7 +4702,7 @@ span.required {
   transition: all 0.4s ease-out;
 }
 .team-member .team-thumb img {
-  width: 100%;
+  width: 50%;
 }
 .team-member .team-content {
   padding: 15px;

@@ -5,6 +5,26 @@
 {% endblock %}
 
 {% block content %}
+
+
+<style>
+    .team-thumb {
+        overflow: hidden; /* Ensures that the image does not overflow its container */
+        position: relative;
+        width: 100%; /* Adjust this value as needed */
+        padding-bottom: 100%; /* This creates a square aspect ratio (1:1) */
+    }
+
+    .team-thumb img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%; /* Ensures the image covers the entire container */
+        height: 100%; /* Ensures the image covers the entire container */
+        object-fit: contain; /* Ensures the image covers the entire container without distortion */
+    }
+</style>
+
          <!-- Begin Slider With Category Menu Area -->
          <div class="slider-with-banner">
             <div class="container">
@@ -182,9 +202,11 @@
                     </div>
                 </div>
             </div>
+
+            
              <!-- CATEGORIES ARE STARTING HERE -->
              
-            <div class="li-main-blog-page pt-20 pb-20">
+            <div class="li-main-blog-page pt-40 pb-20">
                 <div class="container">
                     <div class="row">
                         <!-- Begin Li's Main Content Area -->
@@ -199,7 +221,7 @@
                             <div class="row li-main-content">
                                 {% for i in default_main_category|slice:":6" %}
                                 <div class="col-lg-4 col-md-6">
-                                    <div class="li-blog-single-item pb-25">
+                                    <div class="li-blog-single-item pb-15">
                                         <div class="li-blog-gallery-slider slick-dot-style">
                                             <div class="li-blog-banner">
                                                 <a href="{% url 'main_app:category_products' i.id %}"><img class="img-full" src="{{i.img.url}}" alt=""></a>
@@ -224,8 +246,10 @@
             </div>
             <!-- CATEGORIES ARE ENDING HERE -->
 
-            <!-- PRODUCTS ARE ENDING HERE -->
-            <div class="team-area pt-60 pt-sm-44">
+                    
+            <!--TOP DEALS ON PRODUCTS  ARE STARTING HERE -->
+
+            <div class="team-area pt-10 pt-sm-14">
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
@@ -236,8 +260,8 @@
                     </div> <!-- section title end -->
                     
                     <div class="row">
-                        {% for i in deals|slice:":8"%}
-                        <div class="col-lg-3 col-md-6 col-sm-6">
+                        {% for i in deals|slice:":12"%}
+                        <div class="col-lg-2 col-md-4 col-sm-6"> <!-- Adjusted column sizes -->
                             <div class="team-member mb-60 mb-sm-30 mb-xs-30">
                                 <div class="team-thumb">
                                     <a href="{% url 'main_app:single_product' i.product.id i.id %}">
@@ -246,9 +270,9 @@
                                 </div>
                                 
                                 <div class="team-content text-center">
-                                    <h3>{{ i.product.brand }} {{ i.product.model }}</h3>
-                                    <p> {{ i.ram }}GB RAM Variant </p>
-                                    <a href="{% url 'main_app:single_product' i.product.id i.id %}">Only ₹{{i.offer_price}} &nbsp; &nbsp; &nbsp;{{ i.offer }}% off</a>
+                                    <h3 style="font-size: 13px;">{{ i.product.brand }} {{ i.product.model }}</h3> <!-- Adjusted font size -->
+
+                                    <a href="{% url 'main_app:single_product' i.product.id i.id %}" style="font-size: 11px;">Only ₹{{i.offer_price}} &nbsp; &nbsp; &nbsp;{{ i.offer }}% off</a> <!-- Adjusted font size -->
                                     <div class="team-social">
                                         
                                     </div>
@@ -260,8 +284,8 @@
                     
                 </div>
             </div>
-
             
+                        
             
 
             <script>
