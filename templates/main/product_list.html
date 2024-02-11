@@ -54,20 +54,23 @@
                                     </div>
                                 </div>
                                 <!-- product-select-box start -->
-                                <div class="product-select-box">
+                              <form method="get" action="{% url 'main_app:product_list' %}">
+                                <input type="hidden" name="category" value="{{ get_params.category }}">
+                                <input type="hidden" name="brand" value="{{ get_params.brand }}">
+                               <div class="product-select-box">
                                     <div class="product-short">
                                         <p>Sort By:</p>
                                         <select class="nice-select" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-                                            <option value="?sort_by=-id">Default</option>
-                                            <option value="?sort_by=price_low_high">Price (Low &gt; High)</option>
-                                            <option value="?sort_by=price_high_low">Price (High &gt; Low)</option>
-                                            <option value="?sort_by=name_az">Name (A - Z)</option>
-                                            <option value="?sort_by=name_za">Name (Z - A)</option>
+                                            <option value="">Default</option>
+                                            <option value="price+">Price (Low &gt; High)</option>
+                                            <option value="price-">Price (High &gt; Low)</option>
+                                            <option value="name+">Name (A - Z)</option>
+                                            <option value="name-">Name (Z - A)</option>
                                         </select>
-                                        
                                     </div>
-                                </div>
-                                <!-- product-select-box end -->
+                                </div> 
+                              </form>
+                                <!-- product-select-box end -->                                
                             </div>
                             <!-- shop-top-bar end -->
                             <!-- shop-products-wrapper start -->
@@ -183,7 +186,6 @@
                                                                         {% csrf_token %}
                                                                         <input type="hidden" value="{{ i.product.id }}" class="prod_id">
                                                                         <input type="hidden" value="{{ i.id }}" class="variant_id"> 
-                                                                        <ul class="add-actions-link">
                                                                             {% if i.stock > 0 %}
                                                                                 <li class="add-cart active addToCartBtn "> <type="submit">Add to cart</li>
                                                                                 <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
@@ -203,7 +205,6 @@
                                             </div>
                                            
                                         </div>
-                                        
                                     </div>
                                     <br>
                                     <br>
