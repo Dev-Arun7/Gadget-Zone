@@ -77,11 +77,11 @@
                                         </p>
                                         {% for v in variants %}
                                             {% if v.id == variant.id %}
-                                            <button type="button" class="btn btn-light btn-sm" style="color: grey;"> {{ v.ram }} RAM + {{ v.storage }} Storage</button> &nbsp;
+                                            <button type="button" class="btn btn-light btn-sm" style="color: grey;"> {{ v.ram }}GB + {{ v.storage }} Storage</button> &nbsp;
                                             {% else %}
 
-                                            <a href= "{% url 'main_app:single_product' product.id variant.id %}">
-                                                <button type="button" class="btn btn-secondary btn-sm"> {{ v.ram }} RAM + {{ v.storage }} Storage</button>
+                                            <a href= "{% url 'main_app:single_product' product.id v.id %}">
+                                                <button type="button" class="btn btn-secondary btn-sm"> {{ v.ram }}GB + {{ v.storage }} Storage</button>
                                             </a>
                                             {% endif %}
                                         {% endfor %}
