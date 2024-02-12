@@ -112,6 +112,7 @@ class Cart(models.Model):
 class Wishlist(models.Model):
     user = models.ForeignKey(Customer, on_delete = models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to="products", null=True, blank=True)
     objects = models.Manager()
     

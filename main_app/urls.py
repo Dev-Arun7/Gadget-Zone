@@ -12,15 +12,21 @@ urlpatterns = [
     path('brand_products/<int:id>/', views.brand_products, name='brand_products'),
 
     path('main_categories/',views.main_categories,name='main_categories'),
+
     path('cart/',views.cart,name='cart'),
     path('add_to_cart/<int:product_id>/<int:variant_id>/', views.add_to_cart, name='add_to_cart'),
     path('update_cart/', views.update_cart, name='update_cart'),
     path('delete_cart/<int:product_id>/',views.delete_cart, name="delete_cart"),
+
+    path('add_to_wish/<int:product_id>/<int:variant_id>/', views.add_to_wish, name='add_to_wish'),
+
     path('checkout/',views.checkout,name='checkout'),  
     path('orders/',views.orders,name='orders'),  
     path('order_detail/<int:id>/',views.order_detail,name='order_detail'),  
     path('place_order/',views.place_order,name='place_order'),  
     path('cancel/<int:order_id>/', views.cancel, name='cancel'),
+
+
     
     path('base/',views.base,name='base'),
 ]

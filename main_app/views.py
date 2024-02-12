@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from main_app.models import Main_Category, Product, ProductVariant, Brand
-from gauth_app.models import Cart, Wishlist, Address, Order
+from gauth_app.models import Cart, Wishlist, Address, Order, Wishlist
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -248,6 +248,38 @@ def delete_cart(request, product_id):
     cart_item = get_object_or_404(Cart, id=product_id)
     cart_item.delete()
     return redirect('main_app:cart') 
+
+
+###############################################################################################################
+                                 # WISH LIST #
+###############################################################################################################
+
+
+def add_to_wish(request, product_id, variant_id):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            product = get_object_or_404(Product, id=product_id)
+            variant = get_object_or_404(ProductVariant, id=variant_id)
+
+            # Check if the product exists.
+            if product:
+                # Check if the product is already in the user's cart.
+                if Wishlist.objects.filter(user=request.user, product=product, product_variant=variant).exists():
+                    return JsonResponse({'status': "Product Already in wishlist..!", 'added': False})
+                else: 
+                    # Create a new Cart object for the user and add the product.
+                    Wishlist.objects.create(user=request.user,
+                                        product=product,
+                                        product_variant=variant,
+                                        )
+                    # Return success message
+                    return JsonResponse({'status': "Product added successfully", 'added': True})
+        else:
+            return JsonResponse({'status': "Login to continue"})
+
+    # If the request method is not POST, redirect to the home page.
+    return redirect('main_app:home')
+
 
 
 ###############################################################################################################

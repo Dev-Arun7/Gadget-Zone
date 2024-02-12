@@ -140,3 +140,45 @@ $(document).ready(function(){
     });
 
 });
+
+
+$(document).ready(function(){
+    $('.wishBtn').click(function (e) {
+        e.preventDefault();
+    
+        var product_id = $(this).closest('.product_data').find('.prod_id').val();
+        var variant_id = $(this).closest('.product_data').find('.variant_id').val(); 
+        var token = $('input[name=csrfmiddlewaretoken]').val(); 
+        $.ajax({
+            method: "POST",
+            url: "/add_to_wish/" + product_id  + "/" + variant_id + "/",
+            data: {
+                'product_id': product_id,
+                'variant_id': variant_id, 
+                'csrfmiddlewaretoken': token  
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.added) {
+                    // Show success message using SweetAlert
+                    Swal.fire({
+                        title: "Success!",
+                        text: response.status,
+                        icon: "success"
+                    });
+                } else {  
+                    // You can show a warning message
+                    Swal.fire({
+                        title: "Warning!",
+                        text: response.status,
+                        icon: "warning"
+                    });
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                // Handle errors if any
+                console.log(xhr.status + ": " + xhr.responseText); 
+            }
+        });
+    }); 
+});

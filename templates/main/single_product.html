@@ -9,6 +9,14 @@
     font-size: 16px;
     font-weight: bold;
 }
+.wishlist-btn {
+    padding-left: 20px; /* Adjust the padding as needed */
+    padding-top: 50px; /* Adjust the padding as needed */
+}
+
+.wishlist-btn i {
+    font-size: 40px; /* Adjust the font size as needed */
+}
 </style>
          <!-- Begin Li's Breadcrumb Area -->
             <div class="breadcrumb-area">
@@ -99,11 +107,18 @@
                                                 <label for="quantity">Quantity</label>
                                             </div>
                                             {% if variant.stock > 0 %}
-                                                <button class="add-to-cart addToCartBtn" type="submit">Add to Cart</button>
+                                                <button class="add-to-cart mr-4 wishBtn" type="submit">Add to Cart</button>
                                             {% else %}
-                                                <p class="out-of-stock-message">Sorry, this item is currently out of stock.</p>
+                                                <p class="out-of-stock-message">Sorry, this item is currently out of stock.</p> 
+                                                
                                             {% endif %}
-                                        </form>
+
+                                            {% if variant.stock > 0 %}
+                                                <button class="add-to-cart wishBtn" type="submit">Wishlist</button>
+                                            
+                                            {% endif %}
+
+                                            {% comment %} <a class="wishlist-btn" href="wishlist.html"><i class="fa fa-heart-o"></i></a>                                        </form> {% endcomment %}
                                     </div>                                                           
                                     <div class="product-additional-info">
                                         <div class="product-social-sharing">
@@ -381,9 +396,7 @@
                 </div>
             </section>
             <!-- Li's Laptop Product Area End Here -->
-
    <script>
-    
 
    </script>
         {% endblock content %}
