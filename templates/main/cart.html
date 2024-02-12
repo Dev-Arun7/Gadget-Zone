@@ -41,13 +41,13 @@
                                     <table class="table  cart_data">
                                         <thead>
                                             <tr>
-                                                <th class="li-product-remove">remove</th>
                                                 <th class="li-product-thumbnail">images</th>
                                                 <th class="cart-product-name">Product</th>
                                                 <th class="cart-product-name">Variant</th>
                                                 <th class="li-product-price">Unit Price</th>
                                                 <th class="li-product-quantity">Quantity</th>
                                                 <th class="li-product-subtotal">Total</th>
+                                                <th class="li-product-remove">remove</th>
                                             </tr>
                                         </thead>
                                         <tbody >
@@ -56,7 +56,6 @@
                                             <input type="hidden" value=" {{ index.counter }}" class="prod_id">
                                            
                                                 <tr>
-                                                <td> <a href="#" class="delete-item" data-id="{{ i.id }}"><i class="fa fa-times"></i></a> </td>
 
                                                 <td class="li-product-thumbnail">
                                                     {% if i.product.image %}
@@ -91,6 +90,8 @@
 
                                                 </td>                                                
                                                 <td class="product-subtotal"><span class="amount">₹{{ i.total }}</span></td>
+                                                <td> <a href="#" class="delete-item" data-id="{{ i.id }}"><i class="fa fa-times"></i></a> </td>
+
                                             </tr>
                                         
                                             {% endfor %}
@@ -104,11 +105,7 @@
                                                 <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text">
                                                 <input class="button" name="apply_coupon" value="Apply coupon" type="submit">
                                             </div>
-                                            <div class="coupon2"> 
-                                                <a a href="{% url 'main_app:cart' %}">
-                                                    <input class="button" name="update_cart" value="Update cart" type="submit">
-                                                </a>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>

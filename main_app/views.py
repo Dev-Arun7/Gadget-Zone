@@ -175,7 +175,7 @@ def sort(request):
 @login_required
 def cart(request):
     # Retrieve all cart items along with related product and product variant details
-    cart_items = Cart.objects.select_related('product', 'product_variant').filter(user=request.user).order_by('id')
+    cart_items = Cart.objects.select_related('product', 'product_variant').filter(user=request.user).order_by('-id')
 
     # Calculate subtotal for each item and total price for all items in the cart
     total_price = 0
@@ -280,7 +280,7 @@ def checkout(request):
 @login_required
 def orders(request):
     # Filter orders by the current user
-    user_orders = Order.objects.filter(user=request.user).order_by('id')
+    user_orders = Order.objects.filter(user=request.user).order_by('-id')
 
     # Render the orders template with user's orders data
     return render(request, 'main/orders.html', {'orders': user_orders})

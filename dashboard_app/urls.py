@@ -31,5 +31,10 @@ urlpatterns = [
     path('orders/',views.orders,name='orders'), 
     path('update_order_status/<int:order_id>/', views.update_order_status, name='update_order_status'),
 
+    path('banners/',views.banners,name='banners'), 
+    path('add_banners/',views.add_banners,name='add_banners'), 
+    path('update_banners/<int:id>/',views.update_banners,name='update_banners'), 
+    path('delete_banner/<int:id>/',views.delete_banner,name='delete_banner'),
+
     path('users/',views.users,name='users'),
 ]  

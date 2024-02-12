@@ -1,0 +1,80 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="page-wrapper">
+  <div class="content">
+      <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+              <h4 class="page-title">Update Banner</h4>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <form action="{% url 'dashboard_app:update_banners' banner.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                  {% if form.errors %}
+                  <div class="alert alert-danger">
+                      <strong>Error!</strong> Please correct the following errors.
+                      <ul>
+                          {% for field, errors in form.errors.items %}
+                          {% for error in errors %}
+                          <li>{{ field|title }}: {{ error }}</li>
+                          {% endfor %}
+                          {% endfor %}
+                      </ul>
+                  </div>
+                  {% endif %}
+                  <div class="form-group">
+                      <label for="title">Title</label>
+                      <input class="form-control" type="text"
+                             placeholder="Enter the title"
+                             name="title"
+                             value="{{ banner.title }}"
+                             required>
+                  </div>
+                  <div class="form-group">
+                      <label for="description">Description</label>
+                      <input class="form-control" type="text"
+                             placeholder="Enter the description"
+                             name="description"
+                             value="{{ banner.description }}"
+                             required>
+                  </div>
+                  <div class="form-group">
+                      <label for="url">URL</label>
+                      <input class="form-control" type="text"
+                             placeholder="Enter the URL"
+                             name="url"
+                             value="{{ banner.url }}"
+                             >
+                  </div>
+                  <div class="form-group">
+                    <label>Current Image</label>
+                    <br>
+                    <br>
+                    {% if banner.image %}
+                        <img src="{{ banner.image.url }}" alt="Current Image" style="max-width: 200px;">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                </div>
+                  <div class="form-group">
+                      <label for="image">Update Image</label>
+                      <input class="form-control" type="file"
+                             placeholder="Select image"
+                             name="image"
+                             accept=".jpg, .jpeg, .gif, .png, .webp"
+                             >
+                      <small class="form-text text-muted">Max. file size: 10 MB. Allowed images: jpg, gif, png.</small>
+                  </div>
+                  <div class="row">
+                      <div class="m-t-20 text-center">
+                          <button class="btn btn-primary submit-btn">Update</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from main_app.models import Main_Category, Product, ProductImage, ProductVariant, Brand
+from main_app.models import Main_Category, Product, ProductImage, ProductVariant, Brand, Banner
 from gauth_app.models import Customer, Order
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
+from main_app.forms import BannerForm
 
      # ............. User Priventing Authentication...................
           
@@ -41,7 +42,7 @@ def users(request):
         return redirect('dashboard_app:users')
 
     # Order the records by email
-    customers = Customer.objects.all().order_by('email')
+    customers = Customer.objects.all().order_by('-id')
     return render(request, 'dashboard/users.html', {'customers': customers})
 
 
@@ -256,7 +257,7 @@ def delete_brand(request, id):
 
 @superuser_required
 def products(request):
-    items = Product.objects.all().order_by('id')
+    items = Product.objects.all().order_by('-id')
     p = Paginator(items, 6)
     page = request.GET.get('page')
     data = p.get_page(page)
@@ -408,7 +409,7 @@ def delete_product(request,id):
 
 @superuser_required
 def all_products(request):
-    product_variants = ProductVariant.objects.all().order_by('id')
+    product_variants = ProductVariant.objects.all().order_by('-id')
     paginator = Paginator(product_variants, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -494,7 +495,7 @@ def update_variant(request, id):
 @superuser_required
 def orders(request):
     # Filter orders by the current user
-    user_orders = Order.objects.all().order_by('id')
+    user_orders = Order.objects.all().order_by('-id')
 
     # Render the orders template with user's orders data
     return render(request, 'dashboard/orders.html', {'orders': user_orders})
@@ -508,3 +509,61 @@ def update_order_status(request, order_id):
         order.status = new_status
         order.save()
     return redirect('dashboard_app:orders')
+
+
+
+#############################################################################################
+                             # Banner Management #
+#############################################################################################
+
+
+@superuser_required
+def banners(request):
+    banners = Banner.objects.all().order_by('-id')
+    
+    return render(request, 'dashboard/banners.html', {'banners': banners})
+
+@superuser_required
+def add_banners(request):
+    if request.method == "POST":
+        form = BannerForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard_app:banners')
+    else:
+        form = BannerForm()
+    return render(request, 'dashboard/add_banners.html', {'form':form})
+
+
+
+
+def update_banners(request, id):
+    # Fetch the existing banner object from the database
+    banner = get_object_or_404(Banner, pk=id)
+ 
+    if request.method == 'POST':
+        # If the form is submitted with data, process the form
+        form = BannerForm(request.POST, request.FILES, instance=banner)
+        if form.is_valid():
+            form.save()
+            # Redirect to the updated banner detail page
+            return redirect('dashboard_app:banners')  # Assuming you have a 'banners' URL defined
+        else:
+            # If form validation fails, render the form again with validation errors
+            return render(request, 'dashboard/update_banner.html', {'form': form, 'banner': banner})
+    else:
+        # If the request is a GET request, pre-fill the form with the existing banner details
+        form = BannerForm(instance=banner)
+    
+    # Render the template with the form and the existing banner object
+    return render(request, 'dashboard/update_banner.html', {'form': form, 'banner': banner})
+
+
+@superuser_required
+def delete_banner(request, id):
+    data = Banner.objects.get(id=id)
+
+    data.deleted = not data.deleted
+    data.save()
+
+    return redirect('dashboard_app:banners')

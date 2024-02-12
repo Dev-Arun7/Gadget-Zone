@@ -1,0 +1,62 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-4 col-3">
+                        <h4 class="page-title">Banner images</h4>
+                    </div>
+                    <div class="col-sm-8 col-9 text-left m-b-20 ml-3">
+                        <a href="{% url 'dashboard_app:add_banners' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Banner</a>
+                    </div>
+                </div>
+				<div class="row">
+					<div class="col-md-8 pr-2">
+						<div class="table-responsive">
+							<table class="table table-striped custom-table">
+								<thead>
+									<tr>
+										<th class="text-center">Image</th>
+										<th class="text-center">Title</th>
+										<th class="text-center">Urls</th>
+										<th class="text-center">Status</th>
+										<th class="text-center">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in banners %}
+									<tr>
+										<td style="width: 150px; height: 100px;">
+											{% if i.image %}
+												<img style="width: 100%; height: 100%; object-fit: contain;" src="{{ i.image.url }}" alt="Image">
+											{% else %}
+												<p>No image available</p>
+											{% endif %}
+										</td>	
+										<td class ="text-center" >{{ i.title }}</td>
+										<td class ="text-center" >{{ i.url }}</td>
+
+										<td class ="text-center">
+											<a type="button" href="{% url 'dashboard_app:update_banners' id=i.id %}" class="btn btn-success">Edit</a>
+										</td>
+
+
+
+									         <td class ="text-center">
+											<a href="{% url 'dashboard_app:delete_banner' i.id %}">
+													{% if i.deleted %}
+													<button type="submit" name="toggle_deleted" class="btn btn-danger">  &nbsp; List &nbsp;  </button>
+													{% else %}
+													<button type="submit" name="toggle_deleted" class="btn btn-success">  Unlist </button>
+													{% endif %}
+											</a>
+										</td>	 
+									</tr>	
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+                </div>
+            </div>
+{% endblock content %}

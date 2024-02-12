@@ -76,4 +76,13 @@ class ProductImage(models.Model):
         self.save()
 
 
- 
+class Banner(models.Model):
+    image = models.ImageField(upload_to='product_images', blank=True, null=True)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    url = models.CharField(max_length=100, blank=True, null=True)
+    deleted = models.BooleanField(default=False)
+    objects = models.Manager()
+    
+    def __str__(self):
+        return self.title

@@ -272,7 +272,7 @@
                                     <h5 class="filter-sub-titel">Categories</h5>
                                     <div class="categori-checkbox">
                                             <ul> 
-                                                {% for i in default_main_category %}
+                                                {% for i in default_main_category|slice:":3" %}
                                                     <li><input type="checkbox" name="category" id="category_checkbox_{{i.id}}" value="{{i.id}}"><a href="#"> {{ i.name }}</a></li>
                                                 {% endfor %}
                                             </ul>

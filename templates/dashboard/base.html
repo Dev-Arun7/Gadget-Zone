@@ -75,11 +75,11 @@
                         <li class="{% if request.resolver_match.url_name == 'orders' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:orders' %}"><i class="fa fa-cart-plus"></i> <span>Orders</span></a>
                         </li>
-                        <li class="{% if request.resolver_match.url_name == 'dashboard_home' %} active {% endif %}">
+                        <li class="{% if request.resolver_match.url_name == 'coupons' %} active {% endif %}">
                             <a href="departments.html"><i class="fa fa-tag"></i> <span>Coupons</span></a>
                         </li>
-                        <li class="{% if request.resolver_match.url_name == 'dashboard_home' %} active {% endif %}">
-                            <a href="departments.html"><i class="fa fa-picture-o"></i> <span>Banners</span></a>
+                        <li class="{% if request.resolver_match.url_name == 'banners' %} active {% endif %}">
+                            <a href="{% url 'dashboard_app:banners' %}"><i class="fa fa-picture-o"></i> <span>Banners</span></a>
                         </li>
                     </ul>
                 </div>
