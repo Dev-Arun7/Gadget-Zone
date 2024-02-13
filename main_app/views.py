@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from main_app.models import Main_Category, Product, ProductVariant, Brand
-from gauth_app.models import Cart, Wishlist, Address, Order, Wishlist
+from gauth_app.models import Cart, Wishlist, Address, Order, Wishlist, Wallet
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -11,6 +11,7 @@ from django.urls import reverse
 import json
 import random
 from django.core.paginator import Paginator
+from decimal import Decimal
 
 
 def home(request):
@@ -407,6 +408,18 @@ def cancel(request, order_id):
         variant = order.variant
         variant.stock += order.quantity
         variant.save()
+        # Return amount to user's wallet
+        user = request.user
+        try:
+            # Retrieve user's wallet
+            wallet = Wallet.objects.get(user=user)
+        except Wallet.DoesNotExist:
+            # If wallet doesn't exist, create one for the user
+            wallet = Wallet.objects.create(user=user)
+
+        # Add the amount of cancelled order to the wallet balance
+        wallet.balance += Decimal(order.amount)
+        wallet.save()
 
         order.save()  # Save the updated status
 

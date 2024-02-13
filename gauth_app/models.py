@@ -119,3 +119,10 @@ class Wishlist(models.Model):
     def __str__(self) -> str:
         return f"Wishlist - {self.user} - {self.product}"
 
+
+class Wallet(models.Model):
+    user = models.OneToOneField(Customer, on_delete=models.CASCADE)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return f"{self.user.username}'s Wallet"

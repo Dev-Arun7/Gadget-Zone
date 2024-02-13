@@ -77,8 +77,7 @@ def user_logout(request):
 @login_required
 def profile(request):
     customer = request.user
-    default_address = Address.objects.filter(user=customer, default=True).first()
-    return render(request, 'main/profile.html', {'customer': customer, 'default_address': default_address})
+    return render(request, 'main/profile.html', {'customer': customer})
 
 
 @login_required

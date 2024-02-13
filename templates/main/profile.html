@@ -78,7 +78,11 @@
                                     <label>Wallet Balance</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>₹ {{ customer.wallet_bal }}</p>
+                                    {% if customer.wallet.balance %}
+                                    <p>₹ {{ customer.wallet.balance }}</p>
+                                    {% else %}
+                                    <p>₹ 0.00</p>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
