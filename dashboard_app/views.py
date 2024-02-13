@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from main_app.models import Main_Category, Product, ProductImage, ProductVariant, Brand, Banner
-from gauth_app.models import Customer, Order
+from gauth_app.models import Customer, Order, Coupon
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
 from main_app.forms import BannerForm
+from gauth_app.forms import CouponForm
 
      # ............. User Priventing Authentication...................
           
@@ -535,8 +536,6 @@ def add_banners(request):
     return render(request, 'dashboard/add_banners.html', {'form':form})
 
 
-
-
 def update_banners(request, id):
     # Fetch the existing banner object from the database
     banner = get_object_or_404(Banner, pk=id)
@@ -567,3 +566,58 @@ def delete_banner(request, id):
     data.save()
 
     return redirect('dashboard_app:banners')
+
+
+#############################################################################################
+                             # COUPON MANAGEMENT #
+#############################################################################################
+
+
+def coupons(request):
+    coupons = Coupon.objects.all().order_by('-id')
+    context = {
+        'coupons':coupons,
+
+    }   
+    return render(request, 'dashboard/coupons.html', context)
+
+
+def add_coupon(request):
+    if request.method == 'POST':
+        form = CouponForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Optionally, you can add a success message here
+            return redirect('dashboard_app:coupons') 
+    else:
+        form = CouponForm()
+    return render(request, 'dashboard/add_coupon.html', {'form': form})
+
+
+@superuser_required
+def delete_coupon(request, id):
+    data = Coupon.objects.get(id=id)
+    data.valid = not data.valid
+    data.save()
+    
+    return redirect('dashboard_app:coupons')
+
+
+def update_coupon(request, id):
+    # Fetch the existing banner object from the database
+    coupon = get_object_or_404(Coupon, pk=id)
+ 
+    if request.method == 'POST':
+        form = CouponForm(request.POST, request.FILES, instance=coupon)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard_app:coupons') 
+        else:
+            # If form validation fails, render the form again with validation errors
+            return render(request, 'dashboard/update_banner.html', {'form': form, 'coupon': coupon})
+    else:
+        # If the request is a GET request, pre-fill the form with the existing banner details
+        form = form = CouponForm(instance=coupon)
+    
+    # Render the template with the form and the existing banner object
+    return render(request, 'dashboard/update_coupon.html', {'form': form, 'coupon': coupon})

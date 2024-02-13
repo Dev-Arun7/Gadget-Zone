@@ -126,3 +126,14 @@ class Wallet(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Wallet"
+
+
+class Coupon(models.Model):
+    coupon = models.CharField(max_length=50, null=True, blank=True)
+    date = models.DateField(default=date.today)
+    valid = models.BooleanField(default=True)
+    amount = models.IntegerField()
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"{self.coupon} - {self.amount}"

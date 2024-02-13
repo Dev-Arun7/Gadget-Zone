@@ -1,0 +1,54 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-4 col-3">
+                        <h4 class="page-title">Coupon</h4>
+                    </div>
+                    <div class="col-sm-8 col-9 text-left m-b-20 ml-3">
+                        <a href="{% url 'dashboard_app:add_coupon' %}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Coupon</a>
+                    </div>
+                </div>
+				<div class="row">
+					<div class="col-md-8 pr-2">
+						<div class="table-responsive">
+							<table class="table table-striped custom-table">
+								<thead>
+									<tr>
+										<th class="text-center" >Coupon</th>
+										<th class="text-center" >Date</th>
+                                        <th class="text-center" >Valid</th>
+                                        <th class="text-center" >Amount</th>
+                                        <th class="text-center" >Edit</th>
+                                        <th class="text-center" >Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in coupons %}
+									<tr>
+										<td class="text-center" >{{ i.coupon }}i.</td>
+                                        <td class="text-center" >{{ i.date }}</td>
+                                        <td class="text-center" >{{ i.valid }}</td>
+                                        <td class="text-center" >{{ i.amount }}</td>
+										<td class ="text-center">
+											<a type="button" href="{% url 'dashboard_app:update_coupon' id=i.id %}" class="btn btn-success">Edit</a>
+										</td>
+										<td class ="text-center">
+											<a href="{% url 'dashboard_app:delete_coupon' id=i.id %}">
+													{% if i.valid %}
+													<button type="submit" name="delete_coupon" class="btn btn-danger">  &nbsp; Invalid &nbsp;  </button>
+													{% else %}
+													<button type="submit" name="toggle_coupon" class="btn btn-success">  Valid </button>
+													{% endif %}
+											</a>
+										</td>	 
+									</tr>	
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+                </div>
+            </div>
+{% endblock content %}

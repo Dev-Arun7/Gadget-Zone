@@ -36,5 +36,11 @@ urlpatterns = [
     path('update_banners/<int:id>/',views.update_banners,name='update_banners'), 
     path('delete_banner/<int:id>/',views.delete_banner,name='delete_banner'),
 
+    path('coupons/',views.coupons,name='coupons'), 
+    path('add_coupon/',views.add_coupon,name='add_coupon'), 
+    path('update_coupon/<int:id>/',views.update_coupon,name='update_coupon'), 
+    path('delete_coupon/<int:id>/',views.delete_coupon,name='delete_coupon'), 
+
+
     path('users/',views.users,name='users'),
 ]  

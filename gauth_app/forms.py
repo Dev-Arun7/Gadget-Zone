@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from gauth_app.models import Customer, Address
+from gauth_app.models import Customer, Address, Coupon
 
 
 # Create your forms here.
@@ -90,3 +90,10 @@ class AddressForm(forms.ModelForm):
                 self.add_error(field_name, 'This field must not contain only whitespace.')
 
         return cleaned_data
+
+
+
+class CouponForm(forms.ModelForm):
+    class Meta:
+        model = Coupon
+        fields = ['coupon', 'date', 'valid', 'amount']

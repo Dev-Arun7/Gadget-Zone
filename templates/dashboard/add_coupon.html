@@ -1,0 +1,70 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <h4 class="page-title">Add Coupon</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <form action="{% url 'dashboard_app:add_coupon' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                        
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label>Enter the coupon 8 character code</label>
+                                    <input class="form-control" 
+                                           type="text" 
+                                           placeholder="Enter the code"
+                                           name="coupon"
+                                           pattern="^\S(.*\S)?$"
+                                           minlength="8"
+                                           maxlength="8" 
+                                           required>
+                                </div>   
+                        
+                            <div class="form-group">
+                                <label>Choose expiry date</label>
+                                <input class="form-control" type="date" 
+                                       placeholder="Select a date"
+                                       name="date"
+                                       required>
+                            </div>
+                        
+                            <div class="form-group">
+                                <label for="couponValidation">Coupon Validation</label>
+                                <div class="form-check">
+                                    <input type="checkbox" 
+                                           id="couponValidation" 
+                                           name="valid" 
+                                           value="true" 
+                                           class="form-check-input">
+                                    <label class="form-check-label" for="couponValidation">Apply Coupon Validation</label>
+                                </div>
+                            </div>
+                                                    
+                            <div class="form-group">
+                                <label>Coupon amount</label>
+                                <input class="form-control" type="number" 
+                                       placeholder="Amount"
+                                       name="amount"
+                                       min="1">
+                            </div>
+                        
+                            <div class="row">
+                                <div class="m-t-20 text-center">
+                                    <button class="btn btn-primary submit-btn">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+ 

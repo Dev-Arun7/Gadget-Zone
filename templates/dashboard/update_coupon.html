@@ -1,0 +1,47 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content">
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">Update Coupon</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 pr-2">
+            <div class="card-box">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Enter the coupon 8 character code</label>
+                        <input class="form-control" 
+                               type="text" 
+                               placeholder="Enter the code"
+                               name="coupon"
+                               pattern=".{8}" 
+                               title="Coupon code must be 8 characters long."
+                               required>
+                        <small class="form-text text-muted">Coupon code must be exactly 8 characters long.</small>
+                    </div>   
+                    
+                    <div class="form-group">
+                        <label>Date:</label>
+                        <input type="date" name="date" class="form-control" value="{{ coupon.date|date:'Y-m-d' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Valid:</label>
+                        <input type="checkbox" name="valid" {% if coupon.valid %} checked {% endif %}>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount:</label>
+                        <input type="number" name="amount" class="form-control" value="{{ coupon.amount }}">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Update Coupon</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
