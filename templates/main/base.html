@@ -153,32 +153,15 @@
 
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
+                                            <li class="hm-wishlist">
+                                                <a href=" {% url 'main_app:wishlist' %}" >
+                                                    <span class="cart-item-count wishlist-item-count">{{ wishlist_count }}</span>
+                                                    <i class="fa fa-heart-o"></i>
+                                                </a>
+                                            </li>
                                             
                                         </li>
-                                        {% comment %} <li class="hm-wishlist">
-                                            <a href="">
-                                                <i class="fa fa-heart-o"></i>
-                                            </a>
-                                        </li> {% endcomment %}
-                                        <!-- Header Middle Wishlist Area End Here -->
-                                        <!-- Begin Header Mini Cart Area --> 
-                                        <li class="hm-minicart">
-                                            <div class="hm-minicart-trigger">
-                                                <span class="item-icon"></span>
-                                                <span class="item-text">Cart
-                                            </div>
-                                            <span></span>
-                                            <div class="minicart">
-                                                <div class="minicart-button">
-                                                    <a href="{% url 'main_app:cart' %}" class="li-button li-button-fullwidth li-button-dark">
-                                                        <span>View Full Cart</span>
-                                                    </a>
-                                                    <a href="{% url 'main_app:checkout' %}" class="li-button li-button-fullwidth">
-                                                        <span>Checkout</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </li>
+                                        
                                         <!-- Header Mini Cart Area End Here -->
                                     </ul>
                                 </div>

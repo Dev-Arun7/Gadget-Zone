@@ -211,12 +211,12 @@
                                                                         <ul class="add-actions-link">
                                                                             {% if i.stock > 0 %}
                                                                                 <li class="add-cart active addToCartBtn "> <type="submit">Add to cart</li>
-                                                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a class="links-details" href="###"><i class="fa fa-heart-o"></i></a></li>
+                                                                                <li><a href="{% url 'main_app:single_product' i.product.id i.id %}" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
+                                                                                <li><a class="links-details wishBtn" href="###"><i class="fa fa-heart-o"></i></a></li>
                                                                             {% else %}
                                                                                 <p> Out of Stock </p>
-                                                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a class="links-details" href="###"><i class="fa fa-heart-o"></i></a></li>
+                                                                                <li><a href="{% url 'main_app:single_product' i.product.id i.id %}" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
+                                                                                <li><a class="links-details wishBtn" href="###"><i class="fa fa-heart-o"></i></a></li>
                                                                             {% endif %}
                                                                         </ul>
                                                                     </form>

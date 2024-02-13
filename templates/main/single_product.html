@@ -107,7 +107,7 @@
                                                 <label for="quantity">Quantity</label>
                                             </div>
                                             {% if variant.stock > 0 %}
-                                                <button class="add-to-cart mr-4 wishBtn" type="submit">Add to Cart</button>
+                                                <button class="add-to-cart mr-4 addToCartBtn" type="submit">Add to Cart</button>
                                             {% else %}
                                                 <p class="out-of-stock-message">Sorry, this item is currently out of stock.</p> 
                                                 
@@ -349,10 +349,11 @@
                                         <!-- single-product-wrap start -->
                                         <div class="single-product-wrap">
                                             <div class="product-image">
-                                                {% comment %} <a href="{% url 'main_app:single_product' i.id %}"> {% endcomment %}
-                                                    <img src="{{i.product.image.url}}" alt="Li's Product Image" style="height: 200px; object-fit: contain;">
+                                                <a href="{% url 'main_app:single_product' i.product.id i.id %}">
+                                                    <img src="{{ i.product.image.url }}" alt="Li's Product Image" style="height: 200px; object-fit: contain;">
                                                 </a>
-                                            </div>
+                                               
+                                            </div>  
                                             <div class="product_desc">
                                                 <div class="product_desc_info">
                                                     <div class="product-review">
@@ -380,7 +381,7 @@
                                                     <ul class="add-actions-link">
                                                         <li class="add-cart active"><a href="#">Add to cart</a></li>
                                                         <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                        <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
+                                                        <li><a class="links-details wishBtn" href="#"><i class="fa fa-heart-o"></i></a></li>
                                                     </ul>
                                                 </div>
                                             </div>

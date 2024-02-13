@@ -212,6 +212,11 @@ def add_to_cart(request, product_id, variant_id):
                                         quantity=1,
                                         total=variant.offer_price
                                         )
+                    # Check if the product is in the user's wishlist and remove it if found.
+                    if Wishlist.objects.filter(user=request.user, product=product, product_variant=variant).exists():
+                        wishlist_item = Wishlist.objects.get(user=request.user, product=product, product_variant=variant)
+                        wishlist_item.delete()
+
                     # Return success message
                     return JsonResponse({'status': "Product added successfully", 'added': True})
         else:
@@ -219,6 +224,7 @@ def add_to_cart(request, product_id, variant_id):
 
     # If the request method is not POST, redirect to the home page.
     return redirect('main_app:home')
+
 
 
 def update_cart(request):
@@ -240,8 +246,6 @@ def update_cart(request):
     return redirect('main_app:home')        
 
 
-
-
 @login_required
 def delete_cart(request, product_id):
     # Retrieve the cart item to delete
@@ -253,6 +257,10 @@ def delete_cart(request, product_id):
 ###############################################################################################################
                                  # WISH LIST #
 ###############################################################################################################
+
+def wishlist(request):
+    products = Wishlist.objects.select_related('product', 'product_variant').filter(user=request.user).order_by('-id')
+    return render(request, 'main/wishlist.html', {'products':products})
 
 
 def add_to_wish(request, product_id, variant_id):
@@ -280,6 +288,17 @@ def add_to_wish(request, product_id, variant_id):
     # If the request method is not POST, redirect to the home page.
     return redirect('main_app:home')
 
+
+
+@login_required
+def delete_wish(request, product_id):
+    try:
+        cart_item = Wishlist.objects.get(id=product_id)
+    except Wishlist.DoesNotExist:
+        return redirect('main_app:wishlist')
+    
+    cart_item.delete()
+    return redirect('main_app:wishlist')
 
 
 ###############################################################################################################
