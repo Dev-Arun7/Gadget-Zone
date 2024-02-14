@@ -12,17 +12,28 @@ import json
 import random
 from django.core.paginator import Paginator
 from decimal import Decimal
+from random import shuffle
 
 
 def home(request):
-    products = ProductVariant.objects.filter(deleted=False).order_by('-id')
-    deals = ProductVariant.objects.filter(deleted=False).order_by('-offer')
-    brands = Brand.objects.all()
+    # Retrieve first 10 products ordered by ID
+    products = list(ProductVariant.objects.filter(deleted=False).order_by('-id')[:10])
+
+    # Retrieve first 10 deals ordered by offer
+    deals = list(ProductVariant.objects.filter(deleted=False).order_by('-offer')[:12])
+
+    # Retrieve all brands in random order
+    brands = list(Brand.objects.all().order_by('?'))
+
+    # Shuffle the first 10 deals and products separately
+    shuffle(products)
+    shuffle(deals)
+
     context = {
         'products': products,
-        'brands' : brands,
+        'brands': brands,
         'deals': deals,
-        }  
+    }  
     return render(request, "main/home.html", context)
 
 

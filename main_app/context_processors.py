@@ -2,9 +2,9 @@ from main_app.models import Main_Category, Product, Brand
 from gauth_app.models import Cart, Wishlist
 
 def extras(request):
-    main_category = Main_Category.objects.filter(deleted=False)
+    main_category = Main_Category.objects.filter(deleted=False).order_by('?')
     products = Product.objects.all()
-    brands = Brand.objects.all()
+    brands = Brand.objects.all().order_by('?')
     customer = request.user
     cart_count = Cart.objects.all().count()
     wishlist_count = Wishlist.objects.all().count()
