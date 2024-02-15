@@ -236,7 +236,6 @@ def cart(request):
      'subtotal': total_price,
      'coupon_amount': coupon_amount
      }
-    print(f"Context before rendering: {context}")
     return render(request, 'main/cart.html', context)
 
 
@@ -372,6 +371,7 @@ def checkout(request):
     for item in cart_items:
         if item.product_variant.stock < item.quantity:
            messages.warning(request, "Some items are out of stock.")
+           print("xxxxxxxx",messages.warning)
            return redirect('main_app:cart')
 
     # Retrieve the coupon code from the session
