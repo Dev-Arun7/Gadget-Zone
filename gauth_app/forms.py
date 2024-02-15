@@ -96,4 +96,4 @@ class AddressForm(forms.ModelForm):
 class CouponForm(forms.ModelForm):
     class Meta:
         model = Coupon
-        fields = ['coupon', 'date', 'valid', 'amount']
+        fields = ['coupon', 'date', 'valid', 'amount', 'min_amount']

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from main_app.models import Main_Category, Product, ProductVariant, Brand
-from gauth_app.models import Cart, Wishlist, Address, Order, Wishlist, Wallet
+from gauth_app.models import Cart, Wishlist, Address, Order, Wishlist, Wallet, Coupon
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -13,6 +13,7 @@ import random
 from django.core.paginator import Paginator
 from decimal import Decimal
 from random import shuffle
+from datetime import date
 
 
 def home(request):
@@ -30,7 +31,7 @@ def home(request):
     shuffle(deals)
 
     context = {
-        'products': products,
+        'products': products, 
         'brands': brands,
         'deals': deals,
     }  
@@ -183,7 +184,6 @@ def sort(request):
 ###############################################################################################################
 
 
-
 @login_required
 def cart(request):
     # Retrieve all cart items along with related product and product variant details
@@ -191,6 +191,9 @@ def cart(request):
 
     # Calculate subtotal for each item and total price for all items in the cart
     total_price = 0
+        # Initialize coupon_code
+    coupon_code = None
+    coupon_amount = 0
 
     for item in cart_items:
         # Check if there is sufficient stock for the product variant
@@ -200,7 +203,37 @@ def cart(request):
             # Add subtotal to the total price
             total_price += item.subtotal
 
-    context = { 'cart': cart_items, 'subtotal': total_price }
+    # Handle coupon application
+    if request.method == 'POST':
+        coupon_code = request.POST.get('coupon_code')
+        try:
+            coupon = Coupon.objects.get(coupon=coupon_code, valid=True, date__gte=date.today())
+            if coupon.min_amount is not None and total_price < coupon.min_amount:
+                messages.error(request, f"Minimum purchase amount for '{coupon_code}' is {coupon.min_amount}")
+            else:
+                # Apply coupon logic here
+                # For example, calculate the new total price after applying the coupon
+                total_price -= coupon.amount
+                request.session['coupon'] = coupon_code
+
+                # Assign coupon amount to show on the page
+                coupon_amount = coupon.amount
+
+                # Show success message after applying the coupon
+                messages.success(request, 'Coupon applied successfully!')
+
+        except Coupon.DoesNotExist:
+            messages.error(request, f"Invalid or expired coupon code: {coupon_code}")
+
+            # Redirect back to the cart page to reflect the changes
+            return redirect('main_app:cart')
+
+    context = {'cart': cart_items,
+    'coupon_code': coupon_code,
+     'subtotal': total_price,
+     'coupon_amount': coupon_amount
+     }
+    print(f"Context before rendering: {context}")
     return render(request, 'main/cart.html', context)
 
 

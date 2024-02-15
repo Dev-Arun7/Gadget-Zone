@@ -10,7 +10,6 @@
         height: auto;
     }
 </style>
-
             <!-- Begin Li's Breadcrumb Area -->
             <div class="breadcrumb-area">
                 <div class="container">
@@ -21,8 +20,7 @@
                         </ul>
                     </div>
                 </div>
-            </div>
-            
+            </div>         
             <!-- Li's Breadcrumb Area End Here -->
             <!--Shopping Cart Area Strat-->
             <div class="Shopping-cart-area pt-20 pb-20">
@@ -34,7 +32,6 @@
                     <div class="row">
                         <div class="col-12 reload">
                             {% if cart %}
-                            <form action="#">
                                 <div class="table-content table-responsive">
                                     <table class="table  cart_data">
                                         <thead>
@@ -96,34 +93,31 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="coupon-all">
-                                            <div class="coupon">
-                                                <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text">
-                                                <input class="button" name="apply_coupon" value="Apply coupon" type="submit">
-                                            </div>
-                                            
-                                        </div>
+                                <form action="{% url 'main_app:cart' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="coupon">
+                                        <input id="coupon_code" class="input-text" name="coupon_code" placeholder="Coupon code" type="text">
+                                        <button type="submit" class="button" name="apply_coupon">Apply coupon</button>
                                     </div>
-                                </div>
+                                </form>                            
                                 <div class="row">
                                     <div class="col-md-5 ml-auto">
                                         <div class="cart-page-total">
                                             <h2>Cart totals</h2>
                                             <ul>
+                                                {% if coupon_amount %}
+                                                <li>Coupon <span>- ₹{{ coupon_amount }}</span></li>
+                                                {% endif %}
                                                 <li>Subtotal <span>₹{{ subtotal }}</span></li>
                                                 <li>Delivery <span>₹50</span></li>
                                                 <li>Total <span>₹{{ subtotal|add:50 }}</span></li>
                                             </ul>
-                                            
                                             {% if subtotal > 0 %}
                                                 <a href="{% url 'main_app:checkout' %}">Proceed to checkout</a>
                                             {% endif %}
                                         </div>                                        
                                     </div>
                                 </div>
-                            </form>
                         </div>
                         {% else %}
                         <br>
@@ -139,25 +133,29 @@
    
   
    <!-- Add this script to your cart.html file -->
-
-
    {% if messages %}
    <script>
        // Iterate through each message and display using SweetAlert
        {% for message in messages %}
-           Swal.fire({
-               icon: 'error',
-               title: 'Oops...',
-               text: '{{ message }}'
-           });
+           {% if message.tags == 'error' %}
+               Swal.fire({
+                   icon: 'error',
+                   title: 'Oops...',
+                   text: '{{ message }}'
+               });
+           {% elif message.tags == 'success' %}
+               Swal.fire({
+                   icon: 'success',
+                   title: 'Success!',
+                   text: '{{ message }}'
+               });
+           {% endif %}
        {% endfor %}
    </script>
-   {% endif %}
+{% endif %}
 
 
    <script>
-   
-    
     // Wait for the document to be ready
     document.addEventListener("DOMContentLoaded", function() {
         // Select all delete-item links

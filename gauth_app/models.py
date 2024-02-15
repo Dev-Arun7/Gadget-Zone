@@ -76,7 +76,6 @@ class Order(models.Model):
     payment_type      = models.CharField(max_length=100, null=True,blank=True)  
     status            = models.CharField(max_length=100, choices=ORDER_STATUS, default='pending' )  
     quantity          = models.IntegerField(default=0, null=True, blank=True)
-    image             = models.ImageField(upload_to='products', null=True, blank=True)
     date              = models.DateField(default=date.today) 
     objects           = models.Manager()
             
@@ -133,7 +132,9 @@ class Coupon(models.Model):
     date = models.DateField(default=date.today)
     valid = models.BooleanField(default=True)
     amount = models.IntegerField()
+    min_amount = models.IntegerField(null=True)
     objects = models.Manager()
 
     def __str__(self):
         return f"{self.coupon} - {self.amount}"
+

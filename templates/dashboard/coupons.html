@@ -20,6 +20,7 @@
 										<th class="text-center" >Date</th>
                                         <th class="text-center" >Valid</th>
                                         <th class="text-center" >Amount</th>
+                                        <th class="text-center" >Min amount</th>
                                         <th class="text-center" >Edit</th>
                                         <th class="text-center" >Action</th>
 									</tr>
@@ -27,10 +28,11 @@
 								<tbody>
 									{% for i in coupons %}
 									<tr>
-										<td class="text-center" >{{ i.coupon }}i.</td>
+										<td class="text-center" >{{ i.coupon }}</td>
                                         <td class="text-center" >{{ i.date }}</td>
                                         <td class="text-center" >{{ i.valid }}</td>
                                         <td class="text-center" >{{ i.amount }}</td>
+                                        <td class="text-center" >{{ i.min_amount }}</td>
 										<td class ="text-center">
 											<a type="button" href="{% url 'dashboard_app:update_coupon' id=i.id %}" class="btn btn-success">Edit</a>
 										</td>
