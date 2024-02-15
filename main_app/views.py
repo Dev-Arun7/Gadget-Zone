@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from main_app.models import Main_Category, Product, ProductVariant, Brand
-from gauth_app.models import Cart, Wishlist, Address, Order, Wishlist, Wallet, Coupon
+from gauth_app.models import Cart, Wishlist, Address, Order, Order_details, Wishlist, Wallet, Coupon
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -188,6 +188,9 @@ def sort(request):
 def cart(request):
     # Retrieve all cart items along with related product and product variant details
     cart_items = Cart.objects.select_related('product', 'product_variant').filter(user=request.user).order_by('-id')
+    
+    # setting coupon as non initially
+    request.session['coupon'] = None
 
     # Calculate subtotal for each item and total price for all items in the cart
     total_price = 0
@@ -351,28 +354,6 @@ def delete_wish(request, product_id):
 ###############################################################################################################
 
 
-
-@login_required
-def checkout(request):
-    cart_items = Cart.objects.filter(quantity__gt=0)
-    
-    # Check if all products in the cart are in stock
-    for item in cart_items:
-        if item.product_variant.stock <= item.quantity:
-           messages.warning(request, "Some items are out of stock.")
-           return redirect('main_app:cart')
-    
-    # If all products are in stock, proceed with the checkout process
-    addresses = Address.objects.filter(user=request.user)
-    total_price = cart_items.aggregate(total_price=Sum('total'))['total_price'] or 0
-
-    context = {
-        'subtotal': total_price,
-        'addresses': addresses,
-    }
-    return render(request, "main/checkout.html", context)
-
-
 @login_required
 def orders(request):
     # Filter orders by the current user
@@ -380,6 +361,41 @@ def orders(request):
 
     # Render the orders template with user's orders data
     return render(request, 'main/orders.html', {'orders': user_orders})
+
+
+
+@login_required
+def checkout(request):
+    cart_items = Cart.objects.filter(quantity__gt=0)
+    
+    # Check if all products in the cart are in stock
+    for item in cart_items:
+        if item.product_variant.stock < item.quantity:
+           messages.warning(request, "Some items are out of stock.")
+           return redirect('main_app:cart')
+
+    # Retrieve the coupon code from the session
+    coupon_code = request.session.get('coupon', None)
+    
+    # If all products are in stock, proceed with the checkout process
+    addresses = Address.objects.filter(user=request.user)
+    total_price = cart_items.aggregate(total_price=Sum('total'))['total_price'] or 0
+
+    # Apply coupon discount if it exists
+    if coupon_code:
+        try:
+            coupon = Coupon.objects.get(coupon=coupon_code, valid=True, date__gte=date.today())
+            total_price -= coupon.amount
+        except Coupon.DoesNotExist:
+            # Handle the case if the coupon does not exist
+            messages.error(request, f"Invalid or expired coupon code: {coupon_code}")
+
+
+    context = {
+        'subtotal': total_price,
+        'addresses': addresses,
+    }
+    return render(request, "main/checkout.html", context)
 
 
 
@@ -415,6 +431,9 @@ def place_order(request):
             return HttpResponseRedirect(reverse('main_app:cart'))
 
         # Proceed with order placement for in-stock items
+        total_offer_price = 0
+        total_price = 0
+        total_quantity = 0
         for cart_item in in_stock_items:
             order = Order.objects.create(
                 user=user,
@@ -424,12 +443,38 @@ def place_order(request):
                 payment_type=payment_type, 
                 status='pending',
                 quantity=cart_item.quantity,
-                image=cart_item.image,
                 variant=cart_item.product_variant
             )
+
+            
+            total_offer_price += cart_item.total
+            total_price += cart_item.product_variant.price * cart_item.quantity
+            total_quantity += cart_item.quantity
+
+
+
             cart_item.product_variant.stock -= cart_item.quantity
             cart_item.product_variant.save()
             cart_item.delete()
+        # Update Order_details model
+        Order_details.objects.create(
+            order = order,
+            user = user,
+            quantity = total_quantity,
+            offer_price = total_offer_price,
+            price_total = total_price
+        )
+
+        # After placing the order, make the applied coupon invalid
+        applied_coupon = request.session.get('coupon')
+        if applied_coupon:
+            try:
+                coupon = Coupon.objects.get(coupon=applied_coupon, valid=True)
+                coupon.valid = False
+                coupon.save()
+                del request.session['coupon'] # Removing the applied coupon from the session
+            except Coupon.DoesNotExist:
+                pass # no need to do if the coupon is alredy invalid 
 
         return HttpResponseRedirect(reverse('main_app:home') + '?success=true')
     else:

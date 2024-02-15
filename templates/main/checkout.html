@@ -82,17 +82,8 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-lg-6 col-12">
-                            <div class="row pt-2 pb-4">
-                                <div class="col-12">
-                                    <div class="coupon-all">
-                                        <div class="coupon">
-                                            <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text">
-                                            <input class="button" name="apply_coupon" value="Apply coupon" type="submit">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-lg-6 col-12 pt-4">
+                            <br>
                             <div class="your-order">
                                 <h3>Your order</h3>
                                 <div class="your-order-table table-responsive">
@@ -214,18 +205,17 @@
        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>  
        
        
-    {% if messages %}
-    <script>
-        // Iterate through each message and display using SweetAlert
-        {% for message in messages %}
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: '{{ message }}'
-            });
-        {% endfor %}
-    </script>
-    {% endif %}
-
-    {% endblock content %}
+       {% if messages %}
+       <script>
+           // Iterate through each message and display using SweetAlert
+           {% for message in messages %}
+               Swal.fire({
+                   icon: 'error',
+                   title: 'Oops...',
+                   text: '{{ message }}'
+               });
+           {% endfor %}
+       </script>
+   {% endif %}
+   
 

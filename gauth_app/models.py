@@ -83,15 +83,16 @@ class Order(models.Model):
         return f"Order #{self.pk} - {self.product}"
 
 
-class OrderItem(models.Model):
+class Order_details(models.Model):
+    user           =   models.ForeignKey(Customer, on_delete=models.CASCADE) 
     order          =   models.ForeignKey(Order,on_delete=models.CASCADE)
-    product        =   models.ForeignKey(Product,on_delete=models.CASCADE)
-    quantity       =   models.IntegerField(default=1)
-    image          =   models.ImageField(upload_to='products_order', null=True, blank=True)
+    quantity       =   models.IntegerField(default=0, null=True, blank=True)
+    offer_price    =   models.IntegerField(default=0, null=True, blank=True)
+    price_total    =   models.IntegerField(default=0, null=True, blank=True)
     objects        =   models.Manager()
 
     def __str__(self):
-        return str(self.order)
+        return str(self.offer_price)
 
 
 class Cart(models.Model):
