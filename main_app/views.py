@@ -15,6 +15,13 @@ from decimal import Decimal
 from random import shuffle
 from datetime import date
 
+#Razorpay
+from django.conf import settings
+import razorpay
+import json
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 def home(request):
     # Retrieve first 10 products ordered by ID
@@ -82,7 +89,6 @@ def product_list(request):
     }
     return render(request, "main/product_list.html", context)
 
-
     
 def category_products(request, id):
     # Retrieve the product variants associated with the selected main category
@@ -90,6 +96,7 @@ def category_products(request, id):
 
     # Pass the product variants to the template for rendering
     return render(request, "main/product_list.html", {'products': product_variants})
+
 
 def single_product(request, id, variant_id):
     # Get the product and its variants
@@ -123,6 +130,7 @@ def single_product(request, id, variant_id):
 def main_categories(request):
     return render(request,'main/main_categories.html')
 
+
 def brand_products(request, id):
     product_variants = ProductVariant.objects.filter(product__brand_id=id, deleted=False)
     return render(request, "main/product_list.html", {'products': product_variants})
@@ -131,7 +139,6 @@ def brand_products(request, id):
 ###############################################################################################################
                         # Sorting and showing products on page #
 ###############################################################################################################
-
 
 
 def product_search(request):
@@ -157,7 +164,6 @@ def product_search(request):
         return render(request, 'main/product_list.html', context)
 
     return redirect('main_app:home')
-
 
 
 
@@ -371,7 +377,6 @@ def checkout(request):
     for item in cart_items:
         if item.product_variant.stock < item.quantity:
            messages.warning(request, "Some items are out of stock.")
-           print("xxxxxxxx",messages.warning)
            return redirect('main_app:cart')
 
     # Retrieve the coupon code from the session
@@ -390,12 +395,12 @@ def checkout(request):
             # Handle the case if the coupon does not exist
             messages.error(request, f"Invalid or expired coupon code: {coupon_code}")
 
-
     context = {
         'subtotal': total_price,
         'addresses': addresses,
     }
     return render(request, "main/checkout.html", context)
+
 
 
 
@@ -429,6 +434,7 @@ def place_order(request):
         if out_of_stock_items:
             messages.warning(request, "Some items are out of stock. Please remove them from your cart.")
             return HttpResponseRedirect(reverse('main_app:cart'))
+            
 
         # Proceed with order placement for in-stock items
         total_offer_price = 0
@@ -480,6 +486,42 @@ def place_order(request):
     else:
         messages.error(request, "Invalid request method")
         return HttpResponseRedirect(reverse('main_app:checkout'))
+
+
+@login_required
+def razorpay(request):
+    user = request.user
+    cart_items = Cart.objects.filter(user=user, quantity__gt=0)
+    in_stock_items = []
+    out_of_stock_items = []
+
+    for cart_item in cart_items:
+        if cart_item.quantity <= cart_item.product_variant.stock:
+            in_stock_items.append(cart_item)
+        else:
+            out_of_stock_items.append(cart_item)
+
+    # If any item is out of stock, return to checkout page
+    if out_of_stock_items:
+        messages.warning(request, "Some items are out of stock. Please remove them from your cart.")
+        return HttpResponseRedirect(reverse('main_app:cart'))
+
+    total_offer_price = 0
+    for item in in_stock_items:
+        total_offer_price += item.product_variant.offer_price * item.quantity
+
+    total_offer_price += 50 # Adding shipping charge
+
+    return JsonResponse({
+        'total_offer_price': total_offer_price
+    })
+
+
+
+        
+
+    
+
 
 
 @login_required

@@ -29,7 +29,10 @@ urlpatterns = [
     path('place_order/',views.place_order,name='place_order'),  
     path('cancel/<int:order_id>/', views.cancel, name='cancel'),
 
+    path('razorpay/',views.razorpay,name='razorpay'),
+
 
     
     path('base/',views.base,name='base'),
 ]
+ 

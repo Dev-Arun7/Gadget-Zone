@@ -189,4 +189,7 @@ EMAIL_HOST_PASSWORD = "zygltiuakwpcdjdg"
 EMAIL_USE_TLS = True 
 
 
+RAZORPAY_KEY_ID = 'rzp_test_NVkSrkfRfkhnIQ'
+RAZORPAY_KEY_SECRET = '80kpm02C1iJTZfm8jH79E6iM'
+
 

@@ -566,10 +566,11 @@
         <!-- ScrollUp js -->
         <script src="{% static 'main/js/scrollUp.min.js' %}"></script>
         <!-- Main/Activator js -->
-        <script src="{% static 'main/js/main.js' %}"></script>
-
+ 
         <script src="{% static 'main/js/jquery-3.7.1.min.js' %}"></script>
         <script src="{% static 'main/js/custom.js' %}"></script>
+        
+   
         <!-- JavaScript -->
         {% comment %} <script> 
             alertify.set('notifier','position', 'top-right');
@@ -578,7 +579,14 @@
             {% endfor %}
             
         </script> {% endcomment %}
+
+        {% block scripts %}
+
+        {% endblock scripts %}
+        <!-- RAZORPAY CHECKOUT-->
+        <script src="{% static 'main/js/checkout.js' %}"></script>
+
     </body>
 
 <!-- index30:23-->
-</html>
+</html> 
