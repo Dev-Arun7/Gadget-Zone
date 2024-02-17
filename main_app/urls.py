@@ -22,7 +22,6 @@ urlpatterns = [
     path('add_to_wish/<int:product_id>/<int:variant_id>/', views.add_to_wish, name='add_to_wish'),
     path('delete_wish/<int:product_id>/',views.delete_wish, name="delete_wish"),
 
-
     path('checkout/',views.checkout,name='checkout'),  
     path('orders/',views.orders,name='orders'),  
     path('order_detail/<int:id>/',views.order_detail,name='order_detail'),  
@@ -30,8 +29,6 @@ urlpatterns = [
     path('cancel/<int:order_id>/', views.cancel, name='cancel'),
 
     path('razorpay/',views.razorpay,name='razorpay'),
-
-
     
     path('base/',views.base,name='base'),
 ]

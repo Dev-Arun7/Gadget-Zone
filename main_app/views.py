@@ -435,7 +435,6 @@ def place_order(request):
             messages.warning(request, "Some items are out of stock. Please remove them from your cart.")
             return HttpResponseRedirect(reverse('main_app:cart'))
             
-
         # Proceed with order placement for in-stock items
         total_offer_price = 0
         total_price = 0
@@ -451,13 +450,10 @@ def place_order(request):
                 quantity=cart_item.quantity,
                 variant=cart_item.product_variant
             )
-
             
             total_offer_price += cart_item.total
             total_price += cart_item.product_variant.price * cart_item.quantity
             total_quantity += cart_item.quantity
-
-
 
             cart_item.product_variant.stock -= cart_item.quantity
             cart_item.product_variant.save()
@@ -483,6 +479,10 @@ def place_order(request):
                 pass # no need to do if the coupon is alredy invalid 
 
         return HttpResponseRedirect(reverse('main_app:home') + '?success=true')
+        payMode = request.POST.get('payment_type')
+        if (payMode == 'razorpay'):
+            return JasonResponse({'status': "Razorpay is done"})
+         
     else:
         messages.error(request, "Invalid request method")
         return HttpResponseRedirect(reverse('main_app:checkout'))
@@ -516,11 +516,6 @@ def razorpay(request):
         'total_offer_price': total_offer_price
     })
 
-
-
-        
-
-    
 
 
 
