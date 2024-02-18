@@ -5,10 +5,10 @@ from datetime import date
 from django.utils import timezone
 from main_app.models import *
 
-
 class Customer(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(unique=True, null=True, blank=True, max_length=20)
+    joined_date = models.DateTimeField(default=timezone.now, null = True, blank = True)
     phone = models.CharField(max_length=10)
     is_verified = models.BooleanField(default=False)
     email_token = models.CharField(max_length=100, null=True, blank=True)
@@ -76,7 +76,7 @@ class Order(models.Model):
     payment_type      = models.CharField(max_length=100, null=True,blank=True)  
     status            = models.CharField(max_length=100, choices=ORDER_STATUS, default='pending' )  
     quantity          = models.IntegerField(default=0, null=True, blank=True)
-    date              = models.DateField(default=date.today) 
+    date              = models.DateField(default=date.today, null=True, blank=True) 
     objects           = models.Manager()
             
     def __str__(self):
@@ -85,6 +85,7 @@ class Order(models.Model):
 
 class Order_details(models.Model):
     user           =   models.ForeignKey(Customer, on_delete=models.CASCADE) 
+    date              = models.DateField(default=date.today) 
     order          =   models.ForeignKey(Order,on_delete=models.CASCADE)
     quantity       =   models.IntegerField(default=0, null=True, blank=True)
     offer_price    =   models.IntegerField(default=0, null=True, blank=True)

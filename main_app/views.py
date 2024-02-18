@@ -506,7 +506,7 @@ def place_order(request):
             except Coupon.DoesNotExist:
                 pass # no need to do if the coupon is alredy invalid 
 
-        return HttpResponseRedirect(reverse('main_app:home') + '?success=true')
+        return HttpResponseRedirect(reverse('main_app:orders') + '?success=true')
     else:
         messages.error(request, "Invalid request method")
         return HttpResponseRedirect(reverse('main_app:checkout'))
