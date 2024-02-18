@@ -28,7 +28,7 @@
                                     <select id="addressDropdown" name="addressId">
                                         <option value="">Select an address</option>
                                         {% for address in addresses %}
-                                            <option value="{{ address.id }}">{{ address.address_name }} - {{ address.first_name }}, {{ address.last_name }},  {{ address.city }} - {{ address.pin }}</option>
+                                            <option value="{{ address.id }}" name="addressId" >{{ address.address_name }} - {{ address.first_name }}, {{ address.last_name }},  {{ address.city }} - {{ address.pin }}</option>
                                         {% endfor %}
                                     </select>
                                     
@@ -77,7 +77,7 @@
                                     </div>   
                                     <div class="card-footer border-secondary bg-transparent">
                                         <button id="place-order-button" class="btn btn-lg btn-block btn-secondary font-weight-bold my-3 py-3" type="submit">Place Order</button>
-                                        <button id="rzp-button1" class="btn btn-lg btn-block btn-secondary font-weight-bold my-3 py-3 paywithrazorpay" type="submit">Pay with RAZORPAY</button>
+                                        <button id="rzp-button1" class="btn btn-lg btn-block btn-secondary font-weight-bold my-3 py-3 payWithRazorpay" type="button">Pay with RAZORPAY</button>
                                     </div>
                                 </div>
                             </form>
@@ -179,30 +179,40 @@
             </div>
             <!--Checkout Area End-->
             <script>
-              document.getElementById('place-order-button').addEventListener('click', function() {
-                  document.getElementById('order-form').submit();
-              });
-          </script>      
-             <script>
-        function handlePaymentSelection() {
-            var codRadio = document.getElementById("directcheck");
-            var placeOrderButton = document.getElementById("place-order-button");
-            var razorpayButton = document.getElementById("rzp-button1");
-            console.log("Selected Payment Method:", selectedPayment);
-            if (codRadio.checked) {
-                placeOrderButton.style.display = "block";
-                razorpayButton.style.display = "none";
-            } else {
-                placeOrderButton.style.display = "none";
-                razorpayButton.style.display = "block";
-            }
-        }
-    </script>
-
-       <!-- razorpay -->
-       <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-       <!-- alert-message -->
-       <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>  
+                document.getElementById('place-order-button').addEventListener('click', function() {
+                    document.getElementById('order-form').submit();
+                });
+            </script>
+             
+            <script>
+                function handlePaymentSelection() {
+                    var codRadio = document.getElementById("directcheck");
+                    var placeOrderButton = document.getElementById("place-order-button");
+                    var razorpayButton = document.getElementById("rzp-button1");
+            
+                    if (codRadio && placeOrderButton && razorpayButton) {
+                        if (codRadio.checked) {
+                            placeOrderButton.style.display = "block";
+                            razorpayButton.style.display = "none";
+                        } else {
+                            placeOrderButton.style.display = "none";
+                            razorpayButton.style.display = "block";
+                        }
+                    } else {
+                        console.error("Element or elements not found.");
+                    }
+                }
+            
+                // Trigger the function initially to set the initial button visibility
+                handlePaymentSelection();
+            </script>
+            
+      </script>
+  
+         <!-- razorpay -->
+         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+         <!-- alert-message -->
+         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
        
        
        {% if messages %}
@@ -217,5 +227,11 @@
            {% endfor %}
        </script>
    {% endif %}
+
+   {% endblock %}
    
+   {% block scripts %}
+   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+   {% endblock scripts %}
 

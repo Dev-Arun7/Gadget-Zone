@@ -398,6 +398,36 @@ def checkout(request):
     return render(request, "main/checkout.html", context)
 
 
+@login_required
+def razorpay(request):
+    user = request.user
+    cart_items = Cart.objects.filter(user=user, quantity__gt=0)
+    in_stock_items = []
+    out_of_stock_items = []
+
+    for cart_item in cart_items:
+        if cart_item.quantity <= cart_item.product_variant.stock:
+            in_stock_items.append(cart_item)
+        else:
+            out_of_stock_items.append(cart_item)
+
+    # If any item is out of stock, return to checkout page
+    if out_of_stock_items:
+        messages.warning(request, "Some items are out of stock. Please remove them from your cart.")
+        return HttpResponseRedirect(reverse('main_app:cart'))
+
+    total_offer_price = 0
+    for item in in_stock_items:
+        total_offer_price += item.product_variant.offer_price * item.quantity
+
+    total_offer_price += 50 # Adding shipping charge
+
+    return JsonResponse({
+        'total_offer_price': total_offer_price
+    })
+
+
+
 
 @login_required
 def place_order(request):
