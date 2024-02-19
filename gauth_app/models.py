@@ -85,7 +85,7 @@ class Order(models.Model):
 
 class Order_details(models.Model):
     user           =   models.ForeignKey(Customer, on_delete=models.CASCADE) 
-    date              = models.DateField(default=date.today) 
+    date           = models.DateField(default=date.today) 
     order          =   models.ForeignKey(Order,on_delete=models.CASCADE)
     quantity       =   models.IntegerField(default=0, null=True, blank=True)
     offer_price    =   models.IntegerField(default=0, null=True, blank=True)

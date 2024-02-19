@@ -59,7 +59,7 @@
                     <ul>
                         <li class="menu-title">Main</li>
                         <li  class="{% if request.resolver_match.url_name == 'dashboard_home' %} active {% endif %}">
-                            <a href="{% url 'dashboard_app:dashboard_home' %}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+                            <a href="{% url 'dashboard_app:dashboard_home' %}"><i class="fa fa-home"></i> <span>Dashboard</span></a>
                         </li>
 						<li class="{% if request.resolver_match.url_name == 'users' %} active {% endif %}">
                             <a href="{% url 'dashboard_app:users' %}"><i class="fa fa-user-md"></i> <span>Users</span></a>

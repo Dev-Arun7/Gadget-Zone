@@ -25,13 +25,11 @@ urlpatterns = [
     path('delete_product/<int:id>/',views.delete_product,name='delete_product'),  
     path('product_search/', views.product_search, name='product_search'),
 
-
     path('add_variant/<int:id>/',views.add_variant,name='add_variant'), 
     path('update_variant/<int:id>/',views.update_variant,name='update_variant'), 
     path('soft_delete_product/<int:id>/',views.soft_delete_product,name='soft_delete_product'), 
     path('variant_search/', views.variant_search, name='variant_search'),
 
-    
     path('orders/',views.orders,name='orders'), 
     path('update_order_status/<int:order_id>/', views.update_order_status, name='update_order_status'),
 
@@ -45,6 +43,8 @@ urlpatterns = [
     path('update_coupon/<int:id>/',views.update_coupon,name='update_coupon'), 
     path('delete_coupon/<int:id>/',views.delete_coupon,name='delete_coupon'), 
 
+    path('filter_sales/', views.filter_sales, name='filter_sales'),
+    path('report-pdf-order/', views.report_pdf_order, name='report_pdf_order'),
 
     path('users/',views.users,name='users'),
 ]  

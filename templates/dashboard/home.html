@@ -198,7 +198,7 @@ input[type="month"].form-control {
                     }
                 </script>
                 
-                {% comment %} <form action="{% url 'user:report_pdf_order' %}" method="POST" onsubmit="return validateDate()"> {% endcomment %}
+                <form action="{% url 'dashboard_app:report_pdf_order' %}" method="POST" onsubmit="return validateDate()">
                     {% csrf_token %}
                     <div class="row mb-3">
                         <label class="col-sm-2 col-form-label" for="from-date">From:</label>
