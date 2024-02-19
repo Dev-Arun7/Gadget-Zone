@@ -7,8 +7,27 @@
                         <h4 class="page-title"> Prouduct variants </h4>
                     </div>
                 </div>
-				<p> You can edit product variant details from here </p>
-				<br>
+				<div class="container">
+					<div class="row">
+					  <div class="col-sm">
+						<p> You can edit product variant details from here </p>
+					  </div>
+					  <form action="{% url 'dashboard_app:variant_search' %}" method="POST" class="dashboard_search">
+						{% csrf_token %}
+					  <div class="col-sm">
+						<div class="input-group mb-3">
+							<input type="text" name="searched" class="form-control" placeholder="Search product" value="{{ query }}">
+							<div class="input-group-append">
+							  <button class="btn btn-outline-secondary" type="submit">Search</button>
+							</div>
+						  </div>
+					  </div>
+					</form>
+					</div>
+				  </div>
+
+
+				
 				<div class="row">
 					<div class="col-md-12 pr-2">
 						<div class="table-responsive">

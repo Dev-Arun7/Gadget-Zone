@@ -16,7 +16,8 @@ from datetime import date
 from django.db.models.functions import TruncYear, TruncMonth
 from django.http import JsonResponse
 from django.http import HttpRequest
-from django.http import HttpHeaders  # Add this import statement
+from django.http import HttpHeaders  
+from django.db.models import Q
 
 
 
@@ -619,6 +620,26 @@ def delete_product(request,id):
 
 
 
+def product_search(request):
+    if request.method == "POST":
+        searched = request.POST.get('searched')
+
+        # Query products by model or brand name
+        products_by_model = Product.objects.filter(model__icontains=searched)
+        products_by_brand = Product.objects.filter(brand__name__icontains=searched)
+
+        # Combine the querysets to get unique products
+        products = (products_by_model | products_by_brand).distinct()
+
+        context = {
+            'data': products,
+        }
+        print(context)
+        return render(request, 'dashboard/products.html', context)
+
+    return redirect('dashboard_app:home')
+
+
 #############################################################################################
                         # Product Varinats management #
 #############################################################################################
@@ -704,6 +725,30 @@ def update_variant(request, id):
     context = {'variant':variant}
     return render(request, "dashboard/update_variant.html", context)
 
+
+def variant_search(request):
+    if request.method == "POST":
+        searched = request.POST.get('searched')
+
+        # Split the searched term into individual words
+        search_terms = searched.split()
+
+        # Initialize an empty Q object to build the query dynamically
+        q_objects = Q()
+
+        # Iterate through each search term and construct the query
+        for term in search_terms:
+            q_objects |= Q(product__model__icontains=term) | Q(product__brand__name__icontains=term)
+
+        # Filter products based on the constructed query
+        products = ProductVariant.objects.filter(q_objects).distinct()
+
+        context = {
+            'products': products,
+        }
+        return render(request, 'dashboard/all_products.html', context)
+
+    return redirect('dashboard_app:home')
 
 
 #############################################################################################
