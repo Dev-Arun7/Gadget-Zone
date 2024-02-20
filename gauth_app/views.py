@@ -2,11 +2,14 @@ from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import NewUserForm
-from gauth_app.models import Address, Customer
+from gauth_app.models import Address, Customer, Wallet
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm, AddressForm
+from django.db import transaction
+import random
+import string
 
 
 #############################################################################################
@@ -14,21 +17,52 @@ from .forms import ProfileForm, AddressForm
 #############################################################################################
 
 
+def generate_referral_code(length=8):
+    letters = string.ascii_letters
+    code = ''.join(random.choice(letters) for _ in range(length))
+    return code
+
+
+
 @never_cache
 def user_signup(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
-            new_customer = form.save(commit=False)
-            new_customer.username = form.cleaned_data['email']
-            new_customer.save()
+            referral_code = form.cleaned_data.get('referral')
+            if referral_code:
+                try:
+                    referrer = Customer.objects.get(referral=referral_code)
+                except Customer.DoesNotExist:
+                    messages.error(request, "Invalid referral code. Please try again.")
+                    return redirect("gauth_app:user_signup")
 
-            # Authenticate the user before login just after signup
-            user = authenticate(request, username=new_customer.username, password=form.cleaned_data['password1'])
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # Specify the authentication backend
+            with transaction.atomic():
+                new_customer = form.save(commit=False)
+                new_customer.username = form.cleaned_data['email']
 
-            messages.success(request, "Registration successful.")
-            return redirect("gauth_app:user_login")
+                # Save the new customer
+                new_customer.save()
+
+                if referral_code:
+                    # Create a wallet for the new customer if it doesn't exist
+                    new_wallet, created = Wallet.objects.get_or_create(user=new_customer)
+                    referrer_wallet, created = Wallet.objects.get_or_create(user=referrer)
+                    referrer_wallet.balance += 100
+                    referrer_wallet.save()
+                    new_wallet.balance += 100
+                    new_wallet.save()
+
+                # Generate a unique referral code
+                new_customer.referral = generate_referral_code()
+                new_customer.save()
+
+                # Authenticate the user before login just after signup
+                user = authenticate(request, username=new_customer.username, password=form.cleaned_data['password1'])
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend') 
+
+                messages.success(request, "Registration successful.")
+                return redirect("main_app:home")
         else:
             messages.error(request, "Unsuccessful registration. Invalid information.")
     else:
@@ -143,7 +177,6 @@ def update_address(request, id):
         'address': address,
     }
     return render(request, 'main/update_address.html', context)
-
 
 
 @login_required

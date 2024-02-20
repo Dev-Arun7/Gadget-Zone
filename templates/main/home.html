@@ -284,24 +284,43 @@
                     
                 </div>
             </div>
-            
-                        
-            
 
-            <script>
-                // Check if the URL contains a success parameter indicating successful order placement
-                const urlParams = new URLSearchParams(window.location.search);
-                const successParam = urlParams.get('success');
-            
-                // If the success parameter is present, show the success message using SweetAlert 2
-                if (successParam === 'true') {
-                    Swal.fire({
-                        title: "Success...",
-                        text: "Your order has been placed successfully!",
-                        icon: "success"
-                    });
-                }
-            </script>
+    <!-- Add this script to your cart.html file -->
+    {% if messages %}
+    <script>
+        // Iterate through each message and display using SweetAlert
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '{{ message }}'
+                });
+            {% elif message.tags == 'success' %}
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: '{{ message }}'
+                });
+            {% endif %}
+        {% endfor %}
+    </script>
+    {% endif %}
+
+    <script>
+        // Check if the URL contains a success parameter indicating successful order placement
+        const urlParams = new URLSearchParams(window.location.search);
+        const successParam = urlParams.get('success');
+    
+        // If the success parameter is present, show the success message using SweetAlert 2
+        if (successParam === 'true') {
+            Swal.fire({
+                title: "Success...",
+                text: "Your order has been placed successfully!",
+                icon: "success"
+            });
+        }
+    </script>
 
 
  {% endblock content %}

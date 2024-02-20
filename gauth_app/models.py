@@ -5,6 +5,7 @@ from datetime import date
 from django.utils import timezone
 from main_app.models import *
 
+
 class Customer(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(unique=True, null=True, blank=True, max_length=20)
@@ -16,9 +17,8 @@ class Customer(AbstractUser):
     last_login_time = models.DateTimeField(default=timezone.now, null=True, blank=True)
     last_logout_time = models.DateTimeField(default=timezone.now, null=True, blank=True)
     profile_photo = models.ImageField(upload_to='profile_photo', null=True, blank=True, default='profile.png')
-    wallet_bal = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    referral = models.CharField(max_length=10, null=True, blank=True)
     is_blocked = models.BooleanField(default=False)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = UserManager()
@@ -85,7 +85,7 @@ class Order(models.Model):
 
 class Order_details(models.Model):
     user           =   models.ForeignKey(Customer, on_delete=models.CASCADE) 
-    date           = models.DateField(default=date.today) 
+    date           =   models.DateField(default=date.today) 
     order          =   models.ForeignKey(Order,on_delete=models.CASCADE)
     quantity       =   models.IntegerField(default=0, null=True, blank=True)
     offer_price    =   models.IntegerField(default=0, null=True, blank=True)
@@ -124,6 +124,7 @@ class Wishlist(models.Model):
 class Wallet(models.Model):
     user = models.OneToOneField(Customer, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.username}'s Wallet"

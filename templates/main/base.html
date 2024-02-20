@@ -101,7 +101,6 @@
                                                 <ul class="ht-setting-list">
                                                     {% if user.is_authenticated %}
                                                         <li><a href="{% url 'gauth_app:profile' %}">Profile</a></li>
-                                                        <li><a href="checkout.html">Checkout</a></li>
                                                         <li><a href="{% url 'gauth_app:user_logout' %}">Logout</a></li>
                                                         <li><a href="{% url 'main_app:orders' %}">Orders</a></li>
                                                     {% else %}

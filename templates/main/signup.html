@@ -166,6 +166,16 @@
                 name="password2"
               />
             </div>
+            <div class="form-group">
+              {{ register_form.referral.label_tag }}
+              <input
+                type="text"
+                class="form-control"
+                id="referral"
+                placeholder="Referral code"
+                name="referral"
+              />
+            </div>
             {% if register_form.errors %}
             <div class="alert alert-danger">
                 <strong>Error!</strong> 
@@ -177,7 +187,14 @@
                     {% endfor %}
                 </ul>
             </div>
-        {% endif %}
+          {% endif %}
+          {% if messages %}
+          <ul class="alert alert-danger">
+            {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
         
             <button class="btn btn-primary btn-block" type="submit">
               Register
