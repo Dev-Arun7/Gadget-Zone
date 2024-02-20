@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from main_app.models import Main_Category, Product, ProductVariant, Brand
 from gauth_app.models import Cart, Wishlist, Address, Order, Order_details, Wishlist, Wallet, Coupon
 from django.contrib.auth.decorators import login_required
@@ -122,6 +122,9 @@ def single_product(request, id, variant_id):
 
 def main_categories(request):
     return render(request,'main/main_categories.html')
+
+def brands(request):
+    return render(request,'main/brands.html')
 
 def brand_products(request, id):
     product_variants = ProductVariant.objects.filter(product__brand_id=id, deleted=False)
