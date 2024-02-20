@@ -218,6 +218,7 @@ def add_main_category(request):
     if request.method == 'POST':
         main_category_name = request.POST['main_category_name']
         description = request.POST['description']
+        offer = request.POST['offer']
         image = request.FILES.get('image')
         delete = request.POST.get('delete', False) == 'True'
         
@@ -230,6 +231,7 @@ def add_main_category(request):
         query = Main_Category.objects.create(
             name=main_category_name,
             descriptions=description,
+            offer = offer,
             img=image,
             deleted = delete
         )
@@ -246,6 +248,7 @@ def update_main_category(request, id):
     if request.method      == 'POST':
         main_category_name = request.POST['main_category_name']
         description        = request.POST['description']
+        offer              = request.POST['offer']
 
         # Retrieve existing data
         edit = Main_Category.objects.get(id=id)
@@ -258,6 +261,7 @@ def update_main_category(request, id):
             
         edit.name = main_category_name
         edit.descriptions = description 
+        edit.offer = offer
 
         if 'image' in request.FILES:
             image = request.FILES['image']

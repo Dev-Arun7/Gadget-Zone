@@ -374,7 +374,6 @@ def checkout(request):
     for item in cart_items:
         if item.product_variant.stock < item.quantity:
            messages.warning(request, "Some items are out of stock.")
-           print("xxxxxxxx",messages.warning)
            return redirect('main_app:cart')
 
     # Retrieve the coupon code from the session

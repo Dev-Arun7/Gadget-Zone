@@ -6,6 +6,7 @@ from django.db import models
 class Main_Category(models.Model):
     name = models.CharField(max_length=100)
     descriptions = models.TextField(default='Default Description')
+    offer = models.PositiveIntegerField(default=0, null=True, blank=True)
     img = models.ImageField(upload_to='categories', default='null', null=True, blank=True)
     deleted = models.BooleanField(default=False)
     objects = models.Manager()

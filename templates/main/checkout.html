@@ -26,9 +26,9 @@
                                       <div class="error-message">                                    
                                     </div>
                                     <select id="addressDropdown" name="addressId">
-                                        <option value="">Select an address</option>
+                                        <option value="" selected>Select an address</option>
                                         {% for address in addresses %}
-                                            <option value="{{ address.id }}" name="addressId" >{{ address.address_name }} - {{ address.first_name }}, {{ address.last_name }},  {{ address.city }} - {{ address.pin }}</option>
+                                            <option value="{{ address.id }}" name="addressId">{{ address.address_name }} - {{ address.first_name }}, {{ address.last_name }},  {{ address.city }} - {{ address.pin }}</option>
                                         {% endfor %}
                                     </select>
                                     
