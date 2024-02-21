@@ -75,7 +75,7 @@
                                         <div class="form-group">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input" name="payment" id="walletId" value="wallet" onchange="handlePaymentSelection()">
-                                                <label class="custom-control-label" for="walletId">WALLET PAYMENT</label>
+                                                <label class="custom-control-label" for="walletId">WALLET PAYMENT (Balance : ₹{{ request.user.wallet.balance }})</label>
                                             </div>
                                         </div>
                                     </div>
@@ -93,26 +93,7 @@
                                 <h3>Your order</h3>
                                 <div class="your-order-table table-responsive">
                                     <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th class="cart-product-name">Product</th>
-                                                <th class="cart-product-total">Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for cart_item in cart_items %}
-                                            <tr class="cart_item">
-                                              <td class="cart-product-name"> {{ cart_item.product.product_name }}<strong class="product-quantity"> x {{ cart_item.quantity }}</strong></td>                                            
-                                              {% if cart_item.product.category.category_offer %}
-                                              {% with offer_price=cart_item.product.price|add:'-'|add:cart_item.product.category.category_offer %}
-                                              <td class="cart-product-total"><span class="amount">₹{{ cart_item.product.price }} - (%{{ cart_item.product.category.category_offer }})</span></td>
-                                              {% endwith %}
-                                              {% else %}
-                                              <td class="cart-product-total"><span class="amount">₹{{ cart_item.product.price }}</span></td>
-                                              {% endif %}
-                                            </tr>
-                                            {% endfor %}                                       
-                                        </tbody>
+                                        
                                         <tfoot>
                                             <tr class="cart-subtotal">
                                                 <th>Cart Subtotal</th>

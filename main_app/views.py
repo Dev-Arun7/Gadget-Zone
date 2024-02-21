@@ -468,9 +468,11 @@ def place_order(request):
         for item in in_stock_items:
             total_amount +=  item.product_variant.offer_price * cart_item.quantity
 
-        if user.wallet.balance < total_amount:
-            messages.warning(request, "Not enough balance in your wallet")
-            return HttpResponseRedirect(reverse('main_app:cart'))
+        if payment_type == "wallet":
+            if user.wallet.balance < total_amount:
+                messages.warning(request, "Not enough balance in your wallet")
+                return HttpResponseRedirect(reverse('main_app:cart'))
+                
 
         # Proceed with order placement for in-stock items
         total_offer_price = 0
@@ -554,7 +556,7 @@ def cancel(request, order_id):
             wallet = Wallet.objects.create(user=user)
 
         # Add the amount of cancelled order to the wallet balance if order via razorpay
-        if order.payment_type == 'razorpay':
+        if order.payment_type == 'razorpay' or order.payment_type == 'wallet':
             wallet.balance += Decimal(order.amount)
             wallet.save()
 

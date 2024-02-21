@@ -28,7 +28,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
 
 
-     # ............. User Priventing Authentication...................
+# ............. User Priventing Authentication...................
           
 def superuser_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -70,6 +70,7 @@ def users(request):
 #############################################################################################
 
   
+
 
 @superuser_required
 def dashboard_home(request):
@@ -172,6 +173,7 @@ def dashboard_home(request):
         "monthly_labels": json.dumps(monthly_labels),
         "monthly_data": json.dumps(monthly_data),
     }
+    
 
     return render(request,'dashboard/home.html', context)
 
@@ -198,6 +200,7 @@ def dashboard_login(request):
 def dashboard_logout(request):
     logout(request)
     return render(request,'dashboard/login.html')
+
 
 
 
