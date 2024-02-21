@@ -1,13 +1,13 @@
 from main_app.models import Main_Category, Product, Brand, ProductVariant
-from gauth_app.models import Cart, Wishlist
+from gauth_app.models import Cart, Wishlist, Customer
 
 def extras(request):
     main_category = Main_Category.objects.filter(deleted=False).order_by('?')
     products = ProductVariant.objects.filter(deleted=False).order_by('-id')
     brands = Brand.objects.all().order_by('?')
     customer = request.user
-    cart_count = Cart.objects.all().count()
-    wishlist_count = Wishlist.objects.all().count()
+    cart_count = Cart.objects.filter(user=request.user).count()
+    wishlist_count = Wishlist.objects.filter(user=request.user).count()
     
     context = {'default_main_category' : main_category,
                 'default_product': products,

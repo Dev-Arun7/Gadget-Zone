@@ -27,7 +27,7 @@
             <div class="Shopping-cart-area pt-20 pb-20">
                 <div class="container">
                     <center>
-                        <h3>My Cart</h3>
+                        <h3>My Orders</h3>
                     </center>    
                     <div class="row">
                         <div class="col-12">
@@ -41,6 +41,7 @@
                                                 <th class="cart-product-name">Product</th>
                                                 <th class="cart-product-name">Variant</th>
                                                 <th class="li-product-quantity">Quantity</th>
+                                                <th class="li-product-quantity">Payment</th>
                                                 <th class="li-product-subtotal">Total</th>
                                                 <th class="li-product-subtotal">Status</th>
                                                 <th class="li-product-subtotal">Action</th>
@@ -62,6 +63,7 @@
                                                 <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.product.brand }} {{ i.product.model }}</a></td>
                                                 <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.variant.ram }}GB </a></td>                                               
                                                 <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.quantity }}</a></td>                                               
+                                                <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.payment_type }}</a></td>                                               
                                                 <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.amount }}</a></td>                                               
                                                 <td class="li-product-name"><a href="{% url 'main_app:order_detail' i.id %}">{{ i.status }}</a></td>                                               
                                                 <td class="product-subtotal">

@@ -9,6 +9,23 @@
         width: auto;
         height: auto;
     }
+    .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .button:hover {
+        background-color: #45a049; /* Darker Green */
+    }
 </style>
             <!-- Begin Li's Breadcrumb Area -->
             <div class="breadcrumb-area">
@@ -95,7 +112,7 @@
                                 </div>
                                 <form action="{% url 'main_app:cart' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    <div class="coupon">
+                                    <div class="coupon mt-5">
                                         <input id="coupon_code" class="input-text" name="coupon_code" placeholder="Coupon code" type="text">
                                         <button type="submit" class="button" name="apply_coupon">Apply coupon</button>
                                     </div>

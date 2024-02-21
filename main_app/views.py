@@ -62,7 +62,7 @@ def product_list(request):
         # Filter by price range
         for price_range in price_ranges:
             min_price, max_price = map(int, price_range.split('-'))
-            products = products.filter(price__range=(min_price, max_price))
+            products = products.filter(offer_price__range=(min_price, max_price))
 
         # Filter by color
         if color_values:
@@ -368,7 +368,7 @@ def orders(request):
 
 @login_required
 def checkout(request):
-    cart_items = Cart.objects.filter(quantity__gt=0)
+    cart_items = Cart.objects.filter(quantity__gt=0, user=request.user)
     
     # Check if all products in the cart are in stock
     for item in cart_items:
@@ -446,7 +446,7 @@ def place_order(request):
         if not payment_type:
             messages.error(request, "Please select payment method.")
             return HttpResponseRedirect(reverse('main_app:checkout'))
-        
+
         cart_items = Cart.objects.filter(user=user, quantity__gt=0)
         in_stock_items = []
         out_of_stock_items = []
@@ -460,6 +460,16 @@ def place_order(request):
         # If any item is out of stock, return to checkout page
         if out_of_stock_items:
             messages.warning(request, "Some items are out of stock. Please remove them from your cart.")
+            return HttpResponseRedirect(reverse('main_app:cart'))
+
+        # Calculate the total amount for compare with Wallet balance
+
+        total_amount = 0
+        for item in in_stock_items:
+            total_amount +=  item.product_variant.offer_price * cart_item.quantity
+
+        if user.wallet.balance < total_amount:
+            messages.warning(request, "Not enough balance in your wallet")
             return HttpResponseRedirect(reverse('main_app:cart'))
 
         # Proceed with order placement for in-stock items
@@ -477,17 +487,15 @@ def place_order(request):
                 quantity=cart_item.quantity,
                 variant=cart_item.product_variant
             )
-
-            
+       
             total_offer_price += cart_item.total
             total_price += cart_item.product_variant.price * cart_item.quantity
             total_quantity += cart_item.quantity
 
-
-
             cart_item.product_variant.stock -= cart_item.quantity
             cart_item.product_variant.save()
             cart_item.delete()
+
         # Update Order_details model
         Order_details.objects.create(
             order = order,
@@ -507,11 +515,18 @@ def place_order(request):
                 del request.session['coupon'] # Removing the applied coupon from the session
             except Coupon.DoesNotExist:
                 pass # no need to do if the coupon is alredy invalid 
+        
+        # Reducing the balance if purchase using wallet
+        if payment_type == "wallet":
+            user_wallet = user.wallet
+            user_wallet.balance -= total_offer_price
+            user_wallet.save()
 
         return HttpResponseRedirect(reverse('main_app:orders') + '?success=true')
     else:
         messages.error(request, "Invalid request method")
         return HttpResponseRedirect(reverse('main_app:checkout'))
+
 
 
 @login_required
@@ -538,9 +553,10 @@ def cancel(request, order_id):
             # If wallet doesn't exist, create one for the user
             wallet = Wallet.objects.create(user=user)
 
-        # Add the amount of cancelled order to the wallet balance
-        wallet.balance += Decimal(order.amount)
-        wallet.save()
+        # Add the amount of cancelled order to the wallet balance if order via razorpay
+        if order.payment_type == 'razorpay':
+            wallet.balance += Decimal(order.amount)
+            wallet.save()
 
         order.save()  # Save the updated status
 
@@ -550,6 +566,7 @@ def cancel(request, order_id):
         # Handle GET requests appropriately, if needed
         # For now, let's redirect to the 'orders' page
         return redirect('main_app:orders')
+
 
 
 
