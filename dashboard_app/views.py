@@ -22,8 +22,7 @@ from reportlab.platypus import SimpleDocTemplate
 from reportlab.lib.pagesizes import A4, inch
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-
-
+from django.views.decorators.http import require_http_methods
 
 
 
@@ -71,7 +70,7 @@ def users(request):
 
   
 
-
+@require_http_methods(["GET"])
 @superuser_required
 def dashboard_home(request):
     orders = Order_details.objects.order_by("-id")
@@ -80,6 +79,7 @@ def dashboard_home(request):
     for order in orders:
         labels.append(str(order.id))
         data.append(float(order.offer_price))
+
     total_customers = Customer.objects.count()
 
     one_week_ago = timezone.now() - timezone.timedelta(weeks=1)
@@ -92,6 +92,7 @@ def dashboard_home(request):
 
     # Extract the total offer_price from the result
     total_amount_received = total_offer_price_amount['total_offer_price'] or 0  # Handle None case
+    total_amount_received //= 1000
 
     # Filter Order_details objects for the last week
     order_details_last_week = Order_details.objects.filter(date__gte=one_week_ago)
@@ -104,6 +105,7 @@ def dashboard_home(request):
 
     # Extract the total offer price for last week from the result
     total_amount_received_last_week = total_amount_received_last_week_details['total_offer_price'] or 0  # Handle None case
+    total_amount_received_last_week //= 1000
 
     # Retrieve main categories and annotate them with the count of their related product variants
     main_categories = Main_Category.objects.annotate(num_product_variants=Count('product__productvariant'))
@@ -157,6 +159,7 @@ def dashboard_home(request):
         filtered_data = [float(entry['total_amount']) for entry in filtered_orders]
 
         return JsonResponse({"labels": filtered_labels, "data": filtered_data})
+                                                                                                                                                      
 
     context = {
         "labels": json.dumps(labels),
@@ -173,8 +176,49 @@ def dashboard_home(request):
         "monthly_labels": json.dumps(monthly_labels),
         "monthly_data": json.dumps(monthly_data),
     }
-    
 
+
+    if request.method == 'GET':
+        # Get the start and end dates from the request GET parameters
+        from_date_str = request.GET.get('from_date')
+        to_date_str = request.GET.get('to_date')
+
+        # Convert string dates to datetime objects
+        if from_date_str and to_date_str:
+            from_date = datetime.strptime(from_date_str, '%Y-%m-%d')
+            to_date = datetime.strptime(to_date_str, '%Y-%m-%d')
+
+            # Filter Order_details objects based on the provided dates
+            filtered_orders = Order_details.objects.filter(date__range=[from_date, to_date])
+            order_count = filtered_orders.count()
+
+            filtered_customers_details = Customer.objects.filter(joined_date__range=[from_date, to_date])
+            filtered_customers = filtered_customers_details.count()
+
+            # Aggregate the total offer price for the filtered orders
+            total_amount_received = filtered_orders.aggregate(total_offer_price=Sum('offer_price'))
+
+            # Extract the total offer price from the result
+            total_amount = total_amount_received['total_offer_price'] or 0
+            total_amount //= 1000
+
+            # Prepare the filtered data for rendering in the HTML template
+            data = []
+            labels = []
+            for order in filtered_orders:
+                data.append(float(order.offer_price))
+                labels.append(str(order.id))
+
+
+            # Update the context with filtered data
+            context.update({
+                'total_orders': order_count,
+                'total_amount_received': total_amount,
+                'total_customers' : filtered_customers,
+                "labels": json.dumps(labels),
+                'data': json.dumps(data),
+            })
+    
     return render(request,'dashboard/home.html', context)
 
 
