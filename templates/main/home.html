@@ -23,6 +23,15 @@
         height: 100%; /* Ensures the image covers the entire container */
         object-fit: contain; /* Ensures the image covers the entire container without distortion */
     }
+    .max-size-image {
+        max-width: 170px;
+        /* Add any additional styling if needed */
+    }
+    .fixed-size-image {
+        width: auto; /* Set your desired width */
+         /* Automatically adjust height to maintain aspect ratio */
+    }
+    
 </style>
 
          <!-- Begin Slider With Category Menu Area -->
@@ -246,7 +255,7 @@
             </div>
             <!-- CATEGORIES ARE ENDING HERE -->
 
-                    
+     
             <!--TOP DEALS ON PRODUCTS  ARE STARTING HERE -->
 
             <div class="team-area pt-10 pt-sm-14">
@@ -284,6 +293,164 @@
                     
                 </div>
             </div>
+
+
+
+
+
+
+            <!-- Begin Group Featured Product Area -->
+            <div class="group-featured-product pt-60 pb-40 pb-xs-25">
+                <div class="container">
+                    <div class="row">
+                        <!-- Begin Featured Product Area -->
+                        <div class="col-lg-4">
+                            <div class="featured-product">
+                                <div class="li-section-title">
+                                    <h2>
+                                        <span>Best selling</span>
+                                    </h2>
+                                </div>
+                                <div class="featured-product-active-2 owl-carousel">
+                                    <div class="featured-product-bundle">
+                                        {% for i in top_products|slice:":3" %}
+                                        <div class="row">
+                                            <div class="group-featured-pro-wrapper">
+                                                <div class="product-img">
+                                                    <a href="{% url 'main_app:single_product' i.product.id i.id %}">
+                                                        <img class="fixed-size-image" alt="" src="{{ i.product.image.url }}">
+                                                    </a>
+                                                </div>
+                                                <div class="featured-pro-content">
+                                                    <div class="product-review">
+                                                        <h5 class="manufacturer">
+                                                            <a href="product-details.html">{{ i.offer }}% Off now</a>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="rating-box">
+                                                        <ul class="rating">
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                    <h4><a class="featured-product-name" href="{% url 'main_app:single_product' i.product.id i.id %}">{{  i.product.brand }} {{ i.product.model }}</a></h4>
+                                                    <div class="featured-price-box">
+                                                        <span class="new-price">₹{{ i.offer_price }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Featured Product Area End Here -->
+                        <!-- Begin Featured Product Area -->
+                        <div class="col-lg-4">
+                            <div class="featured-product pt-sm-10 pt-xs-25">
+                                <div class="li-section-title">
+                                    <h2>
+                                        <span>Top 3 offer now</span>
+                                    </h2>
+                                </div>
+                                <div class="featured-product-active-2 owl-carousel">
+                                    <div class="featured-product-bundle">
+                                        {% for i in top_deals|slice:":3" %}
+                                        <div class="row">
+                                            <div class="group-featured-pro-wrapper">
+                                                <div class="product-img">
+                                                    <a href="{% url 'main_app:single_product' i.product.id i.id %}">
+                                                        <img class="fixed-size-image" alt="" src="{{ i.product.image.url }}">
+                                                    </a>
+                                                </div>
+                                                <div class="featured-pro-content">
+                                                    <div class="product-review">
+                                                        <h5 class="manufacturer">
+                                                            <a href="product-details.html">{{ i.offer }}% Off now</a>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="rating-box">
+                                                        <ul class="rating">
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                    <h4><a class="featured-product-name" href="{% url 'main_app:single_product' i.product.id i.id %}">{{  i.product.brand }} {{ i.product.model }}</a></h4>
+                                                    <div class="featured-price-box">
+                                                        <span class="new-price">₹{{ i.offer_price }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Featured Product Area End Here -->
+                        <!-- Begin Featured Product Area -->
+                        <div class="col-lg-4">
+                            <div class="featured-product pt-sm-10 pt-xs-25">
+                                <div class="li-section-title">
+                                    <h2>
+                                        <span>Budget products</span>
+                                    </h2>
+                                </div>
+                                <div class="featured-product-active-2 owl-carousel">
+                                    <div class="featured-product-bundle">
+                                        {% for i in budget_products|slice:":3" %}
+                                        <div class="row">
+                                            <div class="group-featured-pro-wrapper">
+                                                <div class="product-img">
+                                                    <a href="{% url 'main_app:single_product' i.product.id i.id %}">
+                                                        <img class="fixed-size-image" alt="" src="{{ i.product.image.url }}">
+                                                    </a>
+                                                </div>
+                                                <div class="featured-pro-content">
+                                                    <div class="product-review">
+                                                        <h5 class="manufacturer">
+                                                            <a href="product-details.html">{{ i.offer }}% Off now</a>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="rating-box">
+                                                        <ul class="rating">
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                    <h4><a class="featured-product-name" href="{% url 'main_app:single_product' i.product.id i.id %}">{{  i.product.brand }} {{ i.product.model }}</a></h4>
+                                                    <div class="featured-price-box">
+                                                        <span class="new-price">₹{{ i.offer_price }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Featured Product Area End Here -->
+                    </div>
+                </div>
+            </div>
+            <!-- Group Featured Product Area End Here -->
+
+
+>
 
     <!-- Add this script to your cart.html file -->
     {% if messages %}

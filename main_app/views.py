@@ -6,7 +6,7 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.contrib import messages
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.urls import reverse
 import json
 import random
@@ -26,6 +26,12 @@ def home(request):
     # Retrieve all brands in random order
     brands = list(Brand.objects.all().order_by('?'))
 
+    top_products = ProductVariant.objects.annotate(total_orders=Count('order')).order_by('-total_orders')[:5]
+    top_deals = ProductVariant.objects.filter(deleted=False).order_by('-offer')
+    top_brands = Brand.objects.annotate(total_orders=Count('product__order')).order_by('-total_orders')[:5]
+    budget_products = ProductVariant.objects.filter(deleted=False).order_by('offer_price')
+
+
     # Shuffle the first 10 deals and products separately
     shuffle(products)
     shuffle(deals)
@@ -34,6 +40,10 @@ def home(request):
         'products': products, 
         'brands': brands,
         'deals': deals,
+        'top_products': top_products,
+        'top_deals': top_deals,
+        'top_brands': top_brands,
+        'budget_products': budget_products,
     }  
     return render(request, "main/home.html", context)
 
@@ -115,7 +125,7 @@ def single_product(request, id, variant_id):
         "variants": variants,
         "variant": variant,
         "additional_images": additional_images,
-        "similar_products": similar_products
+        "similar_products": similar_products,
     }
     return render(request, "main/single_product.html", context)
 

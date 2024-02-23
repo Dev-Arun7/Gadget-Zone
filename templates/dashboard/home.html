@@ -72,6 +72,7 @@ input[type="datetime-local"].form-control,
 input[type="month"].form-control {
   appearance: none;
 }
+
 </style>
 
 
@@ -258,21 +259,43 @@ input[type="month"].form-control {
                     </div>
                     <button class="btn btn-primary ml-2" type="submit">Generate Report</button>
                 </form>
-                
-                
             </div>
+
+            <div class="container mt-4">
+                <div class="row mt-5">
+                    <div class="col-5">
+                        <h2>Category</h2>
+                        <canvas id="donut"></canvas>
+                    </div>
+                    <div class="col-2">
+                        <ul class="list-group">
+                            <li class="list-group-item active" aria-current="true">Top Products</li>
+                            {% for i in top_products %}
+                            <li class="list-group-item">{{ i.product.brand.name }} {{ i.product.model }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-2">
+                        <ul class="list-group">
+                            <li class="list-group-item active" aria-current="true">Top Categories</li>
+                            {% for i in top_categories %}
+                            <li class="list-group-item">{{ i.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-2">
+                        <ul class="list-group">
+                            <li class="list-group-item active" aria-current="true">Top Brands</li>
+                            {% for i in top_brands %}
+                            <li class="list-group-item">{{ i.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             
-            <div class="mt-5"> <h2>Category</h2> </div>
-                <div class="mt-4" style="height: 550px; width: 550px;">
-                    <canvas id="donut"></canvas>
-                </div>
-                
-                <div class="mt-5"> <h2>Monthly Sales</h2> </div>
-                <div class="mt-4" style="height: 550px; width: 550px;">
-                    <canvas id="monthlySalesChart"></canvas>
-                </div>
-                
-            </div>
+
 <script>
     // const lab = JSON.parse(`{{ labels|safe }}`);
     // const da = JSON.parse(`{{ data|safe }}`);

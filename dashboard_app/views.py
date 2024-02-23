@@ -73,6 +73,16 @@ def users(request):
 @require_http_methods(["GET"])
 @superuser_required
 def dashboard_home(request):
+
+    top_products = ProductVariant.objects.annotate(
+        total_orders=Count('order')
+    ).order_by('-total_orders')[:5]
+
+    top_brands = Brand.objects.annotate(total_orders=Count('product__order')).order_by('-total_orders')[:5]
+
+    top_categories = Main_Category.objects.annotate(total_orders=Count('product__order')).order_by('-total_orders')[:5]
+
+
     orders = Order_details.objects.order_by("-id")
     labels = []
     data = []
@@ -162,6 +172,9 @@ def dashboard_home(request):
                                                                                                                                                       
 
     context = {
+        "top_products": top_products,
+        "top_brands": top_brands,
+        "top_categories": top_categories,
         "labels": json.dumps(labels),
         "data": json.dumps(data),
         "total_customers": total_customers,
