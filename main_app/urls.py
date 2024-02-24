@@ -29,7 +29,13 @@ urlpatterns = [
     path('place_order/',views.place_order,name='place_order'),  
     path('cancel/<int:order_id>/', views.cancel, name='cancel'),
 
+    # path('generate_invoice/<int:order_id>', views.generate_invoice, name='generate_invoice'),
+    # path('download_invoice/<int:order_id>', views.download_invoice, name='download_invoice'),
+
     path('razorpay/',views.razorpay,name='razorpay'),
+
+    path('pdf/<int:product_id>', views.pdf, name='pdf'),
     
     path('base/',views.base,name='base'),
+    path('temp/',views.temp,name='temp'),
 ]

@@ -59,8 +59,9 @@
                    <p>  </p>
                  {% endif %}
                 <div class="border-start h-100"></div>
-                <h5 class="fw-normal mb-0"><a href="#!"> </a></h5>
-                
+                <a href="{% url 'main_app:pdf' product.id %}">
+                  <button type="button" class="btn btn-secondary">Invoice</button>
+                </a>
               </div>
             </div>
           </div>

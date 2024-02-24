@@ -180,41 +180,10 @@
                                 <div class="hb-menu">
                                     <nav>
                                         <ul>
-                                            <li class="{% url 'main_app:home' %}"><a href="{% url 'main_app:home' %}">Home</a></li>
-                                            <li class="megamenu-static-holder"><a href="{% url 'main_app:product_list'%}"> Shop all</a>
-                                                <ul class="megamenu hb-megamenu">
-                                                    <li><a href="blog-left-sidebar.html">Android</a>
-                                                        <ul>
-                                                            <li><a href="blog-2-column.html">Samsung</a></li>
-                                                            <li><a href="blog-3-column.html">Oneplus</a></li>
-                                                            <li><a href="blog-left-sidebar.html">Pixel</a></li>
-                                                            <li><a href="blog-right-sidebar.html">Realme</a></li>
-                                                            <li><a href="blog-right-sidebar.html">Vivo</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="blog-details-left-sidebar.html">IOS</a>
-                                                        <ul>
-                                                            <li><a href="blog-details-left-sidebar.html">iPhone 15 Series</a></li>
-                                                            <li><a href="blog-details-right-sidebar.html">iPhone 14 Series</a></li>
-                                                            <li><a href="blog-audio-format.html">iPhone 13 Series</a></li>
-                                                            <li><a href="blog-video-format.html">iPhone 12 Series</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="index.html">Rugged Phones</a>
-                                                        <ul>
-                                                            <li><a href="login-register.html">Shield</a></li>
-                                                            <li><a href="checkout.html">Doogee</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="index.html">Normal Phones</a>
-                                                        <ul>
-                                                            <li><a href="contact.html">Nokia</a></li>
-                                                            <li><a href="about-us.html">Samsung</a></li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            
+                                            <li class="{% url 'main_app:home' %}"><a href="{% url 'main_app:home' %}">Home</a></li>                                            
+                                            <li><a href="{% url 'main_app:product_list'%}">All Products</a></li>
+                                            <li><a href="{% url 'main_app:main_categories' %}">Categories</a></li>
+                                            <li><a href="{% url 'main_app:brands' %}">Brands</a></li>
                                             <li class="megamenu-holder"><a href="#">Browse</a>
                                                 <ul class="megamenu hb-megamenu">
                                                     <li><a href="{% url 'main_app:main_categories' %}">Categories</a>
@@ -235,9 +204,6 @@
                                                 </ul>
                                             
                                             </li>
-                                            <li><a href="{% url 'main_app:product_list'%}">All Products</a></li>
-                                            <li><a href="{% url 'main_app:main_categories' %}">Categories</a></li>
-                                            <li><a href="{% url 'main_app:brands' %}">Brands</a></li>
                                             <li class="megamenu-holder"><a href="{% url 'gauth_app:profile' %}">Profile</a>
                                                 <ul class="megamenu hb-megamenu">
                                                     <li><a href="{% url 'gauth_app:profile' %}">Account</a>
