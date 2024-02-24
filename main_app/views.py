@@ -592,57 +592,19 @@ def order_detail(request, id):
     
     return render(request, "main/order_detail.html", context)
 
-
-# def generate_invoice(request, order_id):
-#     order = get_object_or_404(Order, pk=order_id)
-#     order_items = OrderItem.objects.filter(order=order)
-
-#     user_address = Address.objects.filter(user=request.user, default=True).first()
-
-#     # Calculate total amount
-#     cart_total_amount = order.amount
-#     user_first_name = request.user.first_name
-#     user_last_name = request.user.last_name
-
-#     subtotal = sum(item.product.price * item.quantity for item in order_items)
-#     total = subtotal  
-
-#     context = {
-#         'order': order,
-#         'order_items': order_items,
-#         'cart_total_amount': cart_total_amount,
-#         'user_address': user_address, 
-#         'user_first_name': user_first_name,
-#         'user_last_name': user_last_name,
-#         'subtotal': subtotal,
-#         'total': total,
-#     }
-
-#     return render(request, 'main/invoice.html', context)
-
-
-# def download_invoice(request, order_id):
-#     return HttpResponse("This is the invoice content.", content_type='application/pdf')
-
-
-
-
-
-
-
-
         
 def pdf(request, product_id):
+    order = Order.objects.get(id=product_id)
     template_path = 'main/pdf1.html'
-    context = {'myvar': 'this is your template context'}
+    context = {'order': order}
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
 
     # If download:
-        # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
 
     #If need to view the invoice:
-    response['Content-Disposition'] = 'filename="report.pdf"'
+    # response['Content-Disposition'] = 'filename="report.pdf"'
     # find the template and render it.
     template = get_template(template_path)
     html = template.render(context)
@@ -653,6 +615,7 @@ def pdf(request, product_id):
     # if error then show some funny view
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+
     return response
     
 

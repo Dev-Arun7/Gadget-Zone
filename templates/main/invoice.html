@@ -1,0 +1,759 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Techzone - invoice</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="#" />
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}" />
+</head>
+
+<body>
+      <style>
+        /** Print **/
+
+@media print {
+    .back-top-home {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+    }
+    .invoice-header,
+    .invoice-top,
+    .invoice-center,
+    .invoice-bottom,
+    .invoice-banner {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    .invoice-top .col-sm-9,
+    .invoice-top .col-sm-3 {
+        width: 50%;
+    }
+    .col-sm-12 {
+        width: 100%;
+    }
+    .col-sm-11 {
+        width: 91.66666667%;
+    }
+    .col-sm-10 {
+        width: 83.33333333%;
+    }
+    .col-sm-9 {
+        width: 75%;
+    }
+    .col-sm-8 {
+        width: 66.66666667%;
+    }
+    .col-sm-7 {
+        width: 58.33333333%;
+    }
+    .col-sm-6 {
+        width: 50%;
+    }
+    .col-sm-5 {
+        width: 41.66666667%;
+    }
+    .col-sm-4 {
+        width: 33.33333333%;
+    }
+    .col-sm-3 {
+        width: 25%;
+    }
+    .col-sm-2 {
+        width: 16.66666667%;
+    }
+    .col-sm-1 {
+        width: 8.33333333%;
+    }
+    .text-end {
+        text-align: right !important;
+    }
+    .invoice-1 {
+        padding: 0;
+        background: #fff;
+    }
+    .invoice-1 .invoice-inner {
+        background: #f8f8f8;
+    }
+    .invoice-1 .container {
+        padding: 0px;
+    }
+    .invoice-1 .invoice-info {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        margin: 0px;
+    }
+}
+
+.invoice-content .invoice-header-1 {
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.invoice-content .invoice-header-2 {
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.invoice-content .invoice-title-1 {
+    font-size: 18px;
+}
+
+.invoice-content .invoice-addr-1 {
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.invoice-content .item-desc-1 {
+    text-align: left;
+}
+
+.invoice-content .item-desc-1 span {
+    display: block;
+}
+
+.invoice-content .item-desc-1 small {
+    display: block;
+}
+
+.invoice-content .important-notes-list-1 {
+    font-size: 13px !important;
+    padding-left: 15px;
+    margin-bottom: 15px;
+    list-style: disc;
+}
+
+.invoice-content .important-notes-list-1 li {
+    margin-bottom: 5px;
+}
+
+.invoice-content .bank-transfer-list-1 {
+    font-size: 13px !important;
+    padding-left: 0px;
+}
+
+.invoice-content .important-notes {
+    font-size: 12px !important;
+}
+
+.invoice-content .invoice-btn-section {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.invoice-content .btn-lg {
+    font-size: 16px;
+    font-weight: 600;
+    height: 50px;
+    padding: 0 35px;
+    line-height: 50px;
+    border-radius: 3px;
+    color: #ffffff;
+    border: none;
+    margin: 3px;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    text-transform: capitalize;
+    -webkit-transition: all 0.3s linear;
+    transition: all 0.3s linear;
+    z-index: 1;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    font-family: "Quicksand", sans-serif;
+}
+
+.invoice-content .btn-check:focus+.btn,
+.invoice-content .btn:focus {
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.invoice-content .btn-download {
+    background: #3BB77E;
+}
+
+.invoice-content .btn-download:after {
+    background: #29A56C;
+}
+
+.invoice-content .btn-print {
+    background: #253D4E;
+}
+
+.invoice-content .btn-print:after {
+    background: #242424;
+}
+
+.invoice-content .invoice-content .invoice-table th:first-child,
+.invoice-content .invoice-content .invoice-table td:first-child {
+    text-align: left;
+}
+
+.invoice-content .btn-custom {
+    border: none;
+    z-index: 1;
+}
+
+.invoice-content .btn-custom img {
+    max-height: 14px;
+    margin-right: 5px;
+}
+
+.invoice-content .btn-custom:after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    -webkit-box-shadow: inset 0px 0px 0px 0px rgba(255, 255, 255, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0px 0px 0px 0px rgba(255, 255, 255, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1);
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.invoice-content .btn-custom:hover {
+    color: #fff;
+}
+
+.invoice-content .btn-custom:hover:after {
+    left: 0;
+    width: 100%;
+}
+
+.invoice-content .btn-custom:active {
+    top: 2px;
+}
+
+.invoice-content table thead {
+    font-family: "Quicksand", sans-serif;
+    color: #253D4E;
+    font-weight: 700;
+}
+
+.invoice-content .f-w-600 {
+    font-weight: 600;
+}
+
+.invoice-content .mobile-social-icon {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+}
+
+.invoice-content .mobile-social-icon h6 {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 0;
+}
+
+.invoice-content .mobile-social-icon a {
+    text-align: center;
+    font-size: 14px;
+    margin-right: 5px;
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    height: 30px;
+    width: 30px;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    background: #3BB77E;
+    border-radius: 30px;
+    line-height: 1;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.invoice-content .mobile-social-icon a img {
+    max-width: 16px;
+}
+
+.invoice-content .mobile-social-icon a img:hover {
+    opacity: 0.8;
+}
+
+.invoice-content .mobile-social-icon a:hover {
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    margin-top: -2px;
+}
+
+.invoice-content .mobile-social-icon a:last-child {
+    margin-right: 0;
+}
+
+/** Invoice 1 **/
+
+.invoice {
+    padding: 50px 0;
+    background: #F2F3F4;
+}
+
+.invoice .invoice-info {
+    background: #fff;
+    margin-bottom: 30px;
+    border-radius: 20px;
+    -webkit-box-shadow: 20px 20px 54px rgba(0, 0, 0, 0.03);
+    box-shadow: 20px 20px 54px rgba(0, 0, 0, 0.03);
+}
+
+.invoice .invoice-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.invoice .item-desc-1 small {
+    font-size: 14px;
+}
+
+.invoice .item-desc-1 span {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.invoice .invoice-header {
+    padding: 80px 150px;
+    border-radius: 20px 20px 0 0;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.invoice .table-striped>tbody>tr:nth-of-type(odd) {
+    --bs-table-accent-bg: rgb(255 255 255 / 5%);
+    color: var(--bs-table-striped-color);
+}
+
+.invoice .invoice-top {
+    padding: 40px 150px 25px 150px;
+    font-size: 15px;
+    border-bottom: 1px solid #ececec;
+    margin-bottom: 50px;
+}
+
+.invoice .invoice-center {
+    padding: 0 150px 40px;
+}
+
+.invoice .invoice-center .table {
+    margin-bottom: 0;
+}
+
+.invoice .table-section {
+    text-align: center;
+}
+
+.invoice .table> :not(caption)>*>* {
+    padding: 15px 20px;
+}
+
+.invoice .table td {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.invoice table th {
+    font-size: 15px;
+}
+
+.invoice .caption-top {
+    caption-side: top;
+    text-align: right;
+    margin-bottom: 0;
+}
+
+.invoice .invoice-bottom {
+    padding: 0 150px 25px;
+}
+
+.invoice .invoice-bottom .amount {
+    text-align: right;
+}
+
+.invoice .invoice-bottom h3 {
+    margin-bottom: 15px;
+}
+
+.invoice .bg-active {
+    background: #f3f3f3;
+    color: #535353 !important;
+}
+
+.invoice .invoice-contact {
+    padding: 70px 150px 40px;
+}
+
+.invoice .social-list {
+    float: left;
+}
+
+.invoice .social-list span {
+    margin-right: 5px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+}
+
+.invoice .social-list a {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    display: inline-block;
+    font-size: 17px;
+    background: #fff;
+    margin: 0 2px 2px 0;
+    color: #25cc7e;
+    border-radius: 50%;
+}
+
+.invoice .social-list a:hover {
+    background: #fff6f6;
+}
+
+.invoice-top .float-end p {
+    margin-bottom: 0;
+}
+
+.invoice-1 .invoice-info-buttom .table .invoice-1 .invoice-info-buttom .table tr,
+.table tr {
+    border: 1px solid #e9ecef;
+}
+
+.table> :not(caption)>*>* {
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 0;
+}
+
+.invoice-1 .table td,
+.invoice-1 .table th {
+    vertical-align: middle;
+    border: none !important;
+}
+
+.invoice-1 .invoice-header {
+    background: rgba(0, 0, 0, 0.04) url(../imgs/invoice/header-bg-1.png) top left repeat;
+}
+
+.invoice-2 .invoice-info {
+    border-radius: 0;
+}
+
+.invoice-2 .invoice-header {
+    border-bottom: 1px solid #ececec;
+}
+
+.invoice-3 .invoice-header {
+    background: url(../imgs/invoice/header-bg-2.jpg) top left no-repeat;
+    background-size: cover;
+    padding: 50px 150px;
+    color: #fff;
+}
+
+.invoice-3 .invoice-table thead {
+    color: #fff !important;
+    background-color: #3BB77E;
+}
+
+.invoice-4 .invoice-info {
+    border-radius: 5px;
+}
+
+.invoice-4 .invoice-header {
+    border-bottom: 1px solid #ececec;
+    padding: 50px 150px 30px 150px;
+    margin-bottom: 50px;
+}
+
+.invoice-4 .invoice-bottom .hr {
+    width: 100%;
+    height: 1px;
+    background-color: #ececec;
+}
+
+.invoice-5 .invoice-info {
+    border-radius: 0;
+}
+
+.invoice-5 .invoice-header {
+    padding: 50px 150px;
+}
+
+.invoice-5 .invoice-banner {
+    padding: 0 150px 50px 150px;
+}
+
+.invoice-5 .invoice-bottom .hr {
+    width: 100%;
+    height: 1px;
+    background-color: #ececec;
+}
+
+.invoice-6.invoice {
+    background-color: #fff;
+}
+
+.invoice-6 .invoice-info {
+    border-radius: 10px;
+    border: 1px solid #BCE3C9;
+    -webkit-box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.invoice-6 .hr {
+    width: 100%;
+    height: 1px;
+    background-color: #3BB77E;
+}
+
+.invoice-6 .invoice-header {
+    background-color: #f7f8f9;
+    padding: 80px 150px 50px 150px;
+    margin-bottom: 50px;
+    border-radius: 10px 10px 0 0;
+}
+
+.invoice-6 .invoice-icon {
+    border-radius: 0 10px 0 0;
+}
+
+.invoice-icon {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    top: 0;
+    right: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    background-color: #3BB77E;
+}
+
+.invoice-icon img {
+    width: 30px;
+}
+
+/*Responsive*/
+
+@media only screen and (max-width: 992px) {
+    .invoice .invoice-header {
+        padding: 50px 35px;
+    }
+    .invoice .invoice-top {
+        padding: 40px 50px 25px 50px;
+    }
+    .invoice .invoice-center {
+        padding: 0 50px 40px;
+    }
+    .invoice .invoice-bottom {
+        padding: 0 50px 25px;
+    }
+    .invoice .back-top-home {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+   </style>
+    <div class="invoice invoice-content invoice-5">
+        <div class="back-top-home justify-content-center align-items-center text-center hover-up mt-30 ml-30 pb-4">
+            <h3><a class="hover-up" href=""><i class="fi-rs-settings-sliders mr-5"></i> Dashboard</a></h3>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="invoice-inner">
+                        <div class="invoice-info" id="invoice_wrapper">
+                            <div class="invoice-header">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="logo d-flex align-items-center">
+                                            <a href="{% url 'home' %}" class="mr-20"><b><h3 style="color: rgb(187, 171, 68);">Techzone</h3></b></a>
+                                            <!-- <div class="text">
+                                                <strong class="text-brand">Techzone </strong> <br />
+                                
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <h4>INVOICE</h4>
+                                        <h5>Sold By: TECHZONE RETAIL LIMITED</h5>
+                                        <p>Madivala Village and Sy<br>
+                                        no.51/1 of thatanahalli village, kasaba hobli,<br>
+                                        anekal taluk,Banglore urban District<br>
+                                    BAnglore, Karnataka,562107</p>
+                                    </div>
+                                    <div>
+                                        <strong>Shipping Address:</strong><br>
+                                        {{ user_first_name }} {{ user_last_name }}<br>
+
+                                        {{ user_address.address_1 }},<br> {{ user_address.city }},<br> {{ user_address.state }}, <br>{{ user_address.country }} - {{ user_address.pin }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- <div class="invoice-banner">
+                                <img src="" alt="">
+                            </div> -->
+                            <div class="invoice-center">
+                                <div class="table-responsive">
+                                    <table class="table table-striped invoice-table">
+                                        <thead class="bg-active">
+                                            <tr>
+                                                <th>Title</th>
+                                                <th class="text-center">Price</th>
+                                                <th class="text-center">Quantity</th>
+                                                <th class="text-center">Offer</th>
+                                                <th class="text-right">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order_items %}
+                                            <tr>
+                                                <td>
+                                                    <div class="item-desc-1">
+                                                        <span>{{ item.product.product_name }}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">{{ item.product.price }}</td>
+                                                <td class="text-center">{{ item.quantity }}</td>
+                                                <td class="text-center">{{item.product.category.category_offer}}%</td>
+                                                <td class="text-right">{{ item.product.price }}</td>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        <tr>
+                                            <td colspan="4" class="text-left f-w-600">Shipping Charge</td>
+                                            <td class="text-right"> 10</td>
+                                        </tr>
+                                            
+                                            <tr>
+                                                <td colspan="4" class="text-left f-w-600">SubTotal</td>
+                                                <td class="text-right">{{cart_total_amount}}</td>
+                                            </tr>
+                                            <!-- <tr>
+                                                <td colspan="3" class="text-end f-w-600">Tax</td>
+                                                <td class="text-right">$85.99</td>
+                                            </tr> -->
+                                            <tr>
+                                                <td colspan="4" class="text-left f-w-600">Grand Total</td>
+                                                <td class="text-right f-w-600">{{cart_total_amount}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="invoice-bottom pb-80">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="mb-15">Invoice Info</h6>
+                                        <p class="font-sm">
+                                            <strong>Invoice To:</strong> {{request.user}}<br />
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <h6 class="mb-15">Total Amount</h6>
+                                        <h3 class="mt-0 mb-0 text-brand">{{cart_total_amount}}</h3>
+                                        <p class="mb-0 text-muted">Taxes Included</p>
+                                    </div>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="hr mt-30 mb-30"></div>
+                                    <p class="mb-0 text-muted"><strong>Hey {{ request.user }}, </strong>Thanks for our shopping at Techzone</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invoice-btn-section clearfix d-print-none">
+                            <a href="javascript:window.print()" class="btn btn-lg btn-custom btn-print hover-up"> <img src="{% static 'assets/imgs/theme/icons/icon-print.svg' %}" alt="" /> Print </a>
+                            <!-- <a id="invoice_download_btn" class="btn btn-lg btn-custom btn-download hover-up" onclick="downloadInvoice()">
+                                Download
+                            </a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function downloadInvoice() {
+            var order_id = 53;  // replace with the actual order ID
+            var downloadUrl = `/products/generate_invoice/${order_id}/download/`;
+    
+            // Make an AJAX request to the server to get the invoice data
+            $.ajax({
+                type: 'GET',
+                url: downloadUrl,
+                xhrFields: {
+                    responseType: 'blob'  // Set the expected response type to blob
+                },
+                success: function (data) {
+                    // Create a Blob from the response data
+                    var blob = new Blob([data], { type: 'application/pdf' });
+    
+                    // Create a link element and trigger the download
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'invoice.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching invoice data:', status, error);
+                }
+            });
+        }
+    </script>
+    
+    <!-- Vendor JS-->
+    <script src="{% static 'main/js/vendor/modernizr-3.6.0.min.js' %}"></script>
+    <script src="{% static 'main/js/vendor/jquery-3.6.0.min.js' %}"></script>
+    <!-- Invoice JS -->
+    <script src="{% static 'main/js/invoice/jspdf.min.js' %}"></script>
+    <script src="{% static 'main/js/invoice/invoice.js' %}"></script>
+</body>
+<a id="invoice_download_btn" class="btn btn-lg btn-custom btn-download hover-up"> <img src="{% static 'assets/imgs/theme/icons/icon-download.svg' %}" alt="" /> Download </a>
+
+</html>
